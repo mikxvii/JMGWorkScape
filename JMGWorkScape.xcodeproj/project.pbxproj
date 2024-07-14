@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		835C0AA82C439C410086C767 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C0AA72C439C410086C767 /* main.swift */; };
+		835C0AAA2C43A1AA0086C767 /* helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C0AA92C43A1AA0086C767 /* helper.swift */; };
 		ED5FF4F22C4362260089B00D /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5FF4F12C4362260089B00D /* HomeScreen.swift */; };
 		EDABA0CF2C4355F4000FD038 /* JMGWorkScapeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDABA0CE2C4355F4000FD038 /* JMGWorkScapeApp.swift */; };
 		EDABA0D12C4355F4000FD038 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDABA0D02C4355F4000FD038 /* ContentView.swift */; };
@@ -16,7 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		835C0AA72C439C410086C767 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		835C0AA92C43A1AA0086C767 /* helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = helper.swift; sourceTree = "<group>"; };
 		ED5FF4F12C4362260089B00D /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
 		EDABA0CB2C4355F4000FD038 /* JMGWorkScape.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JMGWorkScape.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EDABA0CE2C4355F4000FD038 /* JMGWorkScapeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JMGWorkScapeApp.swift; sourceTree = "<group>"; };
@@ -60,7 +60,7 @@
 				ED5FF4F12C4362260089B00D /* HomeScreen.swift */,
 				EDABA0D22C4355F6000FD038 /* Assets.xcassets */,
 				EDABA0D42C4355F6000FD038 /* Preview Content */,
-				835C0AA72C439C410086C767 /* main.swift */,
+				835C0AA92C43A1AA0086C767 /* helper.swift */,
 			);
 			path = JMGWorkScape;
 			sourceTree = "<group>";
@@ -145,8 +145,8 @@
 			files = (
 				EDABA0D12C4355F4000FD038 /* ContentView.swift in Sources */,
 				EDABA0CF2C4355F4000FD038 /* JMGWorkScapeApp.swift in Sources */,
-				835C0AA82C439C410086C767 /* main.swift in Sources */,
 				ED5FF4F22C4362260089B00D /* HomeScreen.swift in Sources */,
+				835C0AAA2C43A1AA0086C767 /* helper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
