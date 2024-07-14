@@ -7,12 +7,18 @@
 //  File where App Logic will be stored
 
 import Foundation
+import CoreData
+
+
+// For color conversion from HEX
+
+
 
 func home(){
     print("Go Home")
 }
 
-func addNew(){
+func route(){
     print("Add New")
 }
 
@@ -27,3 +33,5 @@ func cancel(){
 func done(){
     print("done")
 }
+
+

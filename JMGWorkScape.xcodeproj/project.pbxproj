@@ -48,6 +48,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		835C0AAB2C43F3E10086C767 /* data */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = data;
+			sourceTree = "<group>";
+		};
 		ED97440A2C43A512003641FB /* Screens */ = {
 			isa = PBXGroup;
 			children = (
@@ -81,6 +88,7 @@
 		EDABA0CD2C4355F4000FD038 /* JMGWorkScape */ = {
 			isa = PBXGroup;
 			children = (
+				835C0AAB2C43F3E10086C767 /* data */,
 				EDABA0CE2C4355F4000FD038 /* JMGWorkScapeApp.swift */,
 				EDABA0D02C4355F4000FD038 /* ContentView.swift */,
 				ED9744132C43A7EA003641FB /* HomeObject.swift */,

@@ -56,17 +56,21 @@ struct HomeScreen: View {
                     // only one button is needed
                     HStack(spacing: 115){
                         
-                        Button(action: {
-                            home()
-                        }, label: {
-                            Image(systemName: "house.fill")
-                                .foregroundColor(olive)
-                        })
+//                        Button(action: {
+//                            home()
+//                        }, label: {
+//                            Image(systemName: "house.fill")
+//                                .foregroundColor(olive)
+//                        })
+                        
+                        NavigationLink(destination: AddHomeScreen()) {
+                            Image(systemName: "house.fill").foregroundColor(olive)
+                                        }
                             
                         Button(action: {
-                            addNew()
+                            route()
                         }, label: {
-                            Image(systemName: "plus.circle.fill")
+                            Image(systemName: "map")
                                 .foregroundColor(olive)
                         })
                         
@@ -77,6 +81,6 @@ struct HomeScreen: View {
                 .padding()
             }
             .padding()
-        }
+        }.navigationBarBackButtonHidden(true)
     }
 }
