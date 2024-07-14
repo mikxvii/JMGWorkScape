@@ -2,7 +2,7 @@
 //  JMGWorkScapeApp.swift
 //  JMGWorkScape
 //
-//  Created by Michael Guerrero on 7/13/24.
+//  Created by Michael Guerrero and Christopher Rebollar-Ramirez on 7/13/24.
 //
 
 import SwiftUI
