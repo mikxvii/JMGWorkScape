@@ -12,7 +12,13 @@ struct HomeScreen: View {
     let olive = Color(red: 0.23, green: 0.28, blue: 0.20, opacity: 1.00)
     @State var searchText = ""
     var body: some View {
+        
         ZStack{
+            VStack{
+                Image("olive_tree 1").position(x: 250, y: 590)
+                Image("olive_grass 1").position(x: 190, y: 275)
+            }
+
             VStack {
                 HStack {
                     Text("Homes")
@@ -43,10 +49,7 @@ struct HomeScreen: View {
                     }   .foregroundColor(olive)
                         .font(.largeTitle)
                     Spacer()
-        //            Image("olive_tree 1")
-        //                .position(x: 250, y: 590)
-        //            Image("olive_grass 1")
-        //                .position(x: 190, y: 275)
+
                 }
 
                 
