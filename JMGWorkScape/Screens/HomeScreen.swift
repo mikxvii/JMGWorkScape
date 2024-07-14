@@ -23,19 +23,22 @@ struct HomeScreen: View {
                     .aspectRatio(contentMode: .fill)
 
                 VStack {
-                    HStack {
+                    HStack(spacing: 170) {
                         // Title of the Screen
                         Text("Homes")
                             .bold()
                             .font(.largeTitle)
-                            .frame(maxWidth: 350, alignment: .topLeading)
                             .shadow(color: Color(red: 0.00, green: 0.00, blue: 0.00, opacity: 0.25), radius: 4, x: 0, y: 4)
                             .foregroundColor(olive)
                         
                         // Supposed to be a filter button
-                        Text("Filter")
-                            .bold()
-                            .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                        Button(action: {
+                            filter()
+                        }, label: {
+                            Text("Filter")
+                                .bold()
+                                .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                        })
   
                     }
                     ZStack {
@@ -51,26 +54,23 @@ struct HomeScreen: View {
                     
                     // Might wanna change the UI for these, as
                     // only one button is needed
-                    HStack{
-                        Spacer()
+                    HStack(spacing: 115){
                         
                         Button(action: {
-                            sayHello()
+                            home()
                         }, label: {
                             Image(systemName: "house.fill")
                                 .foregroundColor(olive)
                         })
                             
-                    
-                        Spacer()
-                        Button {
-                        } label: {
+                        Button(action: {
+                            addNew()
+                        }, label: {
                             Image(systemName: "plus.circle.fill")
-                        }   .foregroundColor(olive)
-                            .font(.largeTitle)
-                        Spacer()
-
-                    }
+                                .foregroundColor(olive)
+                        })
+                        
+                    }.padding(.bottom, 30.0).font(.system(size:  40))
 
                     
                 }

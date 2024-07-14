@@ -8,5 +8,6 @@
 import SwiftUI
 
 #Preview {
-    HomeScreen()
+    //HomeScreen()
+    AddHomeScreen()
 }

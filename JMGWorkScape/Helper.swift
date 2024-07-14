@@ -8,6 +8,22 @@
 
 import Foundation
 
-func sayHello(){
-    print("Hello")
+func home(){
+    print("Go Home")
+}
+
+func addNew(){
+    print("Add New")
+}
+
+func filter(){
+    print("Filter")
+}
+
+func cancel(){
+    print("cancel")
+}
+
+func done(){
+    print("done")
 }
