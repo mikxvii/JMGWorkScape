@@ -15,12 +15,13 @@ struct HomeScreen: View {
         
         ZStack{
             VStack{
-                Image("olive_tree 1").position(x: 250, y: 590)
-                Image("olive_grass 1").position(x: 190, y: 275)
-            }
+                Image("olive_tree 1").border(Color.black)
+                Image("olive_grass 1").border(Color.red)
+            }.padding()
 
             VStack {
                 HStack {
+                    Spacer()
                     Text("Homes")
                         .bold()
                         .font(.largeTitle)
@@ -29,6 +30,7 @@ struct HomeScreen: View {
                         .foregroundColor(olive)
                     
                     Text("Label").bold()
+                    Spacer()
                     
                 }
                 TextField("'Calle Miramar..'", text: $searchText)
