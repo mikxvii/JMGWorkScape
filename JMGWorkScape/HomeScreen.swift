@@ -39,11 +39,15 @@ struct HomeScreen: View {
                 Spacer()
                 HStack{
                     Spacer()
-                    Button {
-                    } label: {
+                    
+                    Button(action: {
+                        sayHello()
+                    }, label: {
                         Image(systemName: "house.fill")
-                    }   .foregroundColor(olive)
-                        .font(.largeTitle)
+                            .foregroundColor(olive)
+                    })
+                        
+                
                     Spacer()
                     Button {
                     } label: {
