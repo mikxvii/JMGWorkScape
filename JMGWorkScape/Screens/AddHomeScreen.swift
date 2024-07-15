@@ -26,16 +26,25 @@ extension Color {
     }
 }
 
+
 struct AddHomeScreen: View {
     @State var emptyArray = ["", "", ""]
     @State private var navigateToNextScreen = false
+    @State private var showingImagePicker = false
+    @State private var selectedImage: UIImage?
+    let daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
     
     let olive = Color(red: 0.23, green: 0.28, blue: 0.20, opacity: 1.00)
     
     var body: some View {
+        VStack {
+            
+        }
         VStack(spacing: 30){
             
             HStack(spacing: 125){
+                
+                // Cancel button
                 Button(action: {
                     cancel()
                 }, label: {
@@ -50,6 +59,7 @@ struct AddHomeScreen: View {
                         
                 })
                 
+                // Done Button
                 Button(action: {
                     done()
                 }, label: {
@@ -66,30 +76,52 @@ struct AddHomeScreen: View {
 
             }
         
-            
-            Image(systemName: "photo.badge.plus")
-                .font(.system(size:  50))
-                .foregroundColor(.black)
-                .padding(.vertical, 75.0)
-                .padding(.horizontal, 150)
-                .background(Color(hex: "#e4e4e4"))
-                .cornerRadius(40)
+            // Upload an image
+            Button(action: {
+                showingImagePicker = true
+            }) {
+                if let image = selectedImage {
+                    Image(uiImage: image)
+                        .resizable()
+                        .cornerRadius(40)
+                        .aspectRatio(contentMode: .fit)
+                        .padding()
+                } else {
+                    Image(systemName: "photo.badge.plus")
+                        .font(.system(size:  50))
+                        .foregroundColor(.black)
+                        .padding(.vertical, 75.0)
+                        .padding(.horizontal, 150)
+                        .background(Color(hex: "#e4e4e4"))
+                        .cornerRadius(40)
+                }
+            }.sheet(isPresented: $showingImagePicker) {
+                ImagePicker(selectedImage: $selectedImage)
+            }
 
 
-            
+            // Text field where Name of client is inputted
             TextField("Name", text: $emptyArray[0])
                                 .frame(maxWidth: 350, alignment: .topLeading)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                                 
             
-            
+            // Text field where Address of client is inputted
             TextField("Address", text: $emptyArray[1])
                                 .frame(maxWidth: 350, alignment: .topLeading)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
             
-            TextField("Frequency", text: $emptyArray[2])
-                                .frame(maxWidth: 350, alignment: .topLeading)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
+            // Picker for the frequency (still need to allign better)
+            HStack(alignment: .center) {
+                Text("Frequency: ")
+                Picker("Frequency", selection: $emptyArray[2]) {
+                    ForEach(daysOfWeek, id: \.self) { day in
+                        Text(day)
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding()
             
         }.navigationBarBackButtonHidden(true)
         Spacer()
