@@ -8,25 +8,6 @@
 import Foundation
 import SwiftUI
 
-extension Color {
-    init(hex: String) {
-        let scanner = Scanner(string: hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted))
-        var hexNumber: UInt64 = 0
-        
-        if scanner.scanHexInt64(&hexNumber) {
-            let red = Double((hexNumber & 0xff0000) >> 16) / 255.0
-            let green = Double((hexNumber & 0x00ff00) >> 8) / 255.0
-            let blue = Double(hexNumber & 0x0000ff) / 255.0
-            
-            self.init(red: red, green: green, blue: blue)
-            return
-        }
-        
-        self.init(red: 0, green: 0, blue: 0) // Return black if unable to parse
-    }
-}
-
-
 struct AddHomeScreen: View {
     @State var emptyArray = ["", "", ""]
     @State private var navigateToNextScreen = false
@@ -68,10 +49,9 @@ struct AddHomeScreen: View {
                         .foregroundColor(olive)
                         .padding(.horizontal, 25.0)
                         .padding(.vertical, 10)
-                        .background(Color(hex: "#758f64"))
+                        .background(Color(red: 117/255, green: 143/255, blue: 100/255))
                         .cornerRadius(70)
                         .padding(5)
-                        
                 })
 
             }
@@ -92,7 +72,7 @@ struct AddHomeScreen: View {
                         .foregroundColor(.black)
                         .padding(.vertical, 75.0)
                         .padding(.horizontal, 150)
-                        .background(Color(hex: "#e4e4e4"))
+                        .background(Color(red: 200, green: 200, blue: 200))
                         .cornerRadius(40)
                 }
             }.sheet(isPresented: $showingImagePicker) {
