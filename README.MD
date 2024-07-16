@@ -8,3 +8,6 @@ links for apple developer membership information:
 
 link for figma design prototype:
 https://www.figma.com/proto/o7xaPuZht7zynZkDMCQAkV/App-Design-Ver.-1.0?t=bf4mZlCK7fDHkCb5-1
+
+video for data:
+https://www.youtube.com/watch?v=krRkm8w22A8
