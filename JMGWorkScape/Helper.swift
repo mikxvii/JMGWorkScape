@@ -7,7 +7,7 @@
 //  File where App Logic will be stored
 
 import Foundation
-import CoreData
+import SwiftData
 import SwiftUI
 
 
@@ -49,6 +49,22 @@ struct ImagePicker: UIViewControllerRepresentable {
     }
 
     func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
+}
+
+@Model
+class House: Identifiable{
+    var id: String;
+    
+    var name: String;
+    var address: String;
+    var frequency: String;
+    
+    init(name: String, address: String, frequency: String){
+        self.id = UUID().uuidString;
+        self.name = name;
+        self.address = address;
+        self.frequency = frequency;
+    }
 }
 
 func home(){

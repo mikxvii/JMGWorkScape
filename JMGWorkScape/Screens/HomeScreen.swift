@@ -50,19 +50,13 @@ struct HomeScreen: View {
                                                     .offset(x: 150)
                                                     .foregroundColor(olive)
                     }
+                    
+                    // this where the house code will go
                     Spacer()
                     
                     // Might wanna change the UI for these, as
                     // only one button is needed
                     HStack(spacing: 115){
-                        
-//                        Button(action: {
-//                            home()
-//                        }, label: {
-//                            Image(systemName: "house.fill")
-//                                .foregroundColor(olive)
-//                        })
-                        
                         NavigationLink(destination: AddHomeScreen()) {
                             Image(systemName: "house.fill").foregroundColor(olive)
                                         }
