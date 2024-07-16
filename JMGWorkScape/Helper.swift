@@ -51,22 +51,22 @@ struct ImagePicker: UIViewControllerRepresentable {
 }
 
 @Model
-class House: Identifiable{
+class House: Identifiable {
     var id: String;
     
     var name: String;
     var address: String;
     var frequency: String;
-    //var image: UIImage?;
     var jobD: String;
+//    var image: UIImage;
     
     init(_ name: String, _ address: String, _ job: String, _ frequency: String){
         self.id = UUID().uuidString;
         self.name = name;
         self.address = address;
         self.frequency = frequency;
-        //self.image = image;
         self.jobD = job;
+//        self.image = image
     }
 }
 
@@ -90,9 +90,7 @@ func search(){
     print("search")
 }
 
-//@Query private var items: [House]
-
-func done(_ items: [String]){
+func removeImage() {
     
 }
 
