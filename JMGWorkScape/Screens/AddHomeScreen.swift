@@ -11,15 +11,15 @@ import SwiftUI
 struct AddHomeScreen: View {
     @Environment(\.modelContext) private var context
 
+    @State var currName:String = ""
+    @State var currAddress:String = ""
+    @State var currFrequncy:String = ""
+    @State var currJobD:String = ""
     
-    // [Name, Address, Frequency]
-    @State var houseInfo = ["", "", ""]
-    
-    @State private var navigateToNextScreen = false
     @State private var showingImagePicker = false
     @State private var selectedImage: UIImage?
-    let daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
     
+    let daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
     let olive = Color(red: 0.23, green: 0.28, blue: 0.20, opacity: 1.00)
     
     var body: some View {
@@ -47,8 +47,10 @@ struct AddHomeScreen: View {
                 
                 // Done Button
                 Button(action: {
-                    var newHome = House(name: houseInfo[0], address: houseInfo[1], frequency: houseInfo[2], image: selectedImage)
-                    context.insert(newHome)
+//                    var newHome = House(currName, currAddress, currJobD, currFrequncy)
+//                    context.insert(newHome)
+                    
+                    print(currName)
                 }, label: {
                     Text("Done")
                         .bold()
@@ -87,20 +89,23 @@ struct AddHomeScreen: View {
 
 
             // Text field where Name of client is inputted
-            TextField("Name", text: $houseInfo[0])
+            TextField("Customer Name", text: $currName)
                                 .frame(maxWidth: 350, alignment: .topLeading)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                                 
             
             // Text field where Address of client is inputted
-            TextField("Address", text: $houseInfo[1])
+            TextField("Address", text: $currAddress)
+                                .frame(maxWidth: 350, alignment: .topLeading)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+            TextField("Job Description", text: $currJobD)
                                 .frame(maxWidth: 350, alignment: .topLeading)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
             
             // Picker for the frequency (still need to allign better)
             HStack(alignment: .center) {
                 Text("Frequency: ")
-                Picker("Frequency", selection: $houseInfo[2]) {
+                Picker("Frequency", selection: $currFrequncy) {
                     ForEach(daysOfWeek, id: \.self) { day in
                         Text(day)
                     }

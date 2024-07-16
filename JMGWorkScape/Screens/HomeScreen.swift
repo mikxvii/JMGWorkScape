@@ -21,7 +21,7 @@ struct HomeScreen: View {
                     .resizable()
                     .ignoresSafeArea()
                     .aspectRatio(contentMode: .fill)
-
+                
                 VStack {
                     HStack(spacing: 170) {
                         // Title of the Screen
@@ -37,18 +37,21 @@ struct HomeScreen: View {
                         }, label: {
                             Text("Filter")
                                 .bold()
-                                .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                                .foregroundColor(.blue)
                         })
-  
+                        
                     }
                     ZStack {
-                        // Text Box
                         TextField("'Calle Miramar..'", text: $searchText)
-                                            .frame(maxWidth: 350, alignment: .topLeading)
-                                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                        Image(systemName: "magnifyingglass")
-                                                    .offset(x: 150)
-                                                    .foregroundColor(olive)
+                            .frame(maxWidth: 350, alignment: .topLeading)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                        Button(action: {
+                            search()
+                        }, label: {
+                            Image(systemName: "magnifyingglass")
+                                
+                                .foregroundColor(olive)
+                        }).offset(x: 145)
                     }
                     
                     // this where the house code will go
@@ -59,8 +62,8 @@ struct HomeScreen: View {
                     HStack(spacing: 115){
                         NavigationLink(destination: AddHomeScreen()) {
                             Image(systemName: "house.fill").foregroundColor(olive)
-                                        }
-                            
+                        }
+                        
                         Button(action: {
                             route()
                         }, label: {
@@ -69,7 +72,7 @@ struct HomeScreen: View {
                         })
                         
                     }.padding(.bottom, 30.0).font(.system(size:  40))
-
+                    
                     
                 }
                 .padding()

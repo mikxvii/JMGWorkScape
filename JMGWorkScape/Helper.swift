@@ -57,14 +57,16 @@ class House: Identifiable{
     var name: String;
     var address: String;
     var frequency: String;
-    var image: UIImage?;
+    //var image: UIImage?;
+    var jobD: String;
     
-    init(name: String, address: String, frequency: String, image: UIImage?){
+    init(_ name: String, _ address: String, _ job: String, _ frequency: String){
         self.id = UUID().uuidString;
         self.name = name;
         self.address = address;
         self.frequency = frequency;
-        self.image = image;
+        //self.image = image;
+        self.jobD = job;
     }
 }
 
@@ -82,6 +84,10 @@ func filter(){
 
 func cancel(){
     print("cancel")
+}
+
+func search(){
+    print("search")
 }
 
 //@Query private var items: [House]
