@@ -10,7 +10,6 @@ import Foundation
 import SwiftData
 import SwiftUI
 
-
 // For color conversion from HEX
 
 struct ImagePicker: UIViewControllerRepresentable {
@@ -58,12 +57,14 @@ class House: Identifiable{
     var name: String;
     var address: String;
     var frequency: String;
+    var image: UIImage?;
     
-    init(name: String, address: String, frequency: String){
+    init(name: String, address: String, frequency: String, image: UIImage?){
         self.id = UUID().uuidString;
         self.name = name;
         self.address = address;
         self.frequency = frequency;
+        self.image = image;
     }
 }
 
@@ -83,8 +84,10 @@ func cancel(){
     print("cancel")
 }
 
-func done(){
-    print("done")
+//@Query private var items: [House]
+
+func done(_ items: [String]){
+    
 }
 
 

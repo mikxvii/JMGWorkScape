@@ -9,7 +9,12 @@ import Foundation
 import SwiftUI
 
 struct AddHomeScreen: View {
-    @State var emptyArray = ["", "", ""]
+    @Environment(\.modelContext) private var context
+
+    
+    // [Name, Address, Frequency]
+    @State var houseInfo = ["", "", ""]
+    
     @State private var navigateToNextScreen = false
     @State private var showingImagePicker = false
     @State private var selectedImage: UIImage?
@@ -42,7 +47,8 @@ struct AddHomeScreen: View {
                 
                 // Done Button
                 Button(action: {
-                    done()
+                    var newHome = House(name: houseInfo[0], address: houseInfo[1], frequency: houseInfo[2], image: selectedImage)
+                    context.insert(newHome)
                 }, label: {
                     Text("Done")
                         .bold()
@@ -81,20 +87,20 @@ struct AddHomeScreen: View {
 
 
             // Text field where Name of client is inputted
-            TextField("Name", text: $emptyArray[0])
+            TextField("Name", text: $houseInfo[0])
                                 .frame(maxWidth: 350, alignment: .topLeading)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                                 
             
             // Text field where Address of client is inputted
-            TextField("Address", text: $emptyArray[1])
+            TextField("Address", text: $houseInfo[1])
                                 .frame(maxWidth: 350, alignment: .topLeading)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
             
             // Picker for the frequency (still need to allign better)
             HStack(alignment: .center) {
                 Text("Frequency: ")
-                Picker("Frequency", selection: $emptyArray[2]) {
+                Picker("Frequency", selection: $houseInfo[2]) {
                     ForEach(daysOfWeek, id: \.self) { day in
                         Text(day)
                     }
