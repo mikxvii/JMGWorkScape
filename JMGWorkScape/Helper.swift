@@ -12,9 +12,9 @@ import SwiftUI
 
 // For color conversion from HEX
 
-struct ImagePicker: UIViewControllerRepresentable {
-    @Binding var selectedImage: UIImage?
-    @Environment(\.presentationMode) var presentationMode
+//struct ImagePicker: UIViewControllerRepresentable {
+//    @Binding var selectedImage: UIImage?
+//    @Environment(\.presentationMode) var presentationMode
 
 //    class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
 //        let parent: ImagePicker
@@ -46,9 +46,9 @@ struct ImagePicker: UIViewControllerRepresentable {
 //        picker.sourceType = .photoLibrary
 //        return picker
 //    }
-
-    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
-}
+//
+//    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
+//}
 
 
 func home(){
