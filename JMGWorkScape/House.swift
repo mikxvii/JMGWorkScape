@@ -7,15 +7,17 @@
 
 import Foundation
 import SwiftData
+import SwiftUI
 
 @Model
-class House: Identifiable {
+final class House: Identifiable {
     var id: String
     
     var name: String
     var address: String
     var frequency: String
     var jobD: String
+    var imageData: Data?
     
     init(_ name: String="", _ address: String="", _ job: String="", _ frequency: String=""){
         self.id = UUID().uuidString

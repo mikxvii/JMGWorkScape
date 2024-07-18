@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import PhotosUI
 
 struct AddHomeScreen: View {
     @Environment(\.modelContext) private var context
@@ -16,9 +17,8 @@ struct AddHomeScreen: View {
     @State var currFrequncy:String = "Friday" //default value to not get error for having "" as default
     @State var currJobD:String = ""
     
-    @State private var showingImagePicker = false
-    @State private var selectedImage: UIImage? = nil
     @State var goBackToHome: Bool = false
+    @StateObject private var imageModel = ImageModel()
 
     
     let daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
@@ -50,10 +50,8 @@ struct AddHomeScreen: View {
                     // Done Button
                     Button(action: {
                         let newHouse = House(currName, currAddress, currJobD, currFrequncy)
+                        newHouse.imageData = imageModel.selectedImage
                         context.insert(newHouse)
-                        
-
-                        
                         goBackToHome = true
                     }, label: {
                         Text("Done")
@@ -68,38 +66,38 @@ struct AddHomeScreen: View {
                 }
             
                 // Upload an image
-//                Button(action: {
-//                    showingImagePicker = true
-//                }) {
-//                    if let image = selectedImage {
-//                        VStack {
-//                            Image(uiImage: image)
-//                                .resizable()
-//                                .cornerRadius(40)
-//                                .aspectRatio(contentMode: .fit)
-//                                .padding(5)
-//                            Button (action: {
-//                                selectedImage = nil
-//                            }, label: {
-//                                Image(systemName: "trash.circle.fill")
-//                            })
-//                            .foregroundColor(.red)
-//                            .font(.title)
-//                        }
-//                    } else {
-//                        Image(systemName: "photo.badge.plus")
-//                            .font(.system(size:  50))
-//                            .foregroundColor(.black)
-//                            .padding(.vertical, 75.0)
-//                            .padding(.horizontal, 150)
-//                            .background(Color(red: 200, green: 200, blue: 200))
-//                            .cornerRadius(40)
-//                    }
-//                }.sheet(isPresented: $showingImagePicker) {
-//                    ImagePicker(selectedImage: $selectedImage)
-//                }
+                PhotosPicker(selection: $imageModel.imageSelection, matching: .images) {
+                    if let image = imageModel.selectedImage {
+                        VStack(spacing: 20) {
+                            Image(uiImage: UIImage(data: image)!)
+                                .resizable()
+                                .cornerRadius(40)
+                                .aspectRatio(contentMode: .fit)
+                                .padding(5)
+                            Button (action: {
+                                imageModel.removeImage()
+                            }, label: {
+                                Image(systemName: "trash.circle.fill")
+                            })
+                                .foregroundColor(.red)
+                                .font(.title)
+                        }
+                    } else  {
+                        Image(systemName: "photo.badge.plus")
+                            .font(.system(size:  50))
+                            .foregroundColor(.black)
+                            .padding(.vertical, 75.0)
+                            .padding(.horizontal, 150)
+                            .background(Color(red: 200, green: 200, blue: 200))
+                            .cornerRadius(40)
 
-
+                    }
+                }
+                
+                
+                
+                
+                
                 // Text field where Name of client is inputted
                 TextField("Customer Name", text: $currName)
                                     .frame(maxWidth: 350, alignment: .topLeading)

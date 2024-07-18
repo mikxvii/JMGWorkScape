@@ -9,47 +9,40 @@
 import Foundation
 import SwiftData
 import SwiftUI
+import PhotosUI
+import UIKit
 
-// For color conversion from HEX
 
-struct ImagePicker: UIViewControllerRepresentable {
-    @Binding var selectedImage: UIImage?
-    @Environment(\.presentationMode) var presentationMode
+@MainActor
+final class ImageModel: ObservableObject {
+    
+    @Published private(set) var selectedImage: Data? = nil
+    @Published var imageSelection: PhotosPickerItem? = nil {
+        didSet {
+            setImage(from: imageSelection)
+        }
+    }
+    
+    init() {
+        return
+    }
+    
+    private func setImage(from selection: PhotosPickerItem?) {
+        guard let selection else { return }
+        
+        Task {
+            if let data = try? await selection.loadTransferable(type: Data.self) {
+                selectedImage = data
+                return
+            }
+        }
+    }
+    func removeImage() {
+        self.selectedImage = nil
+        self.imageSelection = nil
+    }
 
-//    class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
-//        let parent: ImagePicker
-//
-//        init(parent: ImagePicker) {
-//            self.parent = parent
-//        }
-//
-//        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-//            if let image = info[.originalImage] as? UIImage {
-//                parent.selectedImage = image
-//            }
-//
-//            parent.presentationMode.wrappedValue.dismiss()
-//        }
-//
-//        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-//            parent.presentationMode.wrappedValue.dismiss()
-//        }
-//    }
-//
-//    func makeCoordinator() -> Coordinator {
-//        Coordinator(parent: self)
-//    }
-//
-//    func makeUIViewController(context: Context) -> UIImagePickerController {
-//        let picker = UIImagePickerController()
-//        picker.delegate = context.coordinator
-//        picker.sourceType = .photoLibrary
-//        return picker
-//    }
-
-    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
 }
-
 
 func home(){
     print("Go Home")
@@ -70,9 +63,4 @@ func cancel(){
 func search(){
     print("search")
 }
-
-func removeImage() {
-    
-}
-
 
