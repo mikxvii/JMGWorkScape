@@ -13,5 +13,6 @@ struct JMGWorkScapeApp: App {
         WindowGroup {
             HomeScreen()
         }
+        .modelContainer(for: House.self)
     }
 }
