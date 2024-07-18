@@ -12,9 +12,20 @@ struct HomeScreen: View {
     let olive = Color(red: 0.23, green: 0.28, blue: 0.20, opacity: 1.00)
     @State var searchText = ""
     
+    @State var goToDetails: Bool = false
+    @State var goToAdd: Bool = false
+    @State var goToRoute: Bool = false
+    
     var body: some View {
         // Setting up for Screen switching
-        NavigationView {
+        if goToDetails {
+            HomeDetailsScreen()
+        } else if goToAdd {
+            AddHomeScreen()
+                .transition(.move(edge: .trailing).animation(.bouncy))
+        } else if goToRoute {
+            RouteScreen()
+        } else {
             ZStack {
                 // HomeScreen background
                 Image("olive_screen")
@@ -60,9 +71,12 @@ struct HomeScreen: View {
                     // Might wanna change the UI for these, as
                     // only one button is needed
                     HStack(spacing: 115){
-                        NavigationLink(destination: AddHomeScreen()) {
+                        // Add a Home Button
+                        Button(action: {
+                            goToAdd = true
+                        }, label: {
                             Image(systemName: "house.fill").foregroundColor(olive)
-                        }
+                        })
                         
                         Button(action: {
                             route()
@@ -78,6 +92,6 @@ struct HomeScreen: View {
                 .padding()
             }
             .padding()
-        }.navigationBarBackButtonHidden(true)
+        }
     }
 }

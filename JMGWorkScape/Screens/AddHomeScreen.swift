@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+
 struct AddHomeScreen: View {
     @Environment(\.modelContext) private var context
 
@@ -18,16 +19,25 @@ struct AddHomeScreen: View {
     
     @State private var showingImagePicker = false
     @State private var selectedImage: UIImage?
+    @State var goBackToHome: Bool = false
+
     
     let daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
     let olive = Color(red: 0.23, green: 0.28, blue: 0.20, opacity: 1.00)
     
     var body: some View {
-        NavigationView {
+        if goBackToHome {
+            HomeScreen()
+                .transition(.move(edge: .trailing).animation(.bouncy))
+        } else {
             VStack(spacing: 30){
+
                 HStack(spacing: 125){
-                    // Cancel button
-                    NavigationLink(destination: HomeScreen()) {
+                    // Cancel Button
+                    Button(action: {
+                        goBackToHome = true
+                        print("cancel")
+                    }, label: {
                         Text("Cancel")
                             .bold()
                             .foregroundColor(.black)
@@ -36,13 +46,12 @@ struct AddHomeScreen: View {
                             .background(.red)
                             .cornerRadius(70)
                             .padding(5)
-                    }
-                    
+                    })
                     // Done Button
                     Button(action: {
-//                            let newHouse = House(currName, currAddress, currJobD, currFrequncy, selectedImage)
-//                            context.insert(newHouse)
-                        print("Done")
+                        let newHouse = House(currName, currAddress, currJobD, currFrequncy, selectedImage)
+//                        context.insert(newHouse)
+                        goBackToHome = true
                     }, label: {
                         Text("Done")
                             .bold()
@@ -54,6 +63,7 @@ struct AddHomeScreen: View {
                             .padding(5)
                     })
                 }
+            
                 // Upload an image
                 Button(action: {
                     showingImagePicker = true
@@ -117,7 +127,8 @@ struct AddHomeScreen: View {
                 .padding()
                 
                 Spacer()
+                Spacer()
             }
-        }.navigationBarBackButtonHidden(true)
+        }
     }
 }

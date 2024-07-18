@@ -52,21 +52,21 @@ struct ImagePicker: UIViewControllerRepresentable {
 
 @Model
 class House: Identifiable {
-    var id: String;
+    var id: String
     
-    var name: String;
-    var address: String;
-    var frequency: String;
-    var jobD: String;
-//    var image: UIImage;
+    var name: String
+    var address: String
+    var frequency: String
+    var jobD: String
+    var image: UIImage?
     
-    init(_ name: String, _ address: String, _ job: String, _ frequency: String){
-        self.id = UUID().uuidString;
-        self.name = name;
-        self.address = address;
-        self.frequency = frequency;
-        self.jobD = job;
-//        self.image = image
+    init(_ name: String, _ address: String, _ job: String, _ frequency: String, _ imageData: UIImage? = nil){
+        self.id = UUID().uuidString
+        self.name = name
+        self.address = address
+        self.frequency = frequency
+        self.jobD = job
+        self.image = imageData
     }
 }
 
