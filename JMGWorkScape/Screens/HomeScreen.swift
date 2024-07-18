@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Foundation
+import SwiftData
 
 struct HomeScreen: View {
     let olive = Color(red: 0.23, green: 0.28, blue: 0.20, opacity: 1.00)
@@ -15,6 +16,7 @@ struct HomeScreen: View {
     @State var goToDetails: Bool = false
     @State var goToAdd: Bool = false
     @State var goToRoute: Bool = false
+    @Query private var houses: [House]
     
     var body: some View {
         // Setting up for Screen switching
@@ -66,6 +68,12 @@ struct HomeScreen: View {
                     }
                     
                     // this where the house code will go
+                    
+                    List{
+                        ForEach (houses) { house in
+                            Text(house.name)
+                        }
+                    }
                     Spacer()
                     
                     // Might wanna change the UI for these, as

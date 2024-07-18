@@ -48,14 +48,8 @@ struct AddHomeScreen: View {
                     })
                     // Done Button
                     Button(action: {
-                        let newHouse = House(currName, currAddress, currJobD, currFrequncy/*, selectedImage*/)
-                        //context.insert(newHouse)
-                        do{
-                            try context.insert(newHouse)
-                            try context.save()
-                        }catch{
-                            print("Error happend when saving information")
-                        }
+                        let newHouse = House(currName, currAddress, currJobD, currFrequncy)
+                        context.insert(newHouse)
                         
 
                         

@@ -24,7 +24,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "578A3DF8-6652-4993-BF92-8D633AB24997"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../../../../var/folders/5q/dldnxr2x4nv522gm6kv1sbww0000gn/T/swift-generated-sources/@__swiftmacro_12JMGWorkScape5House5ModelfMm_.swift"
@@ -34,6 +34,68 @@
             endingLineNumber = "1"
             landmarkName = "unknown"
             landmarkType = "0">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B173D0C1-BE45-4F4B-8404-C856BBB20A06"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../../../../var/folders/5q/dldnxr2x4nv522gm6kv1sbww0000gn/T/swift-generated-sources/@__swiftmacro_12JMGWorkScape5House5ModelfMm_.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1"
+            endingLineNumber = "1"
+            landmarkName = "unknown"
+            landmarkType = "0">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6409733A-77E6-4D62-9287-D0512AFAFE28"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../../../../var/folders/5q/dldnxr2x4nv522gm6kv1sbww0000gn/T/swift-generated-sources/@__swiftmacro_12JMGWorkScape5House5ModelfMm_.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "2"
+            endingLineNumber = "2"
+            landmarkName = "unknown"
+            landmarkType = "0">
+            <Locations>
+               <Location
+                  uuid = "6409733A-77E6-4D62-9287-D0512AFAFE28 - 391fde64382f2fd5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "JMGWorkScape.House.init(Swift.String, Swift.String, Swift.String, Swift.String) -&gt; JMGWorkScape.House"
+                  moduleName = "JMGWorkScape"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///var/folders/5q/dldnxr2x4nv522gm6kv1sbww0000gn/T/swift-generated-sources/@__swiftmacro_12JMGWorkScape5House5ModelfMm_.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "2"
+                  endingLineNumber = "2">
+               </Location>
+               <Location
+                  uuid = "6409733A-77E6-4D62-9287-D0512AFAFE28 - 9af8f89f1dc131ea"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "JMGWorkScape.House.init(backingData: any SwiftData.BackingData&lt;Self.SwiftData.BackingData.Model == JMGWorkScape.House&gt;) -&gt; JMGWorkScape.House"
+                  moduleName = "JMGWorkScape"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///var/folders/5q/dldnxr2x4nv522gm6kv1sbww0000gn/T/swift-generated-sources/@__swiftmacro_12JMGWorkScape5House5ModelfMm_.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "2"
+                  endingLineNumber = "2">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
