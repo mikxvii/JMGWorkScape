@@ -58,16 +58,27 @@ class House: Identifiable {
     var address: String
     var frequency: String
     var jobD: String
-    var image: UIImage?
+//    var imageData: Data?
     
-    init(_ name: String, _ address: String, _ job: String, _ frequency: String, _ imageData: UIImage? = nil){
+//    var image: UIImage?{
+//        get {
+//            guard let imageData = imageData else { return nil }
+//            return UIImage(data: imageData)
+//        }
+//        set {
+//            imageData = newValue?.jpegData(compressionQuality: 1.0)
+//        }
+//    }
+    
+    init(_ name: String="", _ address: String="", _ job: String="", _ frequency: String=""/*, _ image: UIImage? = nil*/){
         self.id = UUID().uuidString
         self.name = name
         self.address = address
         self.frequency = frequency
         self.jobD = job
-        self.image = imageData
+//        self.imageData = imageData
     }
+    
 }
 
 func home(){

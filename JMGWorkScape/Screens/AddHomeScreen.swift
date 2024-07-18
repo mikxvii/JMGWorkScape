@@ -2,23 +2,22 @@
 //  HomeDetailsScreen.swift
 //  JMGWorkScape
 //
-//  Created by Michael Guerrero on 7/13/24.
+//  Created by Michael Guerrero and Christopher Rebollar-Ramirez on 7/13/24.
 //
 
 import Foundation
 import SwiftUI
-
 
 struct AddHomeScreen: View {
     @Environment(\.modelContext) private var context
 
     @State var currName:String = ""
     @State var currAddress:String = ""
-    @State var currFrequncy:String = ""
+    @State var currFrequncy:String = "Friday" //default value to not get error for having "" as default
     @State var currJobD:String = ""
     
     @State private var showingImagePicker = false
-    @State private var selectedImage: UIImage?
+    @State private var selectedImage: UIImage? = nil
     @State var goBackToHome: Bool = false
 
     
@@ -49,9 +48,17 @@ struct AddHomeScreen: View {
                     })
                     // Done Button
                     Button(action: {
-                        let newHouse = House(currName, currAddress, currJobD, currFrequncy, selectedImage)
-//                        context.insert(newHouse)
-                        // why is this not working
+                        let newHouse = House(currName, currAddress, currJobD, currFrequncy/*, selectedImage*/)
+                        //context.insert(newHouse)
+                        do{
+                            try context.insert(newHouse)
+                            try context.save()
+                        }catch{
+                            print("Error happend when saving information")
+                        }
+                        
+
+                        
                         goBackToHome = true
                     }, label: {
                         Text("Done")
