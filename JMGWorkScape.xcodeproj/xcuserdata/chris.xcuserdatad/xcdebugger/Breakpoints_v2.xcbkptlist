@@ -8,7 +8,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "015DB330-5930-49E3-AF9D-46BB9C19B903"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../../../../var/folders/5q/dldnxr2x4nv522gm6kv1sbww0000gn/T/swift-generated-sources/@__swiftmacro_12JMGWorkScape5HouseC5image18_PersistedPropertyfMa_.swift"
@@ -18,52 +18,6 @@
             endingLineNumber = "1"
             landmarkName = "unknown"
             landmarkType = "0">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "5AB5BE6B-BA77-4C75-81FC-4672390799E0"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "JMGWorkScape/Helper.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "62"
-            endingLineNumber = "62"
-            landmarkName = "filter()"
-            landmarkType = "9">
-            <Locations>
-               <Location
-                  uuid = "5AB5BE6B-BA77-4C75-81FC-4672390799E0 - 773139b39ff45d69"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "JMGWorkScape.House.__allocating_init(Swift.String, Swift.String, Swift.String, Swift.String) -&gt; JMGWorkScape.House"
-                  moduleName = "JMGWorkScape"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/chris/Documents/GitHub/JMGWorkScape/JMGWorkScape/Helper.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "0"
-                  endingLineNumber = "0">
-               </Location>
-               <Location
-                  uuid = "5AB5BE6B-BA77-4C75-81FC-4672390799E0 - 391fde64382f2fd5"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "JMGWorkScape.House.init(Swift.String, Swift.String, Swift.String, Swift.String) -&gt; JMGWorkScape.House"
-                  moduleName = "JMGWorkScape"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///var/folders/5q/dldnxr2x4nv522gm6kv1sbww0000gn/T/swift-generated-sources/@__swiftmacro_12JMGWorkScape5House5ModelfMm_.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "2"
-                  endingLineNumber = "2">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
