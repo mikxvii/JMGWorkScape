@@ -25,6 +25,7 @@ struct AddHomeScreen: View {
     let olive = Color(red: 0.23, green: 0.28, blue: 0.20, opacity: 1.00)
     
     var body: some View {
+        // bool variable changed by Cancel and Done buttons
         if goBackToHome {
             HomeScreen()
                 .transition(.move(edge: .trailing).animation(.bouncy))
@@ -67,36 +68,36 @@ struct AddHomeScreen: View {
                 }
             
                 // Upload an image
-                Button(action: {
-                    showingImagePicker = true
-                }) {
-                    if let image = selectedImage {
-                        VStack {
-                            Image(uiImage: image)
-                                .resizable()
-                                .cornerRadius(40)
-                                .aspectRatio(contentMode: .fit)
-                                .padding(5)
-                            Button (action: {
-                                selectedImage = nil
-                            }, label: {
-                                Image(systemName: "trash.circle.fill")
-                            })
-                            .foregroundColor(.red)
-                            .font(.title)
-                        }
-                    } else {
-                        Image(systemName: "photo.badge.plus")
-                            .font(.system(size:  50))
-                            .foregroundColor(.black)
-                            .padding(.vertical, 75.0)
-                            .padding(.horizontal, 150)
-                            .background(Color(red: 200, green: 200, blue: 200))
-                            .cornerRadius(40)
-                    }
-                }.sheet(isPresented: $showingImagePicker) {
-                    ImagePicker(selectedImage: $selectedImage)
-                }
+//                Button(action: {
+//                    showingImagePicker = true
+//                }) {
+//                    if let image = selectedImage {
+//                        VStack {
+//                            Image(uiImage: image)
+//                                .resizable()
+//                                .cornerRadius(40)
+//                                .aspectRatio(contentMode: .fit)
+//                                .padding(5)
+//                            Button (action: {
+//                                selectedImage = nil
+//                            }, label: {
+//                                Image(systemName: "trash.circle.fill")
+//                            })
+//                            .foregroundColor(.red)
+//                            .font(.title)
+//                        }
+//                    } else {
+//                        Image(systemName: "photo.badge.plus")
+//                            .font(.system(size:  50))
+//                            .foregroundColor(.black)
+//                            .padding(.vertical, 75.0)
+//                            .padding(.horizontal, 150)
+//                            .background(Color(red: 200, green: 200, blue: 200))
+//                            .cornerRadius(40)
+//                    }
+//                }.sheet(isPresented: $showingImagePicker) {
+//                    ImagePicker(selectedImage: $selectedImage)
+//                }
 
 
                 // Text field where Name of client is inputted
