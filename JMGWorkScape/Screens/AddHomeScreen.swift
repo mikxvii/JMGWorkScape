@@ -51,6 +51,7 @@ struct AddHomeScreen: View {
                     Button(action: {
                         let newHouse = House(currName, currAddress, currJobD, currFrequncy, selectedImage)
 //                        context.insert(newHouse)
+                        // why is this not working
                         goBackToHome = true
                     }, label: {
                         Text("Done")
