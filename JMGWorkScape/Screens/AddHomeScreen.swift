@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import PhotosUI
 
 struct AddHomeScreen: View {
     @Environment(\.modelContext) private var context
@@ -16,9 +17,10 @@ struct AddHomeScreen: View {
     @State var currFrequncy:String = "Friday" //default value to not get error for having "" as default
     @State var currJobD:String = ""
     
-    @State private var showingImagePicker = false
-    @State private var selectedImage: UIImage? = nil
     @State var goBackToHome: Bool = false
+    @State var selectedPhoto: PhotosPickerItem?
+    @State var selectedPhotoData: Data?
+//    @StateObject private var imageModel = ImageModel()
 
     
     let daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
@@ -49,12 +51,9 @@ struct AddHomeScreen: View {
                     })
                     // Done Button
                     Button(action: {
-                        let newHouse = House(currName, currAddress, currJobD, currFrequncy)
-                        context.insert(newHouse)
-                        
-
-                        
                         goBackToHome = true
+                        let house = House(currName, currAddress, currJobD, currFrequncy, selectedPhotoData)
+                        context.insert(house)
                     }, label: {
                         Text("Done")
                             .bold()
@@ -66,40 +65,43 @@ struct AddHomeScreen: View {
                             .padding(5)
                     })
                 }
-            
-                // Upload an image
-//                Button(action: {
-//                    showingImagePicker = true
-//                }) {
-//                    if let image = selectedImage {
-//                        VStack {
-//                            Image(uiImage: image)
-//                                .resizable()
-//                                .cornerRadius(40)
-//                                .aspectRatio(contentMode: .fit)
-//                                .padding(5)
-//                            Button (action: {
-//                                selectedImage = nil
-//                            }, label: {
-//                                Image(systemName: "trash.circle.fill")
-//                            })
-//                            .foregroundColor(.red)
-//                            .font(.title)
-//                        }
-//                    } else {
-//                        Image(systemName: "photo.badge.plus")
-//                            .font(.system(size:  50))
-//                            .foregroundColor(.black)
-//                            .padding(.vertical, 75.0)
-//                            .padding(.horizontal, 150)
-//                            .background(Color(red: 200, green: 200, blue: 200))
-//                            .cornerRadius(40)
-//                    }
-//                }.sheet(isPresented: $showingImagePicker) {
-//                    ImagePicker(selectedImage: $selectedImage)
-//                }
 
-
+                PhotosPicker(selection: $selectedPhoto, matching: .images, photoLibrary: .shared()) {
+                    if let selectedPhotoData,
+                       let uiImage = UIImage(data: selectedPhotoData) {
+                        withAnimation {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                    .cornerRadius(40)
+                                .aspectRatio(contentMode: .fit)
+                                .padding(5)
+                        }
+                    } else {
+                        Image(systemName: "photo.badge.plus")
+                            .font(.system(size:  50))
+                            .foregroundColor(.black)
+                            .padding(.vertical, 75.0)
+                            .padding(.horizontal, 150)
+                            .background(Color(red: 200, green: 200, blue: 200))
+                            .cornerRadius(40)
+                    }
+                }
+                if selectedPhotoData != nil {
+                    Button (role: .destructive) {
+                        withAnimation {
+                            selectedPhotoData = nil
+                            selectedPhoto = nil
+                        }
+                    } label: {
+                        Image(systemName: "trash.circle.fill")
+                    }
+                        .font(.title)
+                }
+                
+                
+                
+                
+                
                 // Text field where Name of client is inputted
                 TextField("Customer Name", text: $currName)
                                     .frame(maxWidth: 350, alignment: .topLeading)
@@ -131,6 +133,10 @@ struct AddHomeScreen: View {
                 
                 Spacer()
                 Spacer()
+            }.task(id: selectedPhoto) {
+                if let data = try? await selectedPhoto?.loadTransferable(type: Data.self) {
+                    selectedPhotoData = data
+                }
             }
         }
     }

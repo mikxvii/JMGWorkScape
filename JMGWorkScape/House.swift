@@ -7,9 +7,10 @@
 
 import Foundation
 import SwiftData
+import SwiftUI
 
 @Model
-class House: Identifiable {
+final class House: Identifiable {
     var id: String
     
     var name: String
@@ -17,12 +18,15 @@ class House: Identifiable {
     var frequency: String
     var jobD: String
     
-    init(_ name: String="", _ address: String="", _ job: String="", _ frequency: String=""){
+    var imageData: Data?
+    
+    init(_ name: String="", _ address: String="", _ job: String="", _ frequency: String="", _ imageData: Data? = nil) {
         self.id = UUID().uuidString
         self.name = name
         self.address = address
         self.frequency = frequency
         self.jobD = job
+        self.imageData = imageData
     }
     
 }
