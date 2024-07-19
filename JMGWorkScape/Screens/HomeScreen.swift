@@ -17,6 +17,7 @@ struct HomeScreen: View {
     @State var goToAdd: Bool = false
     @State var goToRoute: Bool = false
     @Query private var houses: [House]
+    @Environment(\.modelContext) private var context
     
     var body: some View {
         // Setting up for Screen switching
@@ -35,7 +36,7 @@ struct HomeScreen: View {
                     .ignoresSafeArea()
                     .aspectRatio(contentMode: .fill)
                 
-                VStack {
+                VStack(spacing: 10) {
                     HStack(spacing: 170) {
                         // Title of the Screen
                         Text("Homes")
@@ -47,13 +48,16 @@ struct HomeScreen: View {
                         // Supposed to be a filter button
                         Button(action: {
                             filter()
+                            if !houses.isEmpty {
+                                context.delete(houses[0])
+                            }
                         }, label: {
                             Text("Filter")
                                 .bold()
                                 .foregroundColor(.blue)
                         })
-                        
                     }
+
                     ZStack {
                         TextField("'Calle Miramar..'", text: $searchText)
                             .frame(maxWidth: 350, alignment: .topLeading)
@@ -62,23 +66,42 @@ struct HomeScreen: View {
                             search()
                         }, label: {
                             Image(systemName: "magnifyingglass")
-                                
                                 .foregroundColor(olive)
                         }).offset(x: 145)
                     }
                     
-                    // this where the house code will go
+                    // Page Calculation
+                    let itemsPerPage = 6
+                    let pages = Int(ceil(Double(houses.count) / Double(itemsPerPage)))
                     
-                    List{
-                        ForEach (houses) { house in
-                            Text(house.name)
+                    ScrollView(.horizontal) {
+                        HStack {
+                            ForEach(1..<pages + 1, id: \.self) { page in
+                                LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 2)) {
+                                    ForEach(getItems(for: page, itemsPerPage: itemsPerPage), id: \.self) { item in
+                                        ZStack {
+                                            Rectangle()
+                                                .fill(Color.green)
+                                                .frame(width: 150, height: 150)
+                                                .cornerRadius(45)
+                                            
+                                            Text(item.name)
+                                                .padding(.horizontal, 40)
+                                                .padding(.vertical, 8)
+                                                .background(Color.white)
+                                                .cornerRadius(20)
+                                                .frame(width: 200, height: 100, alignment: .bottom)
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
+                    
                     Spacer()
                     
-                    // Might wanna change the UI for these, as
-                    // only one button is needed
-                    HStack(spacing: 115){
+                    // Buttons for actions
+                    HStack(spacing: 115) {
                         // Add a Home Button
                         Button(action: {
                             goToAdd = true
@@ -92,14 +115,20 @@ struct HomeScreen: View {
                             Image(systemName: "map")
                                 .foregroundColor(olive)
                         })
-                        
-                    }.padding(.bottom, 30.0).font(.system(size:  40))
-                    
-                    
+                    }
+                    .padding(.bottom, 30.0)
+                    .font(.system(size: 40))
                 }
                 .padding()
             }
             .padding()
         }
+    }
+    
+    // Function to get items for a specific page
+    func getItems(for page: Int, itemsPerPage: Int) -> [House] {
+        let startIndex = (page - 1) * itemsPerPage
+        let endIndex = min(startIndex + itemsPerPage, houses.count)
+        return Array(houses[startIndex..<endIndex])
     }
 }
