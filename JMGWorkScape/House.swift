@@ -17,14 +17,16 @@ final class House: Identifiable {
     var address: String
     var frequency: String
     var jobD: String
+    
     var imageData: Data?
     
-    init(_ name: String="", _ address: String="", _ job: String="", _ frequency: String=""){
+    init(_ name: String="", _ address: String="", _ job: String="", _ frequency: String="", _ imageData: Data? = nil) {
         self.id = UUID().uuidString
         self.name = name
         self.address = address
         self.frequency = frequency
         self.jobD = job
+        self.imageData = imageData
     }
     
 }

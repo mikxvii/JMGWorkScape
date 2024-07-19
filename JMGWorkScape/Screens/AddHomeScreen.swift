@@ -18,7 +18,9 @@ struct AddHomeScreen: View {
     @State var currJobD:String = ""
     
     @State var goBackToHome: Bool = false
-    @StateObject private var imageModel = ImageModel()
+    @State var selectedPhoto: PhotosPickerItem?
+    @State var selectedPhotoData: Data?
+//    @StateObject private var imageModel = ImageModel()
 
     
     let daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
@@ -49,10 +51,9 @@ struct AddHomeScreen: View {
                     })
                     // Done Button
                     Button(action: {
-                        let newHouse = House(currName, currAddress, currJobD, currFrequncy)
-                        newHouse.imageData = imageModel.selectedImage
-                        context.insert(newHouse)
                         goBackToHome = true
+                        let house = House(currName, currAddress, currJobD, currFrequncy, selectedPhotoData)
+                        context.insert(house)
                     }, label: {
                         Text("Done")
                             .bold()
@@ -66,23 +67,45 @@ struct AddHomeScreen: View {
                 }
             
                 // Upload an image
-                PhotosPicker(selection: $imageModel.imageSelection, matching: .images) {
-                    if let image = imageModel.selectedImage {
-                        VStack(spacing: 20) {
-                            Image(uiImage: UIImage(data: image)!)
+//                PhotosPicker(selection: $imageModel.imageSelection, matching: .images) {
+//                    if let image = imageModel.selectedImage {
+//                        VStack(spacing: 20) {
+//                            Image(uiImage: UIImage(data: image)!)
+//                                .resizable()
+//                                .cornerRadius(40)
+//                                .aspectRatio(contentMode: .fit)
+//                                .padding(5)
+//                            Button (action: {
+//                                imageModel.removeImage()
+//                            }, label: {
+//                                Image(systemName: "trash.circle.fill")
+//                            })
+//                                .foregroundColor(.red)
+//                                .font(.title)
+//                        }
+//                    } else  {
+//                        Image(systemName: "photo.badge.plus")
+//                            .font(.system(size:  50))
+//                            .foregroundColor(.black)
+//                            .padding(.vertical, 75.0)
+//                            .padding(.horizontal, 150)
+//                            .background(Color(red: 200, green: 200, blue: 200))
+//                            .cornerRadius(40)
+//
+//                    }
+//                }
+
+                PhotosPicker(selection: $selectedPhoto, matching: .images, photoLibrary: .shared()) {
+                    if let selectedPhotoData,
+                       let uiImage = UIImage(data: selectedPhotoData) {
+                        withAnimation {
+                            Image(uiImage: uiImage)
                                 .resizable()
-                                .cornerRadius(40)
+                                    .cornerRadius(40)
                                 .aspectRatio(contentMode: .fit)
                                 .padding(5)
-                            Button (action: {
-                                imageModel.removeImage()
-                            }, label: {
-                                Image(systemName: "trash.circle.fill")
-                            })
-                                .foregroundColor(.red)
-                                .font(.title)
                         }
-                    } else  {
+                    } else {
                         Image(systemName: "photo.badge.plus")
                             .font(.system(size:  50))
                             .foregroundColor(.black)
@@ -90,8 +113,18 @@ struct AddHomeScreen: View {
                             .padding(.horizontal, 150)
                             .background(Color(red: 200, green: 200, blue: 200))
                             .cornerRadius(40)
-
                     }
+                }
+                if selectedPhotoData != nil {
+                    Button (role: .destructive) {
+                        withAnimation {
+                            selectedPhotoData = nil
+                            selectedPhoto = nil
+                        }
+                    } label: {
+                        Image(systemName: "trash.circle.fill")
+                    }
+                        .font(.title)
                 }
                 
                 
@@ -129,6 +162,10 @@ struct AddHomeScreen: View {
                 
                 Spacer()
                 Spacer()
+            }.task(id: selectedPhoto) {
+                if let data = try? await selectedPhoto?.loadTransferable(type: Data.self) {
+                    selectedPhotoData = data
+                }
             }
         }
     }
