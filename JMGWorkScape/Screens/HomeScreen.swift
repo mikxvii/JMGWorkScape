@@ -10,14 +10,32 @@ import Foundation
 import SwiftData
 
 struct HomeScreen: View {
+    // in Cmyk format
     let olive = Color(red: 0.23, green: 0.28, blue: 0.20, opacity: 1.00)
-    @State var searchText = ""
+    let gray = Color(red: 0, green: 0, blue: 0, opacity: 0.04)
     
+    let darkOlive = Color(red: 0.19, green: 0.23, blue: 0.16, opacity: 1.00)
+    @State var searchText = ""
     @State var goToDetails: Bool = false
     @State var goToAdd: Bool = false
     @State var goToRoute: Bool = false
     @Query private var houses: [House]
     @Environment(\.modelContext) private var context
+    
+//    These are used to help display the houses!
+    private let numberColumns = [
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
+    
+    
+    // Function to get items for a specific page
+    func getItems(for page: Int, itemsPerPage: Int) -> [House] {
+        let startIndex = (page - 1) * itemsPerPage
+        let endIndex = min(startIndex + itemsPerPage, houses.count)
+        return Array(houses[startIndex..<endIndex])
+    }
+    
     
     var body: some View {
         // Setting up for Screen switching
@@ -37,7 +55,7 @@ struct HomeScreen: View {
                     .aspectRatio(contentMode: .fill)
                 
                 VStack(spacing: 10) {
-                    HStack(spacing: 170) {
+                    HStack(spacing: 157) {
                         // Title of the Screen
                         Text("Homes")
                             .bold()
@@ -52,12 +70,15 @@ struct HomeScreen: View {
                                 context.delete(houses[0])
                             }
                         }, label: {
-                            Text("Filter")
-                                .bold()
-                                .foregroundColor(.blue)
+                            HStack(spacing: 2){
+                                Text("Label")
+                                    .bold()
+                                    .foregroundColor(.blue)
+                                Image(systemName: "arrow.up.and.down")
+                            }
                         })
                     }
-
+                    
                     ZStack {
                         TextField("'Calle Miramar..'", text: $searchText)
                             .frame(maxWidth: 350, alignment: .topLeading)
@@ -74,31 +95,44 @@ struct HomeScreen: View {
                     let itemsPerPage = 6
                     let pages = Int(ceil(Double(houses.count) / Double(itemsPerPage)))
                     
-                    ScrollView(.horizontal) {
-                        HStack {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 30) {
                             ForEach(1..<pages + 1, id: \.self) { page in
-                                LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 2)) {
-                                    ForEach(getItems(for: page, itemsPerPage: itemsPerPage), id: \.self) { item in
-                                        ZStack {
-                                            Rectangle()
-                                                .fill(Color.green)
-                                                .frame(width: 150, height: 150)
-                                                .cornerRadius(45)
-                                            
-                                            Text(item.name)
-                                                .padding(.horizontal, 40)
-                                                .padding(.vertical, 8)
-                                                .background(Color.white)
-                                                .cornerRadius(20)
-                                                .frame(width: 200, height: 100, alignment: .bottom)
+                                let housesArray = getItems(for: page, itemsPerPage: itemsPerPage)
+                                VStack{
+                                    LazyVGrid(columns: numberColumns, spacing: 20){
+                                        ForEach(housesArray, id: \.self) { item in
+                                            Button(action: {
+                                                // what to do when we click a house item
+                                            }, label: {
+                                                ZStack {
+                                                    RoundedRectangle(cornerRadius: 40)
+                                                        .fill(gray)
+                                                        .frame(width: 150, height: 150)
+                                                        //.shadow(radius: 10, y: 10)
+                                                    VStack{
+                                                        Spacer()
+                                                        Text(item.name)
+                                                            .foregroundStyle(.white)
+                                                            .padding(.horizontal, 12)
+                                                            .padding(.vertical, 6)
+                                                            .background(darkOlive)
+                                                            .cornerRadius(15)
+                                                    }.padding(.bottom, 20)
+                                                }
+                                            })
                                         }
                                     }
+                                    //.border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/) just used for testing
+                                    // padding to make whole scrollable centers, might be a better way to do this
+                                        .frame(width: 330)
+                                    Spacer() // Need this spacer so when page isnt full of items, it start on top
                                 }
                             }
-                        }
-                    }
-                    
-                    Spacer()
+                        }.scrollTargetLayout()
+                    }.padding(.top, 20)
+                    .scrollClipDisabled()
+                    .scrollTargetBehavior(.viewAligned)
                     
                     // Buttons for actions
                     HStack(spacing: 115) {
@@ -120,15 +154,9 @@ struct HomeScreen: View {
                     .font(.system(size: 40))
                 }
                 .padding()
-            }
-            .padding()
+            }.padding()
+            
         }
     }
-    
-    // Function to get items for a specific page
-    func getItems(for page: Int, itemsPerPage: Int) -> [House] {
-        let startIndex = (page - 1) * itemsPerPage
-        let endIndex = min(startIndex + itemsPerPage, houses.count)
-        return Array(houses[startIndex..<endIndex])
-    }
+
 }
