@@ -65,35 +65,6 @@ struct AddHomeScreen: View {
                             .padding(5)
                     })
                 }
-            
-                // Upload an image
-//                PhotosPicker(selection: $imageModel.imageSelection, matching: .images) {
-//                    if let image = imageModel.selectedImage {
-//                        VStack(spacing: 20) {
-//                            Image(uiImage: UIImage(data: image)!)
-//                                .resizable()
-//                                .cornerRadius(40)
-//                                .aspectRatio(contentMode: .fit)
-//                                .padding(5)
-//                            Button (action: {
-//                                imageModel.removeImage()
-//                            }, label: {
-//                                Image(systemName: "trash.circle.fill")
-//                            })
-//                                .foregroundColor(.red)
-//                                .font(.title)
-//                        }
-//                    } else  {
-//                        Image(systemName: "photo.badge.plus")
-//                            .font(.system(size:  50))
-//                            .foregroundColor(.black)
-//                            .padding(.vertical, 75.0)
-//                            .padding(.horizontal, 150)
-//                            .background(Color(red: 200, green: 200, blue: 200))
-//                            .cornerRadius(40)
-//
-//                    }
-//                }
 
                 PhotosPicker(selection: $selectedPhoto, matching: .images, photoLibrary: .shared()) {
                     if let selectedPhotoData,
