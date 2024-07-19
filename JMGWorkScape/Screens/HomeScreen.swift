@@ -79,7 +79,6 @@ struct HomeScreen: View {
                         })
                     }
                     
-
                     ZStack {
                         TextField("'Calle Miramar..'", text: $searchText)
                             .frame(maxWidth: 350, alignment: .topLeading)
@@ -96,7 +95,6 @@ struct HomeScreen: View {
                     let itemsPerPage = 6
                     let pages = Int(ceil(Double(houses.count) / Double(itemsPerPage)))
                     
-
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 30) {
                             ForEach(1..<pages + 1, id: \.self) { page in
@@ -123,8 +121,6 @@ struct HomeScreen: View {
                                                     }.padding(.bottom, 20)
                                                 }
                                             })
-                                            
-
                                         }
                                     }
                                     //.border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/) just used for testing
