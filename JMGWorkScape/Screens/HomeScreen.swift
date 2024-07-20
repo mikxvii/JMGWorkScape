@@ -134,6 +134,8 @@ struct HomeScreen: View {
                     .scrollClipDisabled()
                     .scrollTargetBehavior(.viewAligned)
                     
+                    
+                    Spacer()
                     // Buttons for actions
                     HStack(spacing: 115) {
                         // Add a Home Button
