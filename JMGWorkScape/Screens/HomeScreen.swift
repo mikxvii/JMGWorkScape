@@ -39,14 +39,7 @@ struct HomeScreen: View {
     
     var body: some View {
         // Setting up for Screen switching
-        if goToDetails {
-            HomeDetailsScreen()
-        } else if goToAdd {
-            AddHomeScreen()
-                .transition(.move(edge: .trailing).animation(.bouncy))
-        } else if goToRoute {
-            RouteScreen()
-        } else {
+        NavigationStack {
             ZStack {
                 // HomeScreen background
                 Image("olive_screen")
@@ -106,10 +99,21 @@ struct HomeScreen: View {
                                                 // what to do when we click a house item
                                             }, label: {
                                                 ZStack {
-                                                    RoundedRectangle(cornerRadius: 40)
-                                                        .fill(gray)
-                                                        .frame(width: 150, height: 150)
-                                                        //.shadow(radius: 10, y: 10)
+                                                    if item.imageData != nil {
+                                                        if let image = UIImage(data: item.imageData!) {
+                                                            Image(uiImage: image)
+                                                                .resizable()
+                                                                .aspectRatio(contentMode: .fill)
+                                                                .frame(width: 150, height: 150)
+                                                                .cornerRadius(40)
+                                                                .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                                                        }
+                                                    } else {
+                                                        RoundedRectangle(cornerRadius: 40)
+                                                            .fill(gray)
+                                                            .frame(width: 150, height: 150)
+                                                            .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                                                    }
                                                     VStack{
                                                         Spacer()
                                                         Text(item.name)
@@ -118,6 +122,7 @@ struct HomeScreen: View {
                                                             .padding(.vertical, 6)
                                                             .background(darkOlive)
                                                             .cornerRadius(15)
+                                                            .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
                                                     }.padding(.bottom, 20)
                                                 }
                                             })
@@ -134,6 +139,14 @@ struct HomeScreen: View {
                     .scrollClipDisabled()
                     .scrollTargetBehavior(.viewAligned)
                     
+                    if (houses.count == 0) {
+                        Spacer ()
+                        Image(systemName: "tree")
+                            .foregroundColor(.gray)
+                            .font(.title)
+                        Text("No homes added")
+                            .foregroundColor(.gray)
+                    }
                     
                     Spacer()
                     // Buttons for actions
@@ -143,8 +156,9 @@ struct HomeScreen: View {
                             goToAdd = true
                         }, label: {
                             Image(systemName: "house.fill").foregroundColor(olive)
-                        })
-                        
+                        }).navigationDestination(isPresented: $goToAdd) {
+                            AddHomeScreen().navigationBarBackButtonHidden(true)
+                        }
                         Button(action: {
                             route()
                         }, label: {
@@ -156,8 +170,8 @@ struct HomeScreen: View {
                     .font(.system(size: 40))
                 }
                 .padding()
-            }.padding()
-            
+            }
+                .padding()
         }
     }
 
