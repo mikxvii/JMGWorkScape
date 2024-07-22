@@ -13,20 +13,8 @@ import PhotosUI
 import UIKit
 
 
-func home(){
-    print("Go Home")
-}
-
-func route(){
-    print("Add New")
-}
-
 func filter(){
     print("Filter")
-}
-
-func cancel(){
-    print("cancel")
 }
 
 func search(){

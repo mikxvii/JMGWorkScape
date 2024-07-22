@@ -34,7 +34,6 @@ struct AddHomeScreen: View {
                     // Cancel Button
                     Button(action: {
                         goBackToHome = true
-                        print("cancel")
                     }, label: {
                         Text("Cancel")
                             .bold()

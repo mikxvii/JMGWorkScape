@@ -160,7 +160,7 @@ struct HomeScreen: View {
                             AddHomeScreen().navigationBarBackButtonHidden(true)
                         }
                         Button(action: {
-                            route()
+                            // navigate to route page
                         }, label: {
                             Image(systemName: "map")
                                 .foregroundColor(olive)
