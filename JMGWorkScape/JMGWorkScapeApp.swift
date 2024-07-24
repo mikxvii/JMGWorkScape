@@ -8,6 +8,7 @@
 import SwiftUI
 
 @main
+
 struct JMGWorkScapeApp: App {
     var body: some Scene {
         WindowGroup {

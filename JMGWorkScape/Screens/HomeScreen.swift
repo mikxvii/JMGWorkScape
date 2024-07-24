@@ -10,7 +10,7 @@ import Foundation
 import SwiftData
 
 struct HomeScreen: View {
-    // in Cmyk format
+    // in CMYK format
     let olive = Color(red: 0.23, green: 0.28, blue: 0.20, opacity: 1.00)
     let gray = Color(red: 0, green: 0, blue: 0, opacity: 0.04)
     
@@ -19,15 +19,18 @@ struct HomeScreen: View {
     @State var goToDetails: Bool = false
     @State var goToAdd: Bool = false
     @State var goToRoute: Bool = false
+    @State var selectedHouse: House? = nil
+    @State private var showAlert = false
+    @State private var houseToDelete: House?
+    @State private var longPressDetected = false // State variable to track long press
     @Query private var houses: [House]
     @Environment(\.modelContext) private var context
     
-//    These are used to help display the houses!
+    // These are used to help display the houses!
     private let numberColumns = [
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
-    
     
     // Function to get items for a specific page
     func getItems(for page: Int, itemsPerPage: Int) -> [House] {
@@ -35,7 +38,6 @@ struct HomeScreen: View {
         let endIndex = min(startIndex + itemsPerPage, houses.count)
         return Array(houses[startIndex..<endIndex])
     }
-    
     
     var body: some View {
         // Setting up for Screen switching
@@ -92,55 +94,73 @@ struct HomeScreen: View {
                         HStack(spacing: 30) {
                             ForEach(1..<pages + 1, id: \.self) { page in
                                 let housesArray = getItems(for: page, itemsPerPage: itemsPerPage)
-                                VStack{
-                                    LazyVGrid(columns: numberColumns, spacing: 20){
+                                VStack {
+                                    LazyVGrid(columns: numberColumns, spacing: 20) {
                                         ForEach(housesArray, id: \.self) { item in
-                                            Button(action: {
-                                                // what to do when we click a house item
-                                            }, label: {
-                                                ZStack {
-                                                    if item.imageData != nil {
-                                                        if let image = UIImage(data: item.imageData!) {
+                                            ZStack {
+                                                Button(action: {
+                                                    if !longPressDetected {
+                                                        selectedHouse = item
+                                                        goToDetails = true
+                                                    }
+                                                }, label: {
+                                                    ZStack {
+                                                        if let imageData = item.imageData, let image = UIImage(data: imageData) {
                                                             Image(uiImage: image)
                                                                 .resizable()
                                                                 .aspectRatio(contentMode: .fill)
                                                                 .frame(width: 150, height: 150)
                                                                 .cornerRadius(40)
                                                                 .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                                                        } else {
+                                                            RoundedRectangle(cornerRadius: 40)
+                                                                .fill(gray)
+                                                                .frame(width: 150, height: 150)
+                                                                .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
                                                         }
-                                                    } else {
-                                                        RoundedRectangle(cornerRadius: 40)
-                                                            .fill(gray)
-                                                            .frame(width: 150, height: 150)
-                                                            .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                                                        VStack {
+                                                            Spacer()
+                                                            Text(item.name)
+                                                                .foregroundStyle(.white)
+                                                                .padding(.horizontal, 12)
+                                                                .padding(.vertical, 6)
+                                                                .background(darkOlive)
+                                                                .cornerRadius(15)
+                                                                .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                                                        }
+                                                        .padding(.bottom, 20)
                                                     }
-                                                    VStack{
-                                                        Spacer()
-                                                        Text(item.name)
-                                                            .foregroundStyle(.white)
-                                                            .padding(.horizontal, 12)
-                                                            .padding(.vertical, 6)
-                                                            .background(darkOlive)
-                                                            .cornerRadius(15)
-                                                            .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
-                                                    }.padding(.bottom, 20)
-                                                }
-                                            })
+                                                })
+                                                .simultaneousGesture(
+                                                    LongPressGesture().onEnded { _ in
+                                                        houseToDelete = item
+                                                        showAlert = true
+                                                        longPressDetected = true
+                                                    }
+                                                )
+                                                .simultaneousGesture(
+                                                    TapGesture().onEnded {
+                                                        longPressDetected = false
+                                                    }
+                                                )
+                                            }
                                         }
                                     }
                                     //.border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/) just used for testing
                                     // padding to make whole scrollable centers, might be a better way to do this
-                                        .frame(width: 330)
-                                    Spacer() // Need this spacer so when page isnt full of items, it start on top
+                                    .frame(width: 330)
+                                    Spacer() // Need this spacer so when page isn't full of items, it starts on top
                                 }
                             }
-                        }.scrollTargetLayout()
-                    }.padding(.top, 20)
+                        }
+                        .scrollTargetLayout()
+                    }
+                    .padding(.top, 20)
                     .scrollClipDisabled()
                     .scrollTargetBehavior(.viewAligned)
                     
-                    if (houses.count == 0) {
-                        Spacer ()
+                    if houses.isEmpty {
+                        Spacer()
                         Image(systemName: "tree")
                             .foregroundColor(.gray)
                             .font(.title)
@@ -171,8 +191,24 @@ struct HomeScreen: View {
                 }
                 .padding()
             }
-                .padding()
+            .padding()
+            .navigationDestination(isPresented: $goToDetails) {
+                if let selectedHouse = selectedHouse {
+                    HomeDetailsScreen(house: selectedHouse)
+                }
+            }
+            .alert(isPresented: $showAlert) {
+                Alert(
+                    title: Text("Confirm Deletion"),
+                    message: Text("Are you sure you want to delete this house?"),
+                    primaryButton: .destructive(Text("Delete")) {
+                        if let houseToDelete = houseToDelete, let index = houses.firstIndex(of: houseToDelete) {
+                            context.delete(houses[index])
+                        }
+                    },
+                    secondaryButton: .cancel()
+                )
+            }
         }
     }
-
 }
