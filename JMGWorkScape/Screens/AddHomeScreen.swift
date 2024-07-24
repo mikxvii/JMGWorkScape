@@ -16,7 +16,8 @@ struct AddHomeScreen: View {
     @State var currAddress:String = ""
     @State var currFrequncy:String = "Friday" //default value to not get error for having "" as default
     @State var currJobD:String = ""
-    
+    @State private var showAlert: Bool = false
+
     @State var goBackToHome: Bool = false
     @State var selectedPhoto: PhotosPickerItem?
     @State var selectedPhotoData: Data?
@@ -45,9 +46,15 @@ struct AddHomeScreen: View {
                     })
                     // Done Button
                     Button(action: {
-                        goBackToHome = true
-                        let house = House(currName, currAddress, currJobD, currFrequncy, selectedPhotoData)
-                        context.insert(house)
+                        if currName.isEmpty || currFrequncy.isEmpty || currAddress.isEmpty || currJobD.isEmpty {
+                            showAlert = true
+                        } else {
+                            // Proceed with form submission
+                            print("Name: \(currName), Frequency: \(currFrequncy), Address: \(currAddress), Job Description: \(currJobD)")
+                            goBackToHome = true
+                            let house = House(currName, currAddress, currJobD, currFrequncy, selectedPhotoData)
+                            context.insert(house)
+                        }
                     }, label: {
                         Text("Done")
                             .bold()
@@ -126,10 +133,14 @@ struct AddHomeScreen: View {
                 
                 Spacer()
                 Spacer()
-            }.task(id: selectedPhoto) {
+            }
+            .task(id: selectedPhoto) {
                 if let data = try? await selectedPhoto?.loadTransferable(type: Data.self) {
                     selectedPhotoData = data
                 }
+            }
+            .alert(isPresented: $showAlert) {
+                Alert(title: Text("Validation Error"), message: Text("All text fields must be filled"), dismissButton: .default(Text("OK")))
             }
         }
     }
