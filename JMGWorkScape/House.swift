@@ -17,8 +17,7 @@ final class House: Identifiable {
     var address: String
     var frequency: String
     var jobD: String
-    
-    var imageData: Data?
+    var imageData: Data? // Image needs to be in Data format
     
     init(_ name: String="", _ address: String="", _ job: String="", _ frequency: String="", _ imageData: Data? = nil) {
         self.id = UUID().uuidString

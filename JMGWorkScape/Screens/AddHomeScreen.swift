@@ -20,7 +20,6 @@ struct AddHomeScreen: View {
     @State var goBackToHome: Bool = false
     @State var selectedPhoto: PhotosPickerItem?
     @State var selectedPhotoData: Data?
-//    @StateObject private var imageModel = ImageModel()
 
     
     let daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
@@ -95,10 +94,7 @@ struct AddHomeScreen: View {
                         .font(.title)
                 }
                 
-                
-                
-                
-                
+
                 // Text field where Name of client is inputted
                 TextField("Customer Name", text: $currName)
                                     .frame(maxWidth: 350, alignment: .topLeading)
