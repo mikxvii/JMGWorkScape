@@ -22,6 +22,12 @@ struct HomeScreen: View {
     @Query private var houses: [House]
     @Environment(\.modelContext) private var context
     
+    var housesDic: [String: House] {
+        Dictionary(uniqueKeysWithValues: houses.map { (key: $0.name, value: $0) })
+    }
+    
+
+    
 //    These are used to help display the houses!
     private let numberColumns = [
         GridItem(.flexible()),
@@ -29,11 +35,14 @@ struct HomeScreen: View {
     ]
     
     
-    // Function to get items for a specific page
+// Function to get items for a specific page
     func getItems(for page: Int, itemsPerPage: Int) -> [House] {
         let startIndex = (page - 1) * itemsPerPage
         let endIndex = min(startIndex + itemsPerPage, houses.count)
-        return Array(houses[startIndex..<endIndex])
+        
+        // Get the slice of houses for the current page
+        let items = Array(houses.values)[startIndex..<endIndex]
+        return Array(items)
     }
     
     
@@ -58,10 +67,7 @@ struct HomeScreen: View {
                         
                         // Supposed to be a filter button
                         Button(action: {
-                            filter()
-                            if !houses.isEmpty {
-                                context.delete(houses[0])
-                            }
+                            print(housesDic.count)
                         }, label: {
                             HStack(spacing: 2){
                                 Text("Label")
@@ -84,7 +90,7 @@ struct HomeScreen: View {
                         }).offset(x: 145)
                     }
                     
-                    // Page Calculation
+                     Page Calculation
                     let itemsPerPage = 6
                     let pages = Int(ceil(Double(houses.count) / Double(itemsPerPage)))
                     
@@ -128,16 +134,16 @@ struct HomeScreen: View {
                                             })
                                         }
                                     }
-                                    //.border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/) just used for testing
-                                    // padding to make whole scrollable centers, might be a better way to do this
                                         .frame(width: 330)
-                                    Spacer() // Need this spacer so when page isnt full of items, it start on top
+                                    Spacer() 
                                 }
                             }
                         }.scrollTargetLayout()
                     }.padding(.top, 20)
                     .scrollClipDisabled()
                     .scrollTargetBehavior(.viewAligned)
+//                    
+                    
                     
                     if (houses.count == 0) {
                         Spacer ()

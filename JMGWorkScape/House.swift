@@ -10,7 +10,7 @@ import SwiftData
 import SwiftUI
 
 @Model
-final class House: Identifiable {
+final class House: Identifiable{
     var id: String
     
     var name: String
@@ -27,5 +27,4 @@ final class House: Identifiable {
         self.jobD = job
         self.imageData = imageData
     }
-    
 }
