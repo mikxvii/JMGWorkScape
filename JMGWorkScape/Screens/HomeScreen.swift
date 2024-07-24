@@ -26,7 +26,8 @@ struct HomeScreen: View {
         Dictionary(uniqueKeysWithValues: houses.map { (key: $0.name, value: $0) })
     }
     
-
+    // Initialize the Trie
+    @State private var searchTrie: Trie?
     
 //    These are used to help display the houses!
     private let numberColumns = [
@@ -35,16 +36,18 @@ struct HomeScreen: View {
     ]
     
     
-// Function to get items for a specific page
+    // Function to get items for a specific page
     func getItems(for page: Int, itemsPerPage: Int) -> [House] {
         let startIndex = (page - 1) * itemsPerPage
         let endIndex = min(startIndex + itemsPerPage, houses.count)
-        
-        // Get the slice of houses for the current page
-        let items = Array(houses.values)[startIndex..<endIndex]
-        return Array(items)
+        return Array(houses[startIndex..<endIndex])
     }
     
+    func pullItems(_ houseNames: [String]) -> [House] {
+        // Use the house names to look up the corresponding House objects in the dictionary
+        let houseObjects = houseNames.compactMap { housesDic[$0] }
+        return houseObjects
+    }
     
     var body: some View {
         // Setting up for Screen switching
@@ -67,7 +70,7 @@ struct HomeScreen: View {
                         
                         // Supposed to be a filter button
                         Button(action: {
-                            print(housesDic.count)
+                            print(searchTrie?.getCount() ?? 0)
                         }, label: {
                             HStack(spacing: 2){
                                 Text("Label")
@@ -90,60 +93,117 @@ struct HomeScreen: View {
                         }).offset(x: 145)
                     }
                     
-                     Page Calculation
-                    let itemsPerPage = 6
-                    let pages = Int(ceil(Double(houses.count) / Double(itemsPerPage)))
+                    //Page Calculation
                     
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 30) {
-                            ForEach(1..<pages + 1, id: \.self) { page in
-                                let housesArray = getItems(for: page, itemsPerPage: itemsPerPage)
-                                VStack{
-                                    LazyVGrid(columns: numberColumns, spacing: 20){
-                                        ForEach(housesArray, id: \.self) { item in
-                                            Button(action: {
-                                                // what to do when we click a house item
-                                            }, label: {
-                                                ZStack {
-                                                    if item.imageData != nil {
-                                                        if let image = UIImage(data: item.imageData!) {
-                                                            Image(uiImage: image)
-                                                                .resizable()
-                                                                .aspectRatio(contentMode: .fill)
+                    if searchText != "" {
+                        let foundHouses = searchTrie?.wordsWithPrefix(searchText) ?? []
+                        let itemsPerPage = 6
+                        let pages = Int(ceil(Double(foundHouses.count) / Double(itemsPerPage)))
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 30) {
+                                ForEach(1..<pages + 1, id: \.self) { page in
+                                    let housesArray = getItems(for: page, itemsPerPage: itemsPerPage)
+                                    VStack{
+                                        LazyVGrid(columns: numberColumns, spacing: 20){
+                                            // new array of searched stuff
+                                            let housesArray = pullItems(foundHouses)
+                                            ForEach(housesArray, id: \.self) { item in
+                                                Button(action: {
+                                                    // what to do when we click a house item
+                                                }, label: {
+                                                    ZStack {
+                                                        if item.imageData != nil {
+                                                            if let image = UIImage(data: item.imageData!) {
+                                                                Image(uiImage: image)
+                                                                    .resizable()
+                                                                    .aspectRatio(contentMode: .fill)
+                                                                    .frame(width: 150, height: 150)
+                                                                    .cornerRadius(40)
+                                                                    .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                                                            }
+                                                        } else {
+                                                            RoundedRectangle(cornerRadius: 40)
+                                                                .fill(gray)
                                                                 .frame(width: 150, height: 150)
-                                                                .cornerRadius(40)
                                                                 .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
                                                         }
-                                                    } else {
-                                                        RoundedRectangle(cornerRadius: 40)
-                                                            .fill(gray)
-                                                            .frame(width: 150, height: 150)
-                                                            .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                                                        VStack{
+                                                            Spacer()
+                                                            Text(item.name)
+                                                                .foregroundStyle(.white)
+                                                                .padding(.horizontal, 12)
+                                                                .padding(.vertical, 6)
+                                                                .background(darkOlive)
+                                                                .cornerRadius(15)
+                                                                .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                                                        }.padding(.bottom, 20)
                                                     }
-                                                    VStack{
-                                                        Spacer()
-                                                        Text(item.name)
-                                                            .foregroundStyle(.white)
-                                                            .padding(.horizontal, 12)
-                                                            .padding(.vertical, 6)
-                                                            .background(darkOlive)
-                                                            .cornerRadius(15)
-                                                            .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
-                                                    }.padding(.bottom, 20)
-                                                }
-                                            })
+                                                })
+                                            }
                                         }
+                                            .frame(width: 330)
+                                        Spacer()
                                     }
-                                        .frame(width: 330)
-                                    Spacer() 
                                 }
-                            }
-                        }.scrollTargetLayout()
-                    }.padding(.top, 20)
-                    .scrollClipDisabled()
-                    .scrollTargetBehavior(.viewAligned)
-//                    
-                    
+                            }.scrollTargetLayout()
+                        }.padding(.top, 20)
+                        .scrollClipDisabled()
+                        .scrollTargetBehavior(.viewAligned)
+                        
+                    }else{
+                        let itemsPerPage = 6
+                        let pages = Int(ceil(Double(houses.count) / Double(itemsPerPage)))
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 30) {
+                                ForEach(1..<pages + 1, id: \.self) { page in
+                                    let housesArray = getItems(for: page, itemsPerPage: itemsPerPage)
+                                    VStack{
+                                        LazyVGrid(columns: numberColumns, spacing: 20){
+                                            ForEach(housesArray, id: \.self) { item in
+                                                Button(action: {
+                                                    // what to do when we click a house item
+                                                }, label: {
+                                                    ZStack {
+                                                        if item.imageData != nil {
+                                                            if let image = UIImage(data: item.imageData!) {
+                                                                Image(uiImage: image)
+                                                                    .resizable()
+                                                                    .aspectRatio(contentMode: .fill)
+                                                                    .frame(width: 150, height: 150)
+                                                                    .cornerRadius(40)
+                                                                    .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                                                            }
+                                                        } else {
+                                                            RoundedRectangle(cornerRadius: 40)
+                                                                .fill(gray)
+                                                                .frame(width: 150, height: 150)
+                                                                .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                                                        }
+                                                        VStack{
+                                                            Spacer()
+                                                            Text(item.name)
+                                                                .foregroundStyle(.white)
+                                                                .padding(.horizontal, 12)
+                                                                .padding(.vertical, 6)
+                                                                .background(darkOlive)
+                                                                .cornerRadius(15)
+                                                                .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                                                        }.padding(.bottom, 20)
+                                                    }
+                                                })
+                                            }
+                                        }
+                                            .frame(width: 330)
+                                        Spacer()
+                                    }
+                                }
+                            }.scrollTargetLayout()
+                        }.padding(.top, 20)
+                        .scrollClipDisabled()
+                        .scrollTargetBehavior(.viewAligned)
+                    }
                     
                     if (houses.count == 0) {
                         Spacer ()
@@ -167,6 +227,9 @@ struct HomeScreen: View {
                         }
                         Button(action: {
                             // navigate to route page
+                            if houses.count != 0 {
+                                context.delete(houses[0])
+                            }
                         }, label: {
                             Image(systemName: "map")
                                 .foregroundColor(olive)
@@ -178,6 +241,22 @@ struct HomeScreen: View {
                 .padding()
             }
                 .padding()
+                .onAppear(){
+                    // Initialize the Trie with house names
+                    searchTrie = Trie()
+                    for house in houses {
+                        searchTrie?.insert(house.name)
+                    }
+                    
+                    if houses.count != searchTrie?.getCount(){
+                        for house in houses{
+                            let isFound = searchTrie?.search(house.name) ?? false
+                            if isFound{
+                                searchTrie?.delete(house.name)
+                            }
+                        }
+                    }
+                }
         }
     }
 
