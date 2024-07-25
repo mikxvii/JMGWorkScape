@@ -76,7 +76,7 @@ class Trie {
     }
 
     func delete(_ word: String) {
-        delete(word, currentNode: root, index: 0)
+//        delete(word, currentNode: root, index: 0)
     }
     
     private func delete(_ word: String, currentNode: TrieNode, index: Int) -> Bool {
@@ -137,6 +137,7 @@ class Trie {
         }
     }
 }
+
 
 
 // // Initialize the Trie

@@ -112,7 +112,6 @@ struct HomeScreen: View {
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 30) {
                                 ForEach(1..<pages + 1, id: \.self) { page in
-                                    let housesArray = getItems(for: page, itemsPerPage: itemsPerPage)
                                     VStack {
                                         LazyVGrid(columns: numberColumns, spacing: 20) {
                                             let housesArray = pullItems(foundHouses)
@@ -266,7 +265,7 @@ struct HomeScreen: View {
                         }, label: {
                             Image(systemName: "house.fill").foregroundColor(olive)
                         }).navigationDestination(isPresented: $goToAdd) {
-                            AddHomeScreen().navigationBarBackButtonHidden(true)
+                            AddHomeScreen(housesDic: housesDic).navigationBarBackButtonHidden(true)
                         }
                         Button(action: {
                             // navigate to route page

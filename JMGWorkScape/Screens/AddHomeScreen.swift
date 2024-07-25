@@ -12,12 +12,14 @@ import PhotosUI
 struct AddHomeScreen: View {
     @Environment(\.modelContext) private var context
     @Environment(\.presentationMode) var presentationMode
+    var housesDic: [String: House]
 
     @State var currName:String = ""
     @State var currAddress:String = ""
     @State var currFrequncy:String = "Friday" //default value to not get error for having "" as default
     @State var currJobD:String = ""
-    @State private var showAlert: Bool = false
+    @State private var showFieldAlert: Bool = false
+    @State private var showMatchAlert: Bool = false
 
     @State var goBackToHome: Bool = false
     @State var selectedPhoto: PhotosPickerItem?
@@ -98,7 +100,7 @@ struct AddHomeScreen: View {
                     selectedPhotoData = data
                 }
             }
-            .alert(isPresented: $showAlert) {
+            .alert(isPresented: $showFieldAlert) {
                 Alert(title: Text("Validation Error"), message: Text("All text fields must be filled"), dismissButton: .default(Text("OK")))
             }
             .navigationBarBackButtonHidden(true) // Hide default back button
@@ -120,8 +122,10 @@ struct AddHomeScreen: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button(action: {
-                        if currName.isEmpty || currFrequncy.isEmpty || currAddress.isEmpty || currJobD.isEmpty {
-                            showAlert = true
+                        if (currName.isEmpty || currFrequncy.isEmpty || currAddress.isEmpty || currJobD.isEmpty) {
+                            showFieldAlert = true
+                        } else if (housesDic[currName] != nil) {
+                            showMatchAlert = true
                         } else {
                             // Proceed with form submission
                             print("Name: \(currName), Frequency: \(currFrequncy), Address: \(currAddress), Job Description: \(currJobD)")
@@ -140,6 +144,17 @@ struct AddHomeScreen: View {
                             .cornerRadius(70)
                             .padding(5)
                     })
+                    .alert(isPresented: $showMatchAlert) {
+                        Alert(title: Text("Validation Error"), message: Text("A House with this name already exists, please rename"), dismissButton: .default(Text("Ok")))
+                    }
+                }
+                ToolbarItem(placement: .principal) {
+                    VStack {
+                        Text("Add Home")
+                            .font(.headline)
+                            .bold()
+                            .foregroundColor(olive)
+                    }
                 }
             }
         }
