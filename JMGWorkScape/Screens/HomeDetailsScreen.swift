@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 struct HomeDetailsScreen: View {
+    @Environment(\.presentationMode) var presentationMode
     var house: House
     
     let gray = Color(red: 0, green: 0, blue: 0, opacity: 0.04)
@@ -83,6 +84,18 @@ struct HomeDetailsScreen: View {
                     Spacer()
                 }
                 .ignoresSafeArea()
+                .navigationBarBackButtonHidden(true) // Hide default back button
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button(action: {
+                            // Custom back button action
+                            presentationMode.wrappedValue.dismiss()
+                        }) {
+                            Image(systemName: "arrowshape.backward.fill")
+                                .foregroundColor(.white)// Custom back button image
+                        }
+                    }
+                }
             }
         }
     }

@@ -11,6 +11,7 @@ import PhotosUI
 
 struct AddHomeScreen: View {
     @Environment(\.modelContext) private var context
+    @Environment(\.presentationMode) var presentationMode
 
     @State var currName:String = ""
     @State var currAddress:String = ""
@@ -29,53 +30,14 @@ struct AddHomeScreen: View {
     var body: some View {
         // bool variable changed by Cancel and Done buttons
         NavigationStack {
-            VStack(spacing: 30){
-                HStack(spacing: 125){
-                    // Cancel Button
-                    Button(action: {
-                        goBackToHome = true
-                    }, label: {
-                        Text("Cancel")
-                            .bold()
-                            .foregroundColor(.black)
-                            .padding(.horizontal, 25.0)
-                            .padding(.vertical, 10)
-                            .background(.red)
-                            .cornerRadius(70)
-                            .padding(5)
-                    })
-                    // Done Button
-                    Button(action: {
-                        if currName.isEmpty || currFrequncy.isEmpty || currAddress.isEmpty || currJobD.isEmpty {
-                            showAlert = true
-                        } else {
-                            // Proceed with form submission
-                            print("Name: \(currName), Frequency: \(currFrequncy), Address: \(currAddress), Job Description: \(currJobD)")
-                            goBackToHome = true
-                            let house = House(currName, currAddress, currJobD, currFrequncy, selectedPhotoData)
-                            context.insert(house)
-                        }
-                    }, label: {
-                        Text("Done")
-                            .bold()
-                            .foregroundColor(olive)
-                            .padding(.horizontal, 25.0)
-                            .padding(.vertical, 10)
-                            .background(Color(red: 117/255, green: 143/255, blue: 100/255))
-                            .cornerRadius(70)
-                            .padding(5)
-                    })
-                }.navigationDestination(isPresented: $goBackToHome) {
-                    HomeScreen().navigationBarBackButtonHidden(true)
-                }
-
+            VStack(spacing: 30) {
                 PhotosPicker(selection: $selectedPhoto, matching: .images, photoLibrary: .shared()) {
                     if let selectedPhotoData,
                        let uiImage = UIImage(data: selectedPhotoData) {
                         withAnimation {
                             Image(uiImage: uiImage)
                                 .resizable()
-                                    .cornerRadius(40)
+                                .cornerRadius(40)
                                 .aspectRatio(contentMode: .fit)
                                 .padding(5)
                         }
@@ -98,41 +60,38 @@ struct AddHomeScreen: View {
                     } label: {
                         Image(systemName: "trash.circle.fill")
                     }
-                        .font(.title)
+                    .font(.title)
                 }
                 
-
+                
                 // Text field where Name of client is inputted
                 TextField("Customer Name", text: $currName)
-                                    .frame(maxWidth: 350, alignment: .topLeading)
-                                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                                    
+                    .frame(maxWidth: 350, alignment: .topLeading)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                
                 
                 // Text field where Address of client is inputted
                 TextField("Address", text: $currAddress)
-                                    .frame(maxWidth: 350, alignment: .topLeading)
-                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .frame(maxWidth: 350, alignment: .topLeading)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
                 
                 // Text field where job description is inputted
                 TextField("Job Description", text: $currJobD)
-                                    .frame(maxWidth: 350, alignment: .topLeading)
-                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .frame(maxWidth: 350, alignment: .topLeading)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
                 
                 // Picker for the frequency (still need to allign better)
-                HStack(alignment: .center) {
+                HStack {
                     Text("Frequency: ")
                     Picker("Frequency", selection: $currFrequncy) {
                         ForEach(daysOfWeek, id: \.self) { day in
                             Text(day)
                         }
                     }
-                    
+                    Spacer()
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
                 
-                Spacer()
-                Spacer()
             }
             .task(id: selectedPhoto) {
                 if let data = try? await selectedPhoto?.loadTransferable(type: Data.self) {
@@ -141,6 +100,47 @@ struct AddHomeScreen: View {
             }
             .alert(isPresented: $showAlert) {
                 Alert(title: Text("Validation Error"), message: Text("All text fields must be filled"), dismissButton: .default(Text("OK")))
+            }
+            .navigationBarBackButtonHidden(true) // Hide default back button
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(action: {
+                        goBackToHome = true
+                        presentationMode.wrappedValue.dismiss()
+                    }, label: {
+                        Text("Cancel")
+                            .bold()
+                            .foregroundColor(.black)
+                            .padding(.horizontal, 25.0)
+                            .padding(.vertical, 10)
+                            .background(.red)
+                            .cornerRadius(70)
+                            .padding(5)
+                    })
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button(action: {
+                        if currName.isEmpty || currFrequncy.isEmpty || currAddress.isEmpty || currJobD.isEmpty {
+                            showAlert = true
+                        } else {
+                            // Proceed with form submission
+                            print("Name: \(currName), Frequency: \(currFrequncy), Address: \(currAddress), Job Description: \(currJobD)")
+                            goBackToHome = true
+                            let house = House(currName, currAddress, currJobD, currFrequncy, selectedPhotoData)
+                            context.insert(house)
+                            presentationMode.wrappedValue.dismiss()
+                        }
+                    }, label: {
+                        Text("Done")
+                            .bold()
+                            .foregroundColor(olive)
+                            .padding(.horizontal, 25.0)
+                            .padding(.vertical, 10)
+                            .background(Color(red: 117/255, green: 143/255, blue: 100/255))
+                            .cornerRadius(70)
+                            .padding(5)
+                    })
+                }
             }
         }
     }
