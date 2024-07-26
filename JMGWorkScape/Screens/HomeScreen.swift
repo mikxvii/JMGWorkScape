@@ -13,8 +13,8 @@ struct HomeScreen: View {
     // in CMYK format
     let olive = Color(red: 0.23, green: 0.28, blue: 0.20, opacity: 1.00)
     let gray = Color(red: 0, green: 0, blue: 0, opacity: 0.04)
-    
     let darkOlive = Color(red: 0.19, green: 0.23, blue: 0.16, opacity: 1.00)
+    
     @State var searchText = ""
     @State var goToDetails: Bool = false
     @State var goToAdd: Bool = false

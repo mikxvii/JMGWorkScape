@@ -138,6 +138,32 @@ class Trie {
     }
 }
 
+struct DayButton: View {
+    @Binding var currFrequency: Set<String>
+    @State var buttonColor: Color
+    var day: String
+    
+    var body: some View {
+        Button(action: {
+            if (buttonColor == .cyan) {
+                buttonColor = .gray
+                currFrequency.remove(day)
+            } else {
+                buttonColor = .cyan
+                currFrequency.insert(day)
+            }
+            print(currFrequency.formatted())
+        }, label: {
+            Text(day)
+                .frame(width: 120, height: 50)
+                .foregroundColor(.white)
+                .background(buttonColor)
+                .cornerRadius(10)
+        })
+        
+    }
+}
+
 
 
 // // Initialize the Trie
