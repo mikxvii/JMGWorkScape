@@ -282,7 +282,7 @@ struct HomeScreen: View {
             .padding()
             .navigationDestination(isPresented: $goToDetails) {
                 if let selectedHouse = selectedHouse {
-                    HomeDetailsScreen(house: selectedHouse)
+                    HomeDetailsScreen(house: selectedHouse, houseDic: housesDic)
                 }
             }
             .alert(isPresented: $showAlert) {
@@ -302,14 +302,14 @@ struct HomeScreen: View {
                 // Initialize the Trie with house names
                 searchTrie = Trie()
                 for house in houses {
-                    searchTrie?.insert(house.name)
+                    searchTrie?.insert(house.getName())
                 }
                 
                 if houses.count != searchTrie?.getCount(){
                     for house in houses{
-                        let isFound = searchTrie?.search(house.name) ?? false
+                        let isFound = searchTrie?.search(house.getName()) ?? false
                         if isFound{
-                            searchTrie?.delete(house.name)
+                            searchTrie?.delete(house.getName())
                         }
                     }
                 }

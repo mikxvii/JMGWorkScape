@@ -11,6 +11,9 @@ import SwiftUI
 struct HomeDetailsScreen: View {
     @Environment(\.presentationMode) var presentationMode
     var house: House
+    var houseDic: [String: House]
+    @State var goToEdit: Bool = false
+
     
     let gray = Color(red: 0, green: 0, blue: 0, opacity: 0.04)
     let darkOlive = Color(red: 0.19, green: 0.23, blue: 0.16, opacity: 1.00)
@@ -25,8 +28,8 @@ struct HomeDetailsScreen: View {
                     .ignoresSafeArea()
                 ScrollView(.vertical) {
                     VStack {
-                        if house.imageData != nil {
-                            if let image = UIImage(data: house.imageData!) {
+                        if house.getImg() != nil {
+                            if let image = UIImage(data: house.getImg()!) {
                                 Image(uiImage: image)
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
@@ -34,20 +37,22 @@ struct HomeDetailsScreen: View {
                                     .cornerRadius(40)
                             }
                         } else {
-                            RoundedRectangle(cornerRadius: 40)
-                                .fill(gray)
+                            Image(systemName: "photo.artframe")
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .foregroundColor(gray)
                                 .frame(maxWidth: .infinity, maxHeight: 270)
                                 .cornerRadius(40)
 
                         }
 
                         
-                        Text(house.name + "'s Home")
+                        Text(house.getName() + "'s Home")
                             .font(.largeTitle)
                             .bold()
                             .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
                         
-                        Text(house.address)
+                        Text(house.getAddress())
                             .font(.headline)
                             .multilineTextAlignment(.center)
                             .frame(width: 289, height: 60)
@@ -56,7 +61,7 @@ struct HomeDetailsScreen: View {
                             .cornerRadius(10)
                             .padding(.bottom, 20)
 
-                        Text("\(house.frequency)'s")
+                        Text("\(house.getFrqFormatted())'s")
                             .font(.headline)
                             .multilineTextAlignment(.center)
                             .frame(width: 289, height: 60)
@@ -75,7 +80,7 @@ struct HomeDetailsScreen: View {
                             .padding(.bottom, 20)
 
                         Button(action: {
-                            openMap(house.address.replacingOccurrences(of: " ", with: ","))
+                            openMap(house.getAddress().replacingOccurrences(of: " ", with: ","))
                         }, label: {
                             Text("Take Me There")
                         })
@@ -98,8 +103,18 @@ struct HomeDetailsScreen: View {
                                     .foregroundColor(.blue)// Custom back button image
                             }
                         }
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button(action: {
+                                goToEdit = true
+                            }, label: {
+                                Image(systemName: "pencil")
+                            })
+                        }
                     }
                 }
+            }
+            .navigationDestination(isPresented: $goToEdit) {
+                EditHomeScreen(housesDic: houseDic, house: house)
             }
         }
     }

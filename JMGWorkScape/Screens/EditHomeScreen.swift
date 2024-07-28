@@ -1,27 +1,30 @@
 //
-//  HomeDetailsScreen.swift
+//  EditHomeScreen.swift
 //  JMGWorkScape
 //
-//  Created by Michael Guerrero and Christopher Rebollar-Ramirez on 7/13/24.
+//  Created by Michael Guerrero on 7/27/24.
 //
 
 import Foundation
 import SwiftUI
 import PhotosUI
 
-struct AddHomeScreen: View {
+struct EditHomeScreen: View {
     @Environment(\.modelContext) private var context
     @Environment(\.presentationMode) var presentationMode
     var housesDic: [String: House]
-
+    var house: House
+    @State var editHousesDic: [String: House] = [:]
+    
     @State var currName:String = ""
     @State var currAddress:String = ""
     @State var currFrequncy = Set<String>() //default value to not get error for having "" as default
     @State var currJobD:String = ""
+    
     @State private var showFieldAlert: Bool = false
     @State private var showMatchAlert: Bool = false
 
-    @State var goBackToHome: Bool = false
+    @State var goBackToDetails: Bool = false
     @State var selectedPhoto: PhotosPickerItem?
     @State var selectedPhotoData: Data?
 
@@ -31,6 +34,7 @@ struct AddHomeScreen: View {
     
     var body: some View {
         // bool variable changed by Cancel and Done buttons
+        
         NavigationStack {
             ScrollView(.vertical) {
                 VStack(spacing: 30) {
@@ -87,19 +91,25 @@ struct AddHomeScreen: View {
                         .font(.title2)
                         .bold()
                     HStack {
+        
                         Spacer()
-                        DayButton(currFrequency: $currFrequncy, buttonColor: .gray, day: "Monday")
+                        let monday: Color = house.getFrqSet().contains("Monday") ? .cyan : .gray
+                        DayButton(currFrequency: $currFrequncy, buttonColor: monday, day: "Monday")
                         Spacer()
-                        DayButton(currFrequency: $currFrequncy, buttonColor: .gray, day: "Tuesday")
+                        let tuesday: Color = house.getFrqSet().contains("Tuesday") ? .cyan : .gray
+                        DayButton(currFrequency: $currFrequncy, buttonColor: tuesday, day: "Tuesday")
                         Spacer()
-                        DayButton(currFrequency: $currFrequncy, buttonColor: .gray, day: "Wednesday")
+                        let wednesday: Color = house.getFrqSet().contains("Wednesday") ? .cyan : .gray
+                        DayButton(currFrequency: $currFrequncy, buttonColor: wednesday, day: "Wednesday")
                         Spacer()
                     }
                     HStack {
                         Spacer()
-                        DayButton(currFrequency: $currFrequncy, buttonColor: .gray, day: "Thursday")
+                        let thursday: Color = house.getFrqSet().contains("Thursday") ? .cyan : .gray
+                        DayButton(currFrequency: $currFrequncy, buttonColor: thursday, day: "Thursday")
                         Spacer()
-                        DayButton(currFrequency: $currFrequncy, buttonColor: .gray, day: "Friday")
+                        let friday: Color = house.getFrqSet().contains("Friday") ? .cyan : .gray
+                        DayButton(currFrequency: $currFrequncy, buttonColor: friday, day: "Friday")
                         Spacer()
                     }
                     
@@ -117,7 +127,7 @@ struct AddHomeScreen: View {
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
                         Button(action: {
-                            goBackToHome = true
+                            goBackToDetails = true
                             presentationMode.wrappedValue.dismiss()
                         }, label: {
                             Text("Cancel")
@@ -135,11 +145,11 @@ struct AddHomeScreen: View {
                             print("Name: \(currName), Frequency: \(currFrequncy), Address: \(currAddress), Job Description: \(currJobD)")
                             if (currName.isEmpty || currFrequncy.isEmpty || currAddress.isEmpty || currJobD.isEmpty) {
                                 showFieldAlert = true
-                            } else if (housesDic[currName] != nil) {
+                            } else if (editHousesDic[currName] != nil) {
                                 showMatchAlert = true
                             } else {
                                 // Proceed with form submission
-                                goBackToHome = true
+                                goBackToDetails = true
                                 let dayOrderMap = Dictionary(uniqueKeysWithValues: daysOfWeek.enumerated().map { ($1, $0) })
                                 let filteredUnsortedDays = currFrequncy.filter { dayOrderMap.keys.contains($0) }
                                 let sortedDays = filteredUnsortedDays.sorted {
@@ -148,8 +158,7 @@ struct AddHomeScreen: View {
                                     }
                                     return index1 < index2
                                 }
-                                let house = House(currName, currAddress, currJobD, sortedDays.formatted(), selectedPhotoData)
-                                context.insert(house)
+                                house.update(currName, currAddress, currJobD, sortedDays.formatted(), selectedPhotoData)
                                 presentationMode.wrappedValue.dismiss()
                             }
                         }, label: {
@@ -168,7 +177,7 @@ struct AddHomeScreen: View {
                     }
                     ToolbarItem(placement: .principal) {
                         VStack {
-                            Text("Add Home")
+                            Text("Edit Home")
                                 .font(.headline)
                                 .bold()
                                 .foregroundColor(olive)
@@ -176,6 +185,15 @@ struct AddHomeScreen: View {
                     }
                 }
             }
+        }
+        .onAppear {
+            currName = house.getName()
+            currAddress = house.getAddress()
+            currFrequncy = house.getFrqSet()
+            currJobD = house.getJobD()
+            selectedPhotoData = house.getImg()
+            editHousesDic = housesDic
+            editHousesDic.removeValue(forKey: house.getName())
         }
     }
 }

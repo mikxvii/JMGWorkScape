@@ -148,11 +148,12 @@ struct DayButton: View {
             if (buttonColor == .cyan) {
                 buttonColor = .gray
                 currFrequency.remove(day)
+                print(currFrequency.formatted())
             } else {
                 buttonColor = .cyan
                 currFrequency.insert(day)
+                print(currFrequency.formatted())
             }
-            print(currFrequency.formatted())
         }, label: {
             Text(day)
                 .frame(width: 120, height: 50)
@@ -160,7 +161,6 @@ struct DayButton: View {
                 .background(buttonColor)
                 .cornerRadius(10)
         })
-        
     }
 }
 
