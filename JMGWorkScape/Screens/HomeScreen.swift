@@ -232,8 +232,6 @@ struct HomeScreen: View {
                                                 }
                                             }
                                         }
-                                        //.border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/) just used for testing
-                                        // padding to make whole scrollable centers, might be a better way to do this
                                         .frame(width: 330)
                                         Spacer() // Need this spacer so when page isn't full of items, it starts on top
                                     }
@@ -246,7 +244,6 @@ struct HomeScreen: View {
                         .scrollTargetBehavior(.viewAligned)
                     }
 
-                    
                     if houses.isEmpty {
                         Spacer()
                         Image(systemName: "tree")
@@ -268,7 +265,8 @@ struct HomeScreen: View {
                             AddHomeScreen(housesDic: housesDic).navigationBarBackButtonHidden(true)
                         }
                         Button(action: {
-                            goToRoute = true
+                            // navigate to route page
+                            print(searchTrie?.getCount())
                         }, label: {
                             Image(systemName: "map")
                                 .foregroundColor(olive)
@@ -307,14 +305,14 @@ struct HomeScreen: View {
                     searchTrie?.insert(house.getName())
                 }
                 
-                if houses.count != searchTrie?.getCount(){
-                    for house in houses{
-                        let isFound = searchTrie?.search(house.getName()) ?? false
-                        if isFound{
-                            searchTrie?.delete(house.getName())
-                        }
-                    }
-                }
+//                if houses.count != searchTrie?.getCount(){
+//                    for house in houses{
+//                        let isFound = searchTrie?.search(house.name) ?? false
+//                        if isFound{
+//                            searchTrie?.delete(house.name)
+//                        }
+//                    }
+//                }
             }
         }
     }
