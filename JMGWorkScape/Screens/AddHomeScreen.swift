@@ -108,7 +108,7 @@ struct AddHomeScreen: View {
                         DayButton(currFrequency: $currFrequncy, buttonColor: .gray, day: "Friday")
                         Spacer()
                     }
-
+                    
                     
                 }
                 .task(id: selectedPhoto) {

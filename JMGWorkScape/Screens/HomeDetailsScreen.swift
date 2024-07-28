@@ -74,7 +74,9 @@ struct HomeDetailsScreen: View {
                             .cornerRadius(10)
                             .padding(.bottom, 20)
 
-                        Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
+                        Button(action: {
+                            openMap(house.address.replacingOccurrences(of: " ", with: ","))
+                        }, label: {
                             Text("Take Me There")
                         })
                             .frame(width: 289, height: 50)

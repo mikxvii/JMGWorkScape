@@ -164,6 +164,18 @@ struct DayButton: View {
     }
 }
 
+func openMap(_ address: String, startingAddress: String? = nil) {
+//    UIApplication.shared.open(URL(string: "http://maps.apple.com/?address=\(address)")! as URL)
+    var urlString = "https://maps.apple.com/?daddr=\(address)&directionsmode=driving"
+    if let saddr = startingAddress {
+        urlString += "&saddr=\(saddr)"
+    }
+    
+    if let url = URL(string: urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "") {
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    }
+}
+
 
 
 // // Initialize the Trie
