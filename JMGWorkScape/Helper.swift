@@ -175,6 +175,9 @@ func openMap(_ address: String, startingAddress: String? = nil) {
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
 }
+func getCurrentWeekday() -> String {
+    Date().formatted(.dateTime.weekday(.wide))
+}
 
 
 

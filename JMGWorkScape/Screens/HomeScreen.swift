@@ -268,11 +268,13 @@ struct HomeScreen: View {
                             AddHomeScreen(housesDic: housesDic).navigationBarBackButtonHidden(true)
                         }
                         Button(action: {
-                            // navigate to route page
+                            goToRoute = true
                         }, label: {
                             Image(systemName: "map")
                                 .foregroundColor(olive)
-                        })
+                        }).navigationDestination(isPresented: $goToRoute) {
+                            RouteScreen(houses: houses)
+                        }
                     }
                     .padding(.bottom, 30.0)
                     .font(.system(size: 40))
