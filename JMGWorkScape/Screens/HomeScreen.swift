@@ -28,7 +28,7 @@ struct HomeScreen: View {
     
     
     var housesDic: [String: House] {
-           Dictionary(uniqueKeysWithValues: houses.map { (key: $0.name, value: $0) })
+           Dictionary(uniqueKeysWithValues: houses.map { (key: $0.getName(), value: $0) })
        }
        
    // Initialize the Trie
@@ -110,7 +110,7 @@ struct HomeScreen: View {
                                                         }
                                                     }, label: {
                                                         ZStack {
-                                                            if let imageData = item.imageData, let image = UIImage(data: imageData) {
+                                                            if let imageData = item.getImg(), let image = UIImage(data: imageData) {
                                                                 Image(uiImage: image)
                                                                     .resizable()
                                                                     .aspectRatio(contentMode: .fill)
@@ -125,7 +125,7 @@ struct HomeScreen: View {
                                                             }
                                                             VStack {
                                                                 Spacer()
-                                                                Text(item.name)
+                                                                Text(item.getName())
                                                                     .foregroundStyle(.white)
                                                                     .padding(.horizontal, 12)
                                                                     .padding(.vertical, 6)
@@ -177,7 +177,7 @@ struct HomeScreen: View {
                                                         }
                                                     }, label: {
                                                         ZStack {
-                                                            if let imageData = item.imageData, let image = UIImage(data: imageData) {
+                                                            if let imageData = item.getImg(), let image = UIImage(data: imageData) {
                                                                 Image(uiImage: image)
                                                                     .resizable()
                                                                     .aspectRatio(contentMode: .fill)
@@ -192,7 +192,7 @@ struct HomeScreen: View {
                                                             }
                                                             VStack {
                                                                 Spacer()
-                                                                Text(item.name)
+                                                                Text(item.getName())
                                                                     .foregroundStyle(.white)
                                                                     .padding(.horizontal, 12)
                                                                     .padding(.vertical, 6)

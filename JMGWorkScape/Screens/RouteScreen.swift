@@ -30,7 +30,7 @@ struct RouteScreen: View {
                         ScrollView(.vertical) {
                             ForEach(houses) { house in
                                 ZStack {
-                                    if let imageData = house.imageData, let image = UIImage(data: imageData) {
+                                    if let imageData = house.getImg(), let image = UIImage(data: imageData) {
                                         Image(uiImage: image)
                                             .multilineTextAlignment(.center)
                                             .frame(width: 289, height: 60)

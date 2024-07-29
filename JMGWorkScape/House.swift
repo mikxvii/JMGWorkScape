@@ -11,13 +11,13 @@ import SwiftUI
 
 @Model
 final class House: Identifiable{
-    var id: String
     
-    var name: String
-    var address: String
-    var frequency: String
-    var jobD: String
-    var imageData: Data? // Image needs to be in Data format
+    var id: String
+    private var name: String
+    private var address: String
+    private var frequency: String
+    private var jobD: String
+    private var imageData: Data? // Image needs to be in Data format
     
     init(_ name: String="", _ address: String="", _ job: String="", _ frequency: String="", _ imageData: Data? = nil) {
         self.id = UUID().uuidString
