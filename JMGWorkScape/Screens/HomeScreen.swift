@@ -71,21 +71,7 @@ struct HomeScreen: View {
                             .font(.largeTitle)
                             .shadow(color: Color(red: 0.00, green: 0.00, blue: 0.00, opacity: 0.25), radius: 4, x: 0, y: 4)
                             .foregroundColor(olive)
-                        
-                        // Supposed to be a filter button
-                        Button(action: {
-                            filter()
-                            if !houses.isEmpty {
-                                context.delete(houses[0])
-                            }
-                        }, label: {
-                            HStack(spacing: 2){
-                                Text("Label")
-                                    .bold()
-                                    .foregroundColor(.blue)
-                                Image(systemName: "arrow.up.and.down")
-                            }
-                        })
+                        Spacer() // Just a spacer to push all items to the left
                     }
                     
                     ZStack {
