@@ -56,16 +56,6 @@ struct RouteScreen: View {
                         }
                     }
                 }
-//                else {
-//                    Spacer()
-//                    VStack {
-//                        Image(systemName: "tree")
-//                            .foregroundColor(.gray)
-//                            .font(.title)
-//                        Text("No work today")
-//                            .foregroundColor(.gray)
-//                    }
-//                }
             }
             .toolbar {
                 ToolbarItem(placement: .principal) {
