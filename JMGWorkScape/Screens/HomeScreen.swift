@@ -55,251 +55,254 @@ struct HomeScreen: View {
     
     var body: some View {
         // Setting up for Screen switching
-        NavigationStack {
-            ZStack {
-                // HomeScreen background
-                Image("olive_screen")
-                    .resizable()
-                    .ignoresSafeArea()
-                    .aspectRatio(contentMode: .fill)
-                
-                VStack(spacing: 10) {
-                    HStack(spacing: 157) {
-                        // Title of the Screen
-                        Text("Homes")
-                            .bold()
-                            .font(.largeTitle)
-                            .shadow(color: Color(red: 0.00, green: 0.00, blue: 0.00, opacity: 0.25), radius: 4, x: 0, y: 4)
-                            .foregroundColor(olive)
-                        Spacer() // Just a spacer to push all items to the left
-                    }
+        GeometryReader { geo in
+            NavigationStack {
+                ZStack {
+                    // HomeScreen background
+                    Image("olive_screen")
+                        .resizable()
+                        .scaledToFill()
+                        .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
+                        .frame(width: geo.size.width, height: geo.size.height, alignment: .center)
                     
-                    ZStack {
-                        TextField("'Calle Miramar..'", text: $searchText)
-                            .frame(maxWidth: 350, alignment: .topLeading)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                        Button(action: {
-                            search()
-                        }, label: {
-                            Image(systemName: "magnifyingglass")
+                    VStack(spacing: 10) {
+                        HStack(spacing: 157) {
+                            // Title of the Screen
+                            Text("Homes")
+                                .bold()
+                                .font(.largeTitle)
+                                .shadow(color: Color(red: 0.00, green: 0.00, blue: 0.00, opacity: 0.25), radius: 4, x: 0, y: 4)
                                 .foregroundColor(olive)
-                        }).offset(x: 145)
-                    }
-                    
-                    // Page Calculation
-                    let itemsPerPage = 6
-                    let pages = Int(ceil(Double(houses.count) / Double(itemsPerPage)))
-                    
-                    if searchText != ""{
-                        let foundHouses = searchTrie?.wordsWithPrefix(searchText) ?? []
-                        let itemsPerPage = 6
-                        let pages = Int(ceil(Double(foundHouses.count) / Double(itemsPerPage)))
+                        }
                         
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 30) {
-                                ForEach(1..<pages + 1, id: \.self) { page in
-                                    VStack {
-                                        LazyVGrid(columns: numberColumns, spacing: 20) {
-                                            let housesArray = pullItems(foundHouses)
-                                            ForEach(housesArray, id: \.self) { item in
-                                                ZStack {
-                                                    Button(action: {
-                                                        if !longPressDetected {
-                                                            selectedHouse = item
-                                                            goToDetails = true
-                                                        }
-                                                    }, label: {
-                                                        ZStack {
-                                                            if let imageData = item.getImg(), let image = UIImage(data: imageData) {
-                                                                Image(uiImage: image)
-                                                                    .resizable()
-                                                                    .aspectRatio(contentMode: .fill)
-                                                                    .frame(width: 150, height: 150)
-                                                                    .cornerRadius(40)
-                                                                    .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
-                                                            } else {
-                                                                RoundedRectangle(cornerRadius: 40)
-                                                                    .fill(gray)
-                                                                    .frame(width: 150, height: 150)
-                                                                    .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                        ZStack {
+                            TextField("'Calle Miramar..'", text: $searchText)
+                                .frame(maxWidth: 350, alignment: .topLeading)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                            Button(action: {
+                                search()
+                            }, label: {
+                                Image(systemName: "magnifyingglass")
+                                    .foregroundColor(olive)
+                            }).offset(x: 145)
+                        }
+                        
+                        // Page Calculation
+                        let itemsPerPage = 6
+                        let pages = Int(ceil(Double(houses.count) / Double(itemsPerPage)))
+                        
+                        if searchText != ""{
+                            let foundHouses = searchTrie?.wordsWithPrefix(searchText) ?? []
+                            let itemsPerPage = 6
+                            let pages = Int(ceil(Double(foundHouses.count) / Double(itemsPerPage)))
+                            
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 30) {
+                                    ForEach(1..<pages + 1, id: \.self) { page in
+                                        VStack {
+                                            LazyVGrid(columns: numberColumns, spacing: 20) {
+                                                let housesArray = pullItems(foundHouses)
+                                                ForEach(housesArray, id: \.self) { item in
+                                                    ZStack {
+                                                        Button(action: {
+                                                            if !longPressDetected {
+                                                                selectedHouse = item
+                                                                goToDetails = true
                                                             }
-                                                            VStack {
-                                                                Spacer()
-                                                                Text(item.getName())
-                                                                    .foregroundStyle(.white)
-                                                                    .padding(.horizontal, 12)
-                                                                    .padding(.vertical, 6)
-                                                                    .background(darkOlive)
-                                                                    .cornerRadius(15)
-                                                                    .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                                                        }, label: {
+                                                            ZStack {
+                                                                if let imageData = item.getImg(), let image = UIImage(data: imageData) {
+                                                                    Image(uiImage: image)
+                                                                        .resizable()
+                                                                        .aspectRatio(contentMode: .fill)
+                                                                        .frame(width: 150, height: 150)
+                                                                        .cornerRadius(40)
+                                                                        .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                                                                } else {
+                                                                    RoundedRectangle(cornerRadius: 40)
+                                                                        .fill(gray)
+                                                                        .frame(width: 150, height: 150)
+                                                                        .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                                                                }
+                                                                VStack {
+                                                                    Spacer()
+                                                                    Text(item.getName())
+                                                                        .foregroundStyle(.white)
+                                                                        .padding(.horizontal, 12)
+                                                                        .padding(.vertical, 6)
+                                                                        .background(darkOlive)
+                                                                        .cornerRadius(15)
+                                                                        .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                                                                }
+                                                                .padding(.bottom, 20)
                                                             }
-                                                            .padding(.bottom, 20)
-                                                        }
-                                                    })
-                                                    .simultaneousGesture(
-                                                        LongPressGesture().onEnded { _ in
-                                                            houseToDelete = item
-                                                            showAlert = true
-                                                            longPressDetected = true
-                                                        }
-                                                    )
-                                                    .simultaneousGesture(
-                                                        TapGesture().onEnded {
-                                                            longPressDetected = false
-                                                        }
-                                                    )
+                                                        })
+                                                        .simultaneousGesture(
+                                                            LongPressGesture().onEnded { _ in
+                                                                houseToDelete = item
+                                                                showAlert = true
+                                                                longPressDetected = true
+                                                            }
+                                                        )
+                                                        .simultaneousGesture(
+                                                            TapGesture().onEnded {
+                                                                longPressDetected = false
+                                                            }
+                                                        )
+                                                    }
                                                 }
                                             }
+                                            .frame(width: 330)
+                                            Spacer() // Need this spacer so when page isn't full of items, it starts on top
                                         }
-                                        .frame(width: 330)
-                                        Spacer() // Need this spacer so when page isn't full of items, it starts on top
                                     }
                                 }
+                                .scrollTargetLayout()
                             }
-                            .scrollTargetLayout()
-                        }
-                        .padding(.top, 20)
-                        .scrollClipDisabled()
-                        .scrollTargetBehavior(.viewAligned)
-                    }else{
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 30) {
-                                ForEach(1..<pages + 1, id: \.self) { page in
-                                    let housesArray = getItems(for: page, itemsPerPage: itemsPerPage)
-                                    VStack {
-                                        LazyVGrid(columns: numberColumns, spacing: 20) {
-                                            ForEach(housesArray, id: \.self) { item in
-                                                ZStack {
-                                                    Button(action: {
-                                                        if !longPressDetected {
-                                                            selectedHouse = item
-                                                            goToDetails = true
-                                                        }
-                                                    }, label: {
-                                                        ZStack {
-                                                            if let imageData = item.getImg(), let image = UIImage(data: imageData) {
-                                                                Image(uiImage: image)
-                                                                    .resizable()
-                                                                    .aspectRatio(contentMode: .fill)
-                                                                    .frame(width: 150, height: 150)
-                                                                    .cornerRadius(40)
-                                                                    .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
-                                                            } else {
-                                                                RoundedRectangle(cornerRadius: 40)
-                                                                    .fill(gray)
-                                                                    .frame(width: 150, height: 150)
-                                                                    .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                            .padding(.top, 20)
+                            .scrollClipDisabled()
+                            .scrollTargetBehavior(.viewAligned)
+                        }else{
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 30) {
+                                    ForEach(1..<pages + 1, id: \.self) { page in
+                                        let housesArray = getItems(for: page, itemsPerPage: itemsPerPage)
+                                        VStack {
+                                            LazyVGrid(columns: numberColumns, spacing: 20) {
+                                                ForEach(housesArray, id: \.self) { item in
+                                                    ZStack {
+                                                        Button(action: {
+                                                            if !longPressDetected {
+                                                                selectedHouse = item
+                                                                goToDetails = true
                                                             }
-                                                            VStack {
-                                                                Spacer()
-                                                                Text(item.getName())
-                                                                    .foregroundStyle(.white)
-                                                                    .padding(.horizontal, 12)
-                                                                    .padding(.vertical, 6)
-                                                                    .background(darkOlive)
-                                                                    .cornerRadius(15)
-                                                                    .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                                                        }, label: {
+                                                            ZStack {
+                                                                if let imageData = item.getImg(), let image = UIImage(data: imageData) {
+                                                                    Image(uiImage: image)
+                                                                        .resizable()
+                                                                        .aspectRatio(contentMode: .fill)
+                                                                        .frame(width: 150, height: 150)
+                                                                        .cornerRadius(40)
+                                                                        .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                                                                } else {
+                                                                    RoundedRectangle(cornerRadius: 40)
+                                                                        .fill(gray)
+                                                                        .frame(width: 150, height: 150)
+                                                                        .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                                                                }
+                                                                VStack {
+                                                                    Spacer()
+                                                                    Text(item.getName())
+                                                                        .foregroundStyle(.white)
+                                                                        .padding(.horizontal, 12)
+                                                                        .padding(.vertical, 6)
+                                                                        .background(darkOlive)
+                                                                        .cornerRadius(15)
+                                                                        .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                                                                }
+                                                                .padding(.bottom, 20)
                                                             }
-                                                            .padding(.bottom, 20)
-                                                        }
-                                                    })
-                                                    .simultaneousGesture(
-                                                        LongPressGesture().onEnded { _ in
-                                                            houseToDelete = item
-                                                            showAlert = true
-                                                            longPressDetected = true
-                                                        }
-                                                    )
-                                                    .simultaneousGesture(
-                                                        TapGesture().onEnded {
-                                                            longPressDetected = false
-                                                        }
-                                                    )
+                                                        })
+                                                        .simultaneousGesture(
+                                                            LongPressGesture().onEnded { _ in
+                                                                houseToDelete = item
+                                                                showAlert = true
+                                                                longPressDetected = true
+                                                            }
+                                                        )
+                                                        .simultaneousGesture(
+                                                            TapGesture().onEnded {
+                                                                longPressDetected = false
+                                                            }
+                                                        )
+                                                    }
                                                 }
                                             }
+                                            .frame(width: 330)
+                                            Spacer() // Need this spacer so when page isn't full of items, it starts on top
                                         }
-                                        .frame(width: 330)
-                                        Spacer() // Need this spacer so when page isn't full of items, it starts on top
                                     }
                                 }
+                                .scrollTargetLayout()
                             }
-                            .scrollTargetLayout()
+                            .padding(.top, 20)
+                            .scrollClipDisabled()
+                            .scrollTargetBehavior(.viewAligned)
                         }
-                        .padding(.top, 20)
-                        .scrollClipDisabled()
-                        .scrollTargetBehavior(.viewAligned)
-                    }
 
-                    if houses.isEmpty {
+                        if houses.isEmpty {
+                            Spacer()
+                            Image(systemName: "tree")
+                                .foregroundColor(.gray)
+                                .font(.title)
+                            Text("No homes added")
+                                .foregroundColor(.gray)
+                        }
+                        
                         Spacer()
-                        Image(systemName: "tree")
-                            .foregroundColor(.gray)
-                            .font(.title)
-                        Text("No homes added")
-                            .foregroundColor(.gray)
-                    }
-                    
-                    Spacer()
-                    // Buttons for actions
-                    HStack(spacing: 115) {
-                        // Add a Home Button
-                        Button(action: {
-                            goToAdd = true
-                        }, label: {
-                            Image(systemName: "house.fill").foregroundColor(olive)
-                        }).navigationDestination(isPresented: $goToAdd) {
-                            AddHomeScreen(housesDic: housesDic).navigationBarBackButtonHidden(true)
+                        // Buttons for actions
+                        HStack(spacing: 115) {
+                            // Add a Home Button
+                            Button(action: {
+                                goToAdd = true
+                            }, label: {
+                                Image(systemName: "house.fill").foregroundColor(olive)
+                            }).navigationDestination(isPresented: $goToAdd) {
+                                AddHomeScreen(housesDic: housesDic).navigationBarBackButtonHidden(true)
+                            }
+                            Button(action: {
+                                // navigate to route page
+                                goToRoute = true
+                            }, label: {
+                                Image(systemName: "map")
+                                    .foregroundColor(olive)
+                            }).navigationDestination(isPresented: $goToRoute) {
+                                RouteScreen(houses: houses)
+                            }
                         }
-                        Button(action: {
-                            // navigate to route page
-                            goToRoute = true
-                        }, label: {
-                            Image(systemName: "map")
-                                .foregroundColor(olive)
-                        }).navigationDestination(isPresented: $goToRoute) {
-                            RouteScreen(houses: houses)
-                        }
+                        .padding(.bottom, 30.0)
+                        .font(.system(size: 40))
                     }
-                    .padding(.bottom, 30.0)
-                    .font(.system(size: 40))
+                    .padding()
                 }
                 .padding()
-            }
-            .padding()
-            .navigationDestination(isPresented: $goToDetails) {
-                if let selectedHouse = selectedHouse {
-                    HomeDetailsScreen(house: selectedHouse, houseDic: housesDic)
+                .navigationDestination(isPresented: $goToDetails) {
+                    if let selectedHouse = selectedHouse {
+                        HomeDetailsScreen(house: selectedHouse, houseDic: housesDic)
+                    }
+                }
+                .alert(isPresented: $showAlert) {
+                    Alert(
+                        title: Text("Confirm Deletion"),
+                        message: Text("Are you sure you want to delete this house?"),
+                        primaryButton: .destructive(Text("Delete")) {
+                            if let houseToDelete = houseToDelete, let index = houses.firstIndex(of: houseToDelete) {
+                                context.delete(houses[index])
+                            }
+                        },
+                        secondaryButton: .cancel()
+                    )
+                }
+                // trie stuff here
+                .onAppear(){
+                    // Initialize the Trie with house names
+                    searchTrie = Trie()
+                    for house in houses {
+                        searchTrie?.insert(house.getName())
+                    }
+                    
+    //                if houses.count != searchTrie?.getCount(){
+    //                    for house in houses{
+    //                        let isFound = searchTrie?.search(house.name) ?? false
+    //                        if isFound{
+    //                            searchTrie?.delete(house.name)
+    //                        }
+    //                    }
+    //                }
                 }
             }
-            .alert(isPresented: $showAlert) {
-                Alert(
-                    title: Text("Confirm Deletion"),
-                    message: Text("Are you sure you want to delete this house?"),
-                    primaryButton: .destructive(Text("Delete")) {
-                        if let houseToDelete = houseToDelete, let index = houses.firstIndex(of: houseToDelete) {
-                            context.delete(houses[index])
-                        }
-                    },
-                    secondaryButton: .cancel()
-                )
-            }
-            // trie stuff here
-            .onAppear(){
-                // Initialize the Trie with house names
-                searchTrie = Trie()
-                for house in houses {
-                    searchTrie?.insert(house.getName())
-                }
-                
-//                if houses.count != searchTrie?.getCount(){
-//                    for house in houses{
-//                        let isFound = searchTrie?.search(house.name) ?? false
-//                        if isFound{
-//                            searchTrie?.delete(house.name)
-//                        }
-//                    }
-//                }
-            }
+            .ignoresSafeArea(.all)
         }
     }
 }
