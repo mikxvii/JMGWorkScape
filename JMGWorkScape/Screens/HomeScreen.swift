@@ -252,7 +252,7 @@ struct HomeScreen: View {
                         }
                         Button(action: {
                             // navigate to route page
-                            print(searchTrie?.getCount())
+                            goToRoute = true
                         }, label: {
                             Image(systemName: "map")
                                 .foregroundColor(olive)
