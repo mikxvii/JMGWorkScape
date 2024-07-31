@@ -34,7 +34,64 @@ struct EditHomeScreen: View {
     
     var body: some View {
         // bool variable changed by Cancel and Done buttons
-        
+        HStack {
+            Spacer()
+            
+            Button(action: {
+                goBackToDetails = true
+                presentationMode.wrappedValue.dismiss()
+            }, label: {
+                Text("Cancel")
+                    .bold()
+                    .foregroundColor(.black)
+                    .padding(.horizontal, 25.0)
+                    .padding(.vertical, 10)
+                    .background(.red)
+                    .cornerRadius(70)
+                    .padding(5)
+            })
+            
+            Text("Edit Home")
+                .font(.headline)
+                .bold()
+                .foregroundColor(olive)
+            
+            Button(action: {
+                print("Name: \(currName), Frequency: \(currFrequncy), Address: \(currAddress), Job Description: \(currJobD)")
+                if (currName.isEmpty || currFrequncy.isEmpty || currAddress.isEmpty || currJobD.isEmpty) {
+                    showFieldAlert = true
+                } else if (editHousesDic[currName] != nil) {
+                    showMatchAlert = true
+                } else {
+                    // Proceed with form submission
+                    goBackToDetails = true
+                    let dayOrderMap = Dictionary(uniqueKeysWithValues: daysOfWeek.enumerated().map { ($1, $0) })
+                    let filteredUnsortedDays = currFrequncy.filter { dayOrderMap.keys.contains($0) }
+                    let sortedDays = filteredUnsortedDays.sorted {
+                        guard let index1 = dayOrderMap[$0], let index2 = dayOrderMap[$1] else {
+                            return false
+                        }
+                        return index1 < index2
+                    }
+                    house.update(currName, currAddress, currJobD, sortedDays.formatted(), selectedPhotoData)
+                    presentationMode.wrappedValue.dismiss()
+                }
+            }, label: {
+                Text("Done")
+                    .bold()
+                    .foregroundColor(olive)
+                    .padding(.horizontal, 25.0)
+                    .padding(.vertical, 10)
+                    .background(Color(red: 117/255, green: 143/255, blue: 100/255))
+                    .cornerRadius(70)
+                    .padding(5)
+            })
+            .alert(isPresented: $showMatchAlert) {
+                Alert(title: Text("Validation Error"), message: Text("A House with this name already exists, please rename"), dismissButton: .default(Text("Ok")))
+            }
+            
+            Spacer()
+        }
         ScrollView(.vertical) {
             VStack(spacing: 30) {
                 PhotosPicker(selection: $selectedPhoto, matching: .images, photoLibrary: .shared()) {
@@ -121,67 +178,6 @@ struct EditHomeScreen: View {
             }
             .alert(isPresented: $showFieldAlert) {
                 Alert(title: Text("Validation Error"), message: Text("All text fields must be filled"), dismissButton: .default(Text("OK")))
-            }
-            .navigationBarBackButtonHidden(true) // Hide default back button
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button(action: {
-                        goBackToDetails = true
-                        presentationMode.wrappedValue.dismiss()
-                    }, label: {
-                        Text("Cancel")
-                            .bold()
-                            .foregroundColor(.black)
-                            .padding(.horizontal, 25.0)
-                            .padding(.vertical, 10)
-                            .background(.red)
-                            .cornerRadius(70)
-                            .padding(5)
-                    })
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button(action: {
-                        print("Name: \(currName), Frequency: \(currFrequncy), Address: \(currAddress), Job Description: \(currJobD)")
-                        if (currName.isEmpty || currFrequncy.isEmpty || currAddress.isEmpty || currJobD.isEmpty) {
-                            showFieldAlert = true
-                        } else if (editHousesDic[currName] != nil) {
-                            showMatchAlert = true
-                        } else {
-                            // Proceed with form submission
-                            goBackToDetails = true
-                            let dayOrderMap = Dictionary(uniqueKeysWithValues: daysOfWeek.enumerated().map { ($1, $0) })
-                            let filteredUnsortedDays = currFrequncy.filter { dayOrderMap.keys.contains($0) }
-                            let sortedDays = filteredUnsortedDays.sorted {
-                                guard let index1 = dayOrderMap[$0], let index2 = dayOrderMap[$1] else {
-                                    return false
-                                }
-                                return index1 < index2
-                            }
-                            house.update(currName, currAddress, currJobD, sortedDays.formatted(), selectedPhotoData)
-                            presentationMode.wrappedValue.dismiss()
-                        }
-                    }, label: {
-                        Text("Done")
-                            .bold()
-                            .foregroundColor(olive)
-                            .padding(.horizontal, 25.0)
-                            .padding(.vertical, 10)
-                            .background(Color(red: 117/255, green: 143/255, blue: 100/255))
-                            .cornerRadius(70)
-                            .padding(5)
-                    })
-                    .alert(isPresented: $showMatchAlert) {
-                        Alert(title: Text("Validation Error"), message: Text("A House with this name already exists, please rename"), dismissButton: .default(Text("Ok")))
-                    }
-                }
-                ToolbarItem(placement: .principal) {
-                    VStack {
-                        Text("Edit Home")
-                            .font(.headline)
-                            .bold()
-                            .foregroundColor(olive)
-                    }
-                }
             }
         }
         .onAppear {

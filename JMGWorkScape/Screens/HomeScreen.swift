@@ -248,9 +248,8 @@ struct HomeScreen: View {
                                 goToAdd = true
                             }, label: {
                                 Image(systemName: "house.fill").foregroundColor(olive)
-                            }).navigationDestination(isPresented: $goToAdd) {
-                                AddHomeScreen(housesDic: housesDic).navigationBarBackButtonHidden(true)
-                            }
+                            })
+                            
                             Button(action: {
                                 // navigate to route page
                                 goToRoute = true
@@ -271,6 +270,9 @@ struct HomeScreen: View {
                     if let selectedHouse = selectedHouse {
                         HomeDetailsScreen(house: selectedHouse, houseDic: housesDic)
                     }
+                }
+                .sheet(isPresented: $goToAdd) {
+                    AddHomeScreen(housesDic: housesDic).navigationBarBackButtonHidden(true)
                 }
                 .alert(isPresented: $showAlert) {
                     Alert(

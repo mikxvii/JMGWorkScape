@@ -102,7 +102,7 @@ struct HomeDetailsScreen: View {
                 }
             }
         }
-        .navigationDestination(isPresented: $goToEdit) {
+        .sheet(isPresented: $goToEdit) {
             EditHomeScreen(housesDic: houseDic, house: house)
         }
     }
