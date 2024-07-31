@@ -258,7 +258,7 @@ struct HomeScreen: View {
                                 Image(systemName: "map")
                                     .foregroundColor(olive)
                             }).navigationDestination(isPresented: $goToRoute) {
-                                RouteScreen(houses: houses)
+                                RouteScreen(houses: houses, housesDic: housesDic)
                             }
                         }
                         .padding(.bottom, 30.0)

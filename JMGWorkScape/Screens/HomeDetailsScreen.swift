@@ -20,102 +20,90 @@ struct HomeDetailsScreen: View {
 
 
     var body: some View {
-        NavigationStack {
-            ZStack {
-                Image("stone_screen")
-                    .resizable()
-                    .scaledToFill()
-                    .ignoresSafeArea()
-                ScrollView(.vertical) {
-                    VStack {
-                        if house.getImg() != nil {
-                            if let image = UIImage(data: house.getImg()!) {
-                                Image(uiImage: image)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(maxWidth: .infinity, maxHeight: 270)
-                                    .cornerRadius(40)
-                            }
-                        } else {
-                            Image(systemName: "photo.artframe")
+        ZStack {
+            Image("stone_screen")
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea()
+            ScrollView(.vertical) {
+                VStack {
+                    if house.getImg() != nil {
+                        if let image = UIImage(data: house.getImg()!) {
+                            Image(uiImage: image)
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
-                                .foregroundColor(gray)
                                 .frame(maxWidth: .infinity, maxHeight: 270)
                                 .cornerRadius(40)
-
                         }
+                    } else {
+                        Image(systemName: "photo.artframe")
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .foregroundColor(gray)
+                            .frame(maxWidth: .infinity, maxHeight: 270)
+                            .cornerRadius(40)
 
-                        
-                        Text(house.getName() + "'s Home")
-                            .font(.largeTitle)
-                            .bold()
-                            .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
-                        
-                        Text(house.getAddress())
-                            .font(.headline)
-                            .multilineTextAlignment(.center)
-                            .frame(width: 289, height: 60)
-                            .background(.gray)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                            .padding(.bottom, 20)
-
-                        Text("\(house.getFrqFormatted())'s")
-                            .font(.headline)
-                            .multilineTextAlignment(.center)
-                            .frame(width: 289, height: 60)
-                            .background(darkOlive)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                            .padding(.bottom, 20)
-
-                        Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
-                            Text("Create Invoice")
-                        })
-                            .frame(width: 289, height: 50)
-                            .foregroundColor(.white)
-                            .background(.cyan)
-                            .cornerRadius(10)
-                            .padding(.bottom, 20)
-
-                        Button(action: {
-                            openMap(house.getAddress().replacingOccurrences(of: " ", with: ","))
-                        }, label: {
-                            Text("Take Me There")
-                        })
-                            .frame(width: 289, height: 50)
-                            .foregroundColor(.white)
-                            .background(.brown)
-                            .cornerRadius(10)
-                        
-                        Spacer()
                     }
-                    .ignoresSafeArea()
-                    .navigationBarBackButtonHidden(true) // Hide default back button
-                    .toolbar {
-                        ToolbarItem(placement: .topBarLeading) {
-                            Button(action: {
-                                // Custom back button action
-                                presentationMode.wrappedValue.dismiss()
-                            }) {
-                                Image(systemName: "arrowshape.backward.fill")
-                                    .foregroundColor(.blue)// Custom back button image
-                            }
-                        }
-                        ToolbarItem(placement: .topBarTrailing) {
-                            Button(action: {
-                                goToEdit = true
-                            }, label: {
-                                Image(systemName: "pencil")
-                            })
-                        }
+
+                    
+                    Text(house.getName() + "'s Home")
+                        .font(.largeTitle)
+                        .bold()
+                        .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                    
+                    Text(house.getAddress())
+                        .font(.headline)
+                        .multilineTextAlignment(.center)
+                        .frame(width: 289, height: 60)
+                        .background(.gray)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                        .padding(.bottom, 20)
+
+                    Text("\(house.getFrqFormatted())'s")
+                        .font(.headline)
+                        .multilineTextAlignment(.center)
+                        .frame(width: 289, height: 60)
+                        .background(darkOlive)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                        .padding(.bottom, 20)
+
+                    Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
+                        Text("Create Invoice")
+                    })
+                        .frame(width: 289, height: 50)
+                        .foregroundColor(.white)
+                        .background(.cyan)
+                        .cornerRadius(10)
+                        .padding(.bottom, 20)
+
+                    Button(action: {
+                        openMap(house.getAddress().replacingOccurrences(of: " ", with: ","))
+                    }, label: {
+                        Text("Take Me There")
+                    })
+                        .frame(width: 289, height: 50)
+                        .foregroundColor(.white)
+                        .background(.brown)
+                        .cornerRadius(10)
+                    
+                    Spacer()
+                }
+                .ignoresSafeArea()
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button(action: {
+                            goToEdit = true
+                        }, label: {
+                            Image(systemName: "pencil")
+                        })
                     }
                 }
             }
-            .navigationDestination(isPresented: $goToEdit) {
-                EditHomeScreen(housesDic: houseDic, house: house)
-            }
+        }
+        .navigationDestination(isPresented: $goToEdit) {
+            EditHomeScreen(housesDic: houseDic, house: house)
         }
     }
 }
