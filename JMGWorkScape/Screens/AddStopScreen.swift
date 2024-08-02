@@ -18,8 +18,6 @@ struct AddStopScreen: View {
     let darkOlive = Color(red: 0.19, green: 0.23, blue: 0.16, opacity: 1.00)
 
     @Environment(\.presentationMode) var presentationMode
-    @State private var searchText = ""
-    @State private var searchTrie: Trie?
     
     private let numberColumns = [
         GridItem(.flexible()),
@@ -39,178 +37,110 @@ struct AddStopScreen: View {
     }
     
     var body: some View {
-        GeometryReader { geo in
-            HStack {
-                Spacer()
-                VStack {
-                    HStack {
-                        Spacer()
-                        Button(action: {
-                            presentationMode.wrappedValue.dismiss()
-                        }, label: {
-                            Text("Cancel")
-                                .bold()
-                                .foregroundColor(.black)
-                                .padding(.horizontal, 25.0)
-                                .padding(.vertical, 10)
-                                .background(.red)
-                                .cornerRadius(70)
-                                .padding(5)
-                        })
-                        Spacer()
-                        Button(action: {
-                            presentationMode.wrappedValue.dismiss()
-                        }, label: {
-                            Text("Done")
-                                .bold()
-                                .foregroundColor(olive)
-                                .padding(.horizontal, 25.0)
-                                .padding(.vertical, 10)
-                                .background(Color(red: 117/255, green: 143/255, blue: 100/255))
-                                .cornerRadius(70)
-                                .padding(5)
-                        })
-                        Spacer()
-                    }
-                    HStack {
-                        TextField("'Calle Miramar..'", text: $searchText)
-                            .frame(maxWidth: 350, alignment: .topLeading)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                        
-                        Image(systemName: "magnifyingglass")
+        HStack {
+            Spacer()
+            VStack {
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        presentationMode.wrappedValue.dismiss()
+                    }, label: {
+                        Text("Cancel")
+                            .bold()
+                            .foregroundColor(.black)
+                            .padding(.horizontal, 25.0)
+                            .padding(.vertical, 10)
+                            .background(.red)
+                            .cornerRadius(70)
+                            .padding(5)
+                    })
+                    Spacer()
+                    Text("Add Stop")
+                        .font(.headline)
+                        .bold()
+                        .foregroundColor(olive)
+                    Spacer()
+                    Button(action: {
+                        presentationMode.wrappedValue.dismiss()
+                    }, label: {
+                        Text("Done")
+                            .bold()
                             .foregroundColor(olive)
-                    }
-                    
-                    let itemsPerPage = 6
-                    let pages = Int(ceil(Double(houses.count) / Double(itemsPerPage)))
-                    
-                    if searchText != ""{
-                        let foundHouses = searchTrie?.wordsWithPrefix(searchText) ?? []
-                        let itemsPerPage = 6
-                        let pages = Int(ceil(Double(foundHouses.count) / Double(itemsPerPage)))
-                        
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 30) {
-                                ForEach(1..<pages + 1, id: \.self) { page in
-                                    VStack {
-                                        LazyVGrid(columns: numberColumns, spacing: 20) {
-                                            let housesArray = pullItems(foundHouses)
-                                            ForEach(housesArray, id: \.self) { item in
+                            .padding(.horizontal, 25.0)
+                            .padding(.vertical, 10)
+                            .background(Color(red: 117/255, green: 143/255, blue: 100/255))
+                            .cornerRadius(70)
+                            .padding(5)
+                    })
+                    Spacer()
+                }
+                
+                let itemsPerPage = 6
+                let pages = Int(ceil(Double(houses.count) / Double(itemsPerPage)))
+                
+                ScrollView(.horizontal, showsIndicators: true) {
+                    HStack(spacing: 50) {
+                        ForEach(1..<pages + 1, id: \.self) { page in
+                            let housesArray = getItems(for: page, itemsPerPage: itemsPerPage)
+                            VStack {
+                                LazyVGrid(columns: numberColumns, spacing: 20) {
+                                    ForEach(housesArray, id: \.self) { item in
+                                        ZStack {
+                                            Button(action: {
+                                                // DO SOMETHING
+                                            }, label: {
                                                 ZStack {
-                                                    Button(action: {
-                                                        // DO SOMETHING
-                                                    }, label: {
-                                                        ZStack {
-                                                            if let imageData = item.getImg(), let image = UIImage(data: imageData) {
-                                                                Image(uiImage: image)
-                                                                    .resizable()
-                                                                    .aspectRatio(contentMode: .fill)
-                                                                    .frame(width: 150, height: 150)
-                                                                    .cornerRadius(40)
-                                                                    .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
-                                                            } else {
-                                                                RoundedRectangle(cornerRadius: 40)
-                                                                    .fill(gray)
-                                                                    .frame(width: 150, height: 150)
-                                                                    .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
-                                                            }
-                                                            VStack {
-                                                                Spacer()
-                                                                Text(item.getName())
-                                                                    .foregroundStyle(.white)
-                                                                    .padding(.horizontal, 12)
-                                                                    .padding(.vertical, 6)
-                                                                    .background(darkOlive)
-                                                                    .cornerRadius(15)
-                                                                    .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
-                                                            }
-                                                            .padding(.bottom, 20)
-                                                        }
-                                                    })
+                                                    if let imageData = item.getImg(), let image = UIImage(data: imageData) {
+                                                        Image(uiImage: image)
+                                                            .resizable()
+                                                            .aspectRatio(contentMode: .fill)
+                                                            .frame(width: 150, height: 150)
+                                                            .cornerRadius(40)
+                                                            .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                                                    } else {
+                                                        RoundedRectangle(cornerRadius: 40)
+                                                            .fill(gray)
+                                                            .frame(width: 150, height: 150)
+                                                            .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                                                    }
+                                                    VStack {
+                                                        Spacer()
+                                                        Text(item.getName())
+                                                            .foregroundStyle(.white)
+                                                            .padding(.horizontal, 12)
+                                                            .padding(.vertical, 6)
+                                                            .background(darkOlive)
+                                                            .cornerRadius(15)
+                                                            .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                                                    }
+                                                    .padding(.bottom, 20)
                                                 }
-                                            }
+                                            })
                                         }
-                                        .frame(width: 330)
-                                        Spacer() // Need this spacer so when page isn't full of items, it starts on top
                                     }
                                 }
+                                .frame(width: 330)
+                                Spacer() // Need this spacer so when page isn't full of items, it starts on top
                             }
-                            .scrollTargetLayout()
                         }
-                        .padding(.top, 20)
-                        .scrollClipDisabled()
-                        .scrollTargetBehavior(.viewAligned)
-                    }else{
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 30) {
-                                ForEach(1..<pages + 1, id: \.self) { page in
-                                    let housesArray = getItems(for: page, itemsPerPage: itemsPerPage)
-                                    VStack {
-                                        LazyVGrid(columns: numberColumns, spacing: 20) {
-                                            ForEach(housesArray, id: \.self) { item in
-                                                ZStack {
-                                                    Button(action: {
-                                                        // DO SOMETHING
-                                                    }, label: {
-                                                        ZStack {
-                                                            if let imageData = item.getImg(), let image = UIImage(data: imageData) {
-                                                                Image(uiImage: image)
-                                                                    .resizable()
-                                                                    .aspectRatio(contentMode: .fill)
-                                                                    .frame(width: 150, height: 150)
-                                                                    .cornerRadius(40)
-                                                                    .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
-                                                            } else {
-                                                                RoundedRectangle(cornerRadius: 40)
-                                                                    .fill(gray)
-                                                                    .frame(width: 150, height: 150)
-                                                                    .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
-                                                            }
-                                                            VStack {
-                                                                Spacer()
-                                                                Text(item.getName())
-                                                                    .foregroundStyle(.white)
-                                                                    .padding(.horizontal, 12)
-                                                                    .padding(.vertical, 6)
-                                                                    .background(darkOlive)
-                                                                    .cornerRadius(15)
-                                                                    .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
-                                                            }
-                                                            .padding(.bottom, 20)
-                                                        }
-                                                    })
-                                                }
-                                            }
-                                        }
-                                        .frame(width: 330)
-                                        Spacer() // Need this spacer so when page isn't full of items, it starts on top
-                                    }
-                                }
-                            }
-                            .scrollTargetLayout()
-                        }
-                        .padding(.top, 20)
-                        .scrollClipDisabled()
-                        .scrollTargetBehavior(.viewAligned)
                     }
+                    .scrollTargetLayout()
+                    .padding(.horizontal, 40)
+                }
+                .padding(.top, 20)
+                .scrollClipDisabled()
+                .scrollTargetBehavior(.viewAligned)
 
-                    if houses.isEmpty {
-                        Spacer()
-                        Image(systemName: "tree")
-                            .foregroundColor(.gray)
-                            .font(.title)
-                        Text("No homes added")
-                            .foregroundColor(.gray)
-                    }
-                }
-                Spacer()
-            }
-            .onAppear {
-                searchTrie = Trie()
-                for house in houses {
-                    searchTrie?.insert(house.getName())
+                if houses.isEmpty {
+                    Spacer()
+                    Image(systemName: "tree")
+                        .foregroundColor(.gray)
+                        .font(.title)
+                    Text("No homes added")
+                        .foregroundColor(.gray)
                 }
             }
+            Spacer()
         }
     }
 }

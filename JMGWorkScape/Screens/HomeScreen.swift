@@ -97,7 +97,7 @@ struct HomeScreen: View {
                             let pages = Int(ceil(Double(foundHouses.count) / Double(itemsPerPage)))
                             
                             ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 30) {
+                                HStack(spacing: 35) {
                                     ForEach(1..<pages + 1, id: \.self) { page in
                                         VStack {
                                             LazyVGrid(columns: numberColumns, spacing: 20) {
@@ -158,13 +158,14 @@ struct HomeScreen: View {
                                     }
                                 }
                                 .scrollTargetLayout()
+                                .padding(.horizontal, 30)
                             }
                             .padding(.top, 20)
                             .scrollClipDisabled()
                             .scrollTargetBehavior(.viewAligned)
                         }else{
                             ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 30) {
+                                HStack(spacing: 35) {
                                     ForEach(1..<pages + 1, id: \.self) { page in
                                         let housesArray = getItems(for: page, itemsPerPage: itemsPerPage)
                                         VStack {
@@ -225,6 +226,7 @@ struct HomeScreen: View {
                                     }
                                 }
                                 .scrollTargetLayout()
+                                .padding(.horizontal, 30)
                             }
                             .padding(.top, 20)
                             .scrollClipDisabled()
