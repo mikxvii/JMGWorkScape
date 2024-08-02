@@ -13,6 +13,7 @@ struct HomeDetailsScreen: View {
     var house: House
     var houseDic: [String: House]
     @State var goToEdit: Bool = false
+    @State var goToInvoice: Bool = false
 
     
     let gray = Color(red: 0, green: 0, blue: 0, opacity: 0.04)
@@ -69,7 +70,9 @@ struct HomeDetailsScreen: View {
                         .cornerRadius(10)
                         .padding(.bottom, 20)
 
-                    Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
+                    Button(action: {
+                        goToInvoice = true
+                    }, label: {
                         Text("Create Invoice")
                     })
                         .frame(width: 289, height: 50)
@@ -104,6 +107,9 @@ struct HomeDetailsScreen: View {
         }
         .sheet(isPresented: $goToEdit) {
             EditHomeScreen(housesDic: houseDic, house: house)
+        }
+        .navigationDestination(isPresented: $goToInvoice) {
+            InvoiceScreen(house: house)
         }
     }
 }

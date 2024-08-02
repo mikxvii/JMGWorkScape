@@ -19,6 +19,7 @@ struct HomeScreen: View {
     @State var goToDetails: Bool = false
     @State var goToAdd: Bool = false
     @State var goToRoute: Bool = false
+    @State var goToProfile: Bool = false
     @State var selectedHouse: House? = nil
     @State private var showAlert = false
     @State private var houseToDelete: House?
@@ -73,6 +74,14 @@ struct HomeScreen: View {
                                 .font(.largeTitle)
                                 .shadow(color: Color(red: 0.00, green: 0.00, blue: 0.00, opacity: 0.25), radius: 4, x: 0, y: 4)
                                 .foregroundColor(olive)
+                            
+                            Button(action: {
+                                goToProfile = true
+                            }, label: {
+                                Image(systemName: "person.crop.circle")
+                                    .font(.largeTitle)
+                                    .foregroundColor(olive)
+                            })
                         }
                         
                         ZStack {
@@ -275,6 +284,9 @@ struct HomeScreen: View {
                 }
                 .sheet(isPresented: $goToAdd) {
                     AddHomeScreen(housesDic: housesDic).navigationBarBackButtonHidden(true)
+                }
+                .navigationDestination(isPresented: $goToProfile) {
+                    Profile()
                 }
                 .alert(isPresented: $showAlert) {
                     Alert(
