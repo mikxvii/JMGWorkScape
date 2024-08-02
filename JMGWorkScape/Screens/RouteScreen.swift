@@ -140,7 +140,7 @@ struct RouteScreen: View {
                 }
             }
             .sheet(isPresented: $goToAddStop) {
-                AddStopScreen()
+                AddStopScreen(houses: houses, housesDic: housesDic)
             }
             .onAppear {
                 editHouses = houses
