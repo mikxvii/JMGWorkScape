@@ -36,6 +36,8 @@ struct AddStopScreen: View {
         return Array(houses[startIndex..<endIndex])
     }
     
+    @State var selectedStates: [Bool]
+    
     var body: some View {
         HStack {
             Spacer()
@@ -84,13 +86,13 @@ struct AddStopScreen: View {
                             let housesArray = getItems(for: page, itemsPerPage: itemsPerPage)
                             VStack {
                                 LazyVGrid(columns: numberColumns, spacing: 20) {
-                                    ForEach(housesArray, id: \.self) { item in
+                                    ForEach(housesArray.indices, id: \.self) { index in
                                         ZStack {
                                             Button(action: {
-                                                // DO SOMETHING
+                                                selectedStates[index].toggle()
                                             }, label: {
                                                 ZStack {
-                                                    if let imageData = item.getImg(), let image = UIImage(data: imageData) {
+                                                    if let imageData = housesArray[index].getImg(), let image = UIImage(data: imageData) {
                                                         Image(uiImage: image)
                                                             .resizable()
                                                             .aspectRatio(contentMode: .fill)
@@ -104,8 +106,12 @@ struct AddStopScreen: View {
                                                             .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
                                                     }
                                                     VStack {
+                                                        HStack {
+                                                            Image(systemName: selectedStates[index] ? housesArray[index].toggleSelect() : housesArray[index].toggleUnselect())
+                                                           Spacer()
+                                                        }
                                                         Spacer()
-                                                        Text(item.getName())
+                                                        Text(housesArray[index].getName())
                                                             .foregroundStyle(.white)
                                                             .padding(.horizontal, 12)
                                                             .padding(.vertical, 6)
@@ -141,6 +147,9 @@ struct AddStopScreen: View {
                 }
             }
             Spacer()
+        }
+        .onAppear() {
+            selectedStates = Array(repeating: false, count: houses.count)
         }
     }
 }

@@ -64,4 +64,10 @@ final class House: Identifiable{
     func getImg() -> Data? {
         return self.imageData
     }
+    func toggleSelect() -> String {
+        return "circlebadge.fill"
+    }
+    func toggleUnselect() -> String {
+        return "circlebadge"
+    }
 }
