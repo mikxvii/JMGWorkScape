@@ -12,10 +12,12 @@ struct AddStopScreen: View {
     
     var houses: [House]
     var housesDic: [String: House]
+    @State var selectedHouse: House?
     
     let gray = Color(red: 0, green: 0, blue: 0, opacity: 0.04)
     let olive = Color(red: 0.23, green: 0.28, blue: 0.20, opacity: 1.00)
     let darkOlive = Color(red: 0.19, green: 0.23, blue: 0.16, opacity: 1.00)
+    
 
     @Environment(\.presentationMode) var presentationMode
     
@@ -36,7 +38,6 @@ struct AddStopScreen: View {
         return Array(houses[startIndex..<endIndex])
     }
     
-    @State var selectedStates: [Bool]
     
     var body: some View {
         HStack {
@@ -82,17 +83,19 @@ struct AddStopScreen: View {
                 
                 ScrollView(.horizontal, showsIndicators: true) {
                     HStack(spacing: 50) {
-                        ForEach(1..<pages + 1, id: \.self) { page in
+                        ForEach(1..<pages + Int(1.0), id: \.self) { page in
                             let housesArray = getItems(for: page, itemsPerPage: itemsPerPage)
+                            var stateArray = Dictionary(uniqueKeysWithValues: housesArray.map { ($0.id, false) })
                             VStack {
                                 LazyVGrid(columns: numberColumns, spacing: 20) {
-                                    ForEach(housesArray.indices, id: \.self) { index in
+                                    ForEach(housesArray, id: \.self) { house in
+                                        @State var image = "circlebadge"
                                         ZStack {
                                             Button(action: {
-                                                selectedStates[index].toggle()
+                                                selectedHouse = house
                                             }, label: {
                                                 ZStack {
-                                                    if let imageData = housesArray[index].getImg(), let image = UIImage(data: imageData) {
+                                                    if let imageData = house.getImg(), let image = UIImage(data: imageData) {
                                                         Image(uiImage: image)
                                                             .resizable()
                                                             .aspectRatio(contentMode: .fill)
@@ -106,12 +109,8 @@ struct AddStopScreen: View {
                                                             .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
                                                     }
                                                     VStack {
-                                                        HStack {
-                                                            Image(systemName: selectedStates[index] ? housesArray[index].toggleSelect() : housesArray[index].toggleUnselect())
-                                                           Spacer()
-                                                        }
                                                         Spacer()
-                                                        Text(housesArray[index].getName())
+                                                        Text(house.getName())
                                                             .foregroundStyle(.white)
                                                             .padding(.horizontal, 12)
                                                             .padding(.vertical, 6)
@@ -147,9 +146,6 @@ struct AddStopScreen: View {
                 }
             }
             Spacer()
-        }
-        .onAppear() {
-            selectedStates = Array(repeating: false, count: houses.count)
         }
     }
 }

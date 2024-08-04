@@ -13,6 +13,8 @@ struct RouteScreen: View {
     var houses: [House]
     var housesDic: [String: House]
     @State var editHouses: [House] = []
+    @State var stopHouses: [House] = []
+    @State var remainingHouses: [House] = []
     var currentWeekday: String = "Monday" // Tester Day
     let daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
     let darkOlive = Color(red: 0.19, green: 0.23, blue: 0.16, opacity: 1.00)
@@ -123,15 +125,34 @@ struct RouteScreen: View {
                             })
                         }
                     }
+                } else {
+                    VStack {
+                        Spacer()
+                        Image(systemName: "tree")
+                            .foregroundColor(.gray)
+                            .font(.title)
+                        Text("No work today :)")
+                            .foregroundColor(.gray)
+                        Spacer()
+                    }
                 }
+                
             }
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text("\(currentWeekday) Route")
-                        .bold()
-                        .font(.largeTitle)
-                        .shadow(color: Color(red: 0.00, green: 0.00, blue: 0.00, opacity: 0.25), radius: 4, x: 0, y: 4)
-                        .foregroundColor(.brown)
+                    if daysOfWeek.contains(currentWeekday) {
+                        Text("\(currentWeekday) Route")
+                            .bold()
+                            .font(.largeTitle)
+                            .shadow(color: Color(red: 0.00, green: 0.00, blue: 0.00, opacity: 0.25), radius: 4, x: 0, y: 4)
+                            .foregroundColor(.brown)
+                    } else {
+                        Text("\(currentWeekday)")
+                            .bold()
+                            .font(.largeTitle)
+                            .shadow(color: Color(red: 0.00, green: 0.00, blue: 0.00, opacity: 0.25), radius: 4, x: 0, y: 4)
+                            .foregroundColor(.brown)
+                    }
                 }
             }
             .navigationDestination(isPresented: $goToDetails) {
@@ -140,10 +161,12 @@ struct RouteScreen: View {
                 }
             }
             .sheet(isPresented: $goToAddStop) {
-                AddStopScreen(houses: houses, housesDic: housesDic)
+                AddStopScreen(houses: remainingHouses, housesDic: housesDic)
             }
             .onAppear {
-                editHouses = houses
+                editHouses = houses.filter { $0.getFrqSet().contains(currentWeekday) }
+                remainingHouses = houses.filter { !$0.getFrqSet().contains(currentWeekday) }
+
             }
         }
     }
