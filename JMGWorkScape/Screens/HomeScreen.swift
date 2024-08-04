@@ -286,7 +286,7 @@ struct HomeScreen: View {
                     AddHomeScreen(housesDic: housesDic).navigationBarBackButtonHidden(true)
                 }
                 .navigationDestination(isPresented: $goToProfile) {
-                    Profile()
+                    ProfileScreen()
                 }
                 .alert(isPresented: $showAlert) {
                     Alert(

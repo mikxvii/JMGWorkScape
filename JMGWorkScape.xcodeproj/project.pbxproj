@@ -10,7 +10,8 @@
 		835C0AAA2C43A1AA0086C767 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C0AA92C43A1AA0086C767 /* Helper.swift */; };
 		835C0AB52C494BDD0086C767 /* House.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C0AB42C494BDD0086C767 /* House.swift */; };
 		ED3BEBC52C55EFF6006A2279 /* EditHomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED3BEBC42C55EFF6006A2279 /* EditHomeScreen.swift */; };
-		ED7AF6E82C5D926200A235A3 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7AF6E72C5D926200A235A3 /* Profile.swift */; };
+		ED7AF6E82C5D926200A235A3 /* ProfileScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7AF6E72C5D926200A235A3 /* ProfileScreen.swift */; };
+		ED7AF6EC2C5F93F300A235A3 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7AF6EB2C5F93F300A235A3 /* Profile.swift */; };
 		ED97440B2C43A512003641FB /* AddHomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED9744042C43A512003641FB /* AddHomeScreen.swift */; };
 		ED97440C2C43A512003641FB /* AddStopScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED9744052C43A512003641FB /* AddStopScreen.swift */; };
 		ED97440D2C43A512003641FB /* HomeDetailsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED9744062C43A512003641FB /* HomeDetailsScreen.swift */; };
@@ -29,7 +30,8 @@
 		835C0AB42C494BDD0086C767 /* House.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = House.swift; sourceTree = "<group>"; };
 		ED3BEBC42C55EFF6006A2279 /* EditHomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditHomeScreen.swift; sourceTree = "<group>"; };
 		ED6AA00E2C51A5E0003A8C86 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		ED7AF6E72C5D926200A235A3 /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
+		ED7AF6E72C5D926200A235A3 /* ProfileScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreen.swift; sourceTree = "<group>"; };
+		ED7AF6EB2C5F93F300A235A3 /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		ED9744042C43A512003641FB /* AddHomeScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddHomeScreen.swift; sourceTree = "<group>"; };
 		ED9744052C43A512003641FB /* AddStopScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddStopScreen.swift; sourceTree = "<group>"; };
 		ED9744062C43A512003641FB /* HomeDetailsScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeDetailsScreen.swift; sourceTree = "<group>"; };
@@ -72,7 +74,7 @@
 				ED9744112C43A715003641FB /* HomeScreen.swift */,
 				ED9744092C43A512003641FB /* RouteScreen.swift */,
 				ED3BEBC42C55EFF6006A2279 /* EditHomeScreen.swift */,
-				ED7AF6E72C5D926200A235A3 /* Profile.swift */,
+				ED7AF6E72C5D926200A235A3 /* ProfileScreen.swift */,
 			);
 			name = Screens;
 			path = JMGWorkScape/Screens;
@@ -103,6 +105,7 @@
 				EDABA0D02C4355F4000FD038 /* ContentView.swift */,
 				ED9744132C43A7EA003641FB /* HomeObject.swift */,
 				835C0AB42C494BDD0086C767 /* House.swift */,
+				ED7AF6EB2C5F93F300A235A3 /* Profile.swift */,
 				835C0AA92C43A1AA0086C767 /* Helper.swift */,
 				ED97440A2C43A512003641FB /* Screens */,
 				EDABA0D22C4355F6000FD038 /* Assets.xcassets */,
@@ -192,7 +195,8 @@
 				ED97440D2C43A512003641FB /* HomeDetailsScreen.swift in Sources */,
 				EDABA0D12C4355F4000FD038 /* ContentView.swift in Sources */,
 				835C0AB52C494BDD0086C767 /* House.swift in Sources */,
-				ED7AF6E82C5D926200A235A3 /* Profile.swift in Sources */,
+				ED7AF6EC2C5F93F300A235A3 /* Profile.swift in Sources */,
+				ED7AF6E82C5D926200A235A3 /* ProfileScreen.swift in Sources */,
 				ED97440C2C43A512003641FB /* AddStopScreen.swift in Sources */,
 				ED9744142C43A7EA003641FB /* HomeObject.swift in Sources */,
 				EDABA0CF2C4355F4000FD038 /* JMGWorkScapeApp.swift in Sources */,

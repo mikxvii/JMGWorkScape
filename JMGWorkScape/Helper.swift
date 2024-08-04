@@ -180,8 +180,11 @@ func openMap(_ address: String, startingAddress: String? = nil) {
 func getCurrentWeekday() -> String {
     Date().formatted(.dateTime.weekday(.wide))
 }
-
-
+func formatDate(_ date: Date) -> String {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "MMMM d, yyyy" // Set the desired format
+    return dateFormatter.string(from: date)
+}
 
 // // Initialize the Trie
 // let trie = Trie()

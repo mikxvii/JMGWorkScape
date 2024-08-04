@@ -85,7 +85,6 @@ struct AddStopScreen: View {
                     HStack(spacing: 50) {
                         ForEach(1..<pages + Int(1.0), id: \.self) { page in
                             let housesArray = getItems(for: page, itemsPerPage: itemsPerPage)
-                            var stateArray = Dictionary(uniqueKeysWithValues: housesArray.map { ($0.id, false) })
                             VStack {
                                 LazyVGrid(columns: numberColumns, spacing: 20) {
                                     ForEach(housesArray, id: \.self) { house in
