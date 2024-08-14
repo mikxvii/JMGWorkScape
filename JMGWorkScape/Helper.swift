@@ -4,21 +4,16 @@
 //
 //  Created by Christopher Rebollar on 7/13/24.
 //
-//  File where App Logic will be stored
+//  
 
 import Foundation
 import SwiftData
 import SwiftUI
 import PhotosUI
 
-func filter(){
-    print("Filter")
-}
-
-func search(){
-    print("search")
-}
-
+//
+// Trie class definition used for the search feature in HomeScreen
+//
 class Trie {
     // The starting node for the trie
     private let root = TrieNode()
@@ -39,6 +34,10 @@ class Trie {
             }
         }
     }
+    
+    //
+    // Class Methods
+    //
     
     func getCount() -> Int{
         return count
@@ -75,10 +74,6 @@ class Trie {
         return true
     }
 
-    func delete(_ word: String) {
-//        delete(word, currentNode: root, index: 0)
-    }
-    
     private func delete(_ word: String, currentNode: TrieNode, index: Int) -> Bool {
         if index == word.count {
             // End of word reached
@@ -138,6 +133,9 @@ class Trie {
     }
 }
 
+//
+// Custom Button element exclusively used for Frequency selection (AddHomeScreen, EditHomeScreen)
+//
 struct DayButton: View {
     @Binding var currFrequency: Set<String>
     @State var buttonColor: Color
@@ -165,6 +163,9 @@ struct DayButton: View {
 }
 
 
+//
+// Helper Functions
+//
 
 func openMap(_ address: String, startingAddress: String? = nil) {
 //    UIApplication.shared.open(URL(string: "http://maps.apple.com/?address=\(address)")! as URL)
@@ -177,24 +178,13 @@ func openMap(_ address: String, startingAddress: String? = nil) {
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
 }
+
 func getCurrentWeekday() -> String {
     Date().formatted(.dateTime.weekday(.wide))
 }
+
 func formatDate(_ date: Date) -> String {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "MMMM d, yyyy" // Set the desired format
     return dateFormatter.string(from: date)
 }
-
-// // Initialize the Trie
-// let trie = Trie()
-
-// // Insert words into the Trie
-// trie.insert("apple")
-// trie.insert("app")
-// trie.insert("application")
-// trie.insert("append")
-// print(trie.wordsWithPrefix("ap"))
-// trie.delete("ap")
-// print("\n")
-// print(trie.wordsWithPrefix("ap"))

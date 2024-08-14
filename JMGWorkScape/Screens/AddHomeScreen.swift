@@ -10,29 +10,50 @@ import SwiftUI
 import PhotosUI
 
 struct AddHomeScreen: View {
+    
+    //
+    // Environment variables
+    //
+    
+    // Context for adding House items to SwiftData
     @Environment(\.modelContext) private var context
+    
+    // Necessary for switching back to main view
     @Environment(\.presentationMode) var presentationMode
+    
+    //
+    // Parameters
+    //
+    
+    // Dictionary is used to check if the new house already exists
     var housesDic: [String: House]
-
-    @State var currName:String = ""
-    @State var currAddress:String = ""
-    @State var currFrequncy = Set<String>() //default value to not get error for having "" as default
-    @State var currJobD:String = ""
+    
+    //
+    // State Variables
+    //
+    
+    // Used to show alerts incase there is an existing house or fields are missing
     @State private var showFieldAlert: Bool = false
     @State private var showMatchAlert: Bool = false
-
-    @State var goBackToHome: Bool = false
-    @State var selectedPhoto: PhotosPickerItem?
-    @State var selectedPhotoData: Data?
-
     
+    @State private var currName:String = ""
+    @State private var currAddress:String = ""
+    @State private var currFrequncy = Set<String>() //default value to not get error for having "" as default
+    @State private var currJobD:String = ""
+    @State private var selectedPhoto: PhotosPickerItem?
+    @State private var selectedPhotoData: Data?
+    
+    // Used to switch back to HomeScreen
+    @State private var goBackToHome: Bool = false
+
     let daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
     let olive = Color(red: 0.23, green: 0.28, blue: 0.20, opacity: 1.00)
     
     var body: some View {
-        // bool variable changed by Cancel and Done buttons
         HStack {
             Spacer()
+            
+            // Cancel Button (<- HomeScreen)
             Button(action: {
                 goBackToHome = true
                 presentationMode.wrappedValue.dismiss()
@@ -46,10 +67,14 @@ struct AddHomeScreen: View {
                     .cornerRadius(70)
                     .padding(5)
             })
+            
+            // Headline Text for View
             Text("Add Home")
                 .font(.headline)
                 .bold()
                 .foregroundColor(olive)
+            
+            // Done Button (saves house object, <- HomeScreen)
             Button(action: {
                 print("Name: \(currName), Frequency: \(currFrequncy), Address: \(currAddress), Job Description: \(currJobD)")
                 if (currName.isEmpty || currFrequncy.isEmpty || currAddress.isEmpty || currJobD.isEmpty) {
@@ -59,6 +84,7 @@ struct AddHomeScreen: View {
                 } else {
                     // Proceed with form submission
                     goBackToHome = true
+                    // Makes sure that the selected frequency days are in order of earliest to latest in the week
                     let dayOrderMap = Dictionary(uniqueKeysWithValues: daysOfWeek.enumerated().map { ($1, $0) })
                     let filteredUnsortedDays = currFrequncy.filter { dayOrderMap.keys.contains($0) }
                     let sortedDays = filteredUnsortedDays.sorted {
@@ -67,6 +93,7 @@ struct AddHomeScreen: View {
                         }
                         return index1 < index2
                     }
+                    // Creates house object and saves in context
                     let house = House(currName, currAddress, currJobD, sortedDays.formatted(), selectedPhotoData)
                     context.insert(house)
                     presentationMode.wrappedValue.dismiss()
@@ -81,6 +108,7 @@ struct AddHomeScreen: View {
                     .cornerRadius(70)
                     .padding(5)
             })
+            // Only appears when there is an existing house with the same name
             .alert(isPresented: $showMatchAlert) {
                 Alert(title: Text("Validation Error"), message: Text("A House with this name already exists, please rename"), dismissButton: .default(Text("Ok")))
             }
@@ -89,6 +117,7 @@ struct AddHomeScreen: View {
         
         ScrollView(.vertical) {
             VStack(spacing: 30) {
+                // Image Picker
                 PhotosPicker(selection: $selectedPhoto, matching: .images, photoLibrary: .shared()) {
                     if let selectedPhotoData,
                        let uiImage = UIImage(data: selectedPhotoData) {
@@ -110,6 +139,8 @@ struct AddHomeScreen: View {
                     }
                 }
                 .padding()
+                
+                // Delete Picture Button
                 if selectedPhotoData != nil {
                     Button (role: .destructive) {
                         withAnimation {
@@ -141,6 +172,7 @@ struct AddHomeScreen: View {
                 Text("Frequency:")
                     .font(.title2)
                     .bold()
+                // The following buttons allow for frequency selection (refer to Helper)
                 HStack {
                     Spacer()
                     DayButton(currFrequency: $currFrequncy, buttonColor: .gray, day: "Monday")
@@ -160,6 +192,7 @@ struct AddHomeScreen: View {
                 
                 
             }
+            // Updates the variable storing the selected image data
             .task(id: selectedPhoto) {
                 if let data = try? await selectedPhoto?.loadTransferable(type: Data.self) {
                     selectedPhotoData = data

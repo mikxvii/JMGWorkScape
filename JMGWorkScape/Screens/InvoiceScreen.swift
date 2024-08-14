@@ -10,9 +10,17 @@ import SwiftUI
 
 
 struct InvoiceScreen: View {
+    
+    //
+    // Environment Variables
+    //
+    
     @EnvironmentObject var profileManager: ProfileManager
-
+    
+    //
     // State variables
+    //
+    
     @State private var selectedDate = Date()
     @State private var jobSite: String = ""
     @State private var jobDescription: String = ""

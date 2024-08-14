@@ -33,11 +33,12 @@ struct RouteScreen: View {
                     .frame(width: geo.size.width, height: geo.size.height, alignment: .center)
                 
                 if daysOfWeek.contains(currentWeekday) {
-                    VStack(spacing: 30) {
+                    VStack {
                         
                         Image(systemName: "map.circle")
                             .font(.title2)
                             .foregroundColor(.brown)
+//                        Spacer()
                         List {
                             ForEach(editHouses, id: \.self) { house in
                                 HStack {
@@ -96,34 +97,8 @@ struct RouteScreen: View {
 
                         }
                         .listStyle(.inset)
-                        .frame(height: 450)
-                        ScrollView(.vertical) {
-                            Button(action: {
-                                goToAddStop = true
-                            }, label: {
-                                Image(systemName: "plus")
-                                    .bold()
-                                    .foregroundColor(.white)
-                                    .multilineTextAlignment(.center)
-                                    .frame(width: 289, height: 60)
-                                    .background(.brown)
-                                    .cornerRadius(10)
-                                    .padding(.bottom, 20)
-                            })
-                            
-                            Button(action: {
-                                // Navigate to Maps
-                            }, label: {
-                                Text("Go")
-                                    .bold()
-                                    .foregroundColor(.white)
-                                    .multilineTextAlignment(.center)
-                                    .frame(width: 289, height: 60)
-                                    .background(.green)
-                                    .cornerRadius(10)
-                                    .padding(.bottom, 20)
-                            })
-                        }
+                        .frame(height: 640)
+                        Spacer()
                     }
                 } else {
                     VStack {
@@ -159,9 +134,6 @@ struct RouteScreen: View {
                 if let selectedHouse = selectedHouse {
                     HomeDetailsScreen(house: selectedHouse, houseDic: housesDic)
                 }
-            }
-            .sheet(isPresented: $goToAddStop) {
-                AddStopScreen(houses: remainingHouses, housesDic: housesDic)
             }
             .onAppear {
                 editHouses = houses.filter { $0.getFrqSet().contains(currentWeekday) }

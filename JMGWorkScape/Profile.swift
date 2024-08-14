@@ -9,14 +9,16 @@ import Foundation
 import SwiftUI
 import Combine
 
-// Define the Profile struct
+//
+// Define Profile Struct used in ProfileScreen (edit, update) and InvoiceScreen (retrieve)
+//
 struct Profile: Codable {
     var companyName: String
     var contractorName: String
     var billingAddress: String
     var licenseNumber: String
 }
-// Define the ObservableObject class
+
 class ProfileManager: ObservableObject {
     @Published var profile: Profile {
         didSet {
