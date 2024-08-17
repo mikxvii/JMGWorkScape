@@ -88,12 +88,9 @@ struct HomeScreen: View {
                             TextField("'Calle Miramar..'", text: $searchText)
                                 .frame(maxWidth: 350, alignment: .topLeading)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
-                            Button(action: {
-                                search()
-                            }, label: {
-                                Image(systemName: "magnifyingglass")
-                                    .foregroundColor(olive)
-                            }).offset(x: 145)
+                            Image(systemName: "magnifyingglass")
+                                .foregroundColor(olive)
+                                .offset(x: 145)
                         }
                         
                         // Page Calculation
@@ -161,13 +158,12 @@ struct HomeScreen: View {
                                                     }
                                                 }
                                             }
-                                            .frame(width: 330)
+                                            .frame(width: 361)
                                             Spacer() // Need this spacer so when page isn't full of items, it starts on top
                                         }
                                     }
                                 }
                                 .scrollTargetLayout()
-                                .padding(.horizontal, 30)
                             }
                             .padding(.top, 20)
                             .scrollClipDisabled()
@@ -229,13 +225,12 @@ struct HomeScreen: View {
                                                     }
                                                 }
                                             }
-                                            .frame(width: 330)
+                                            .frame(width: 361)
                                             Spacer() // Need this spacer so when page isn't full of items, it starts on top
                                         }
                                     }
                                 }
                                 .scrollTargetLayout()
-                                .padding(.horizontal, 30)
                             }
                             .padding(.top, 20)
                             .scrollClipDisabled()
@@ -302,20 +297,11 @@ struct HomeScreen: View {
                 }
                 // trie stuff here
                 .onAppear(){
-                    // Initialize the Trie with house names
+                    // Initialize the Trie with house names, will update when going back to homescreen
                     searchTrie = Trie()
                     for house in houses {
                         searchTrie?.insert(house.getName())
                     }
-                    
-    //                if houses.count != searchTrie?.getCount(){
-    //                    for house in houses{
-    //                        let isFound = searchTrie?.search(house.name) ?? false
-    //                        if isFound{
-    //                            searchTrie?.delete(house.name)
-    //                        }
-    //                    }
-    //                }
                 }
             }
             .ignoresSafeArea(.all)

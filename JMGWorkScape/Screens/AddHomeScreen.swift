@@ -50,9 +50,8 @@ struct AddHomeScreen: View {
     let olive = Color(red: 0.23, green: 0.28, blue: 0.20, opacity: 1.00)
     
     var body: some View {
-        HStack {
+        HStack() {
             Spacer()
-            
             // Cancel Button (<- HomeScreen)
             Button(action: {
                 goBackToHome = true
@@ -68,12 +67,14 @@ struct AddHomeScreen: View {
                     .padding(5)
             })
             
+            Spacer()
             // Headline Text for View
             Text("Add Home")
                 .font(.headline)
                 .bold()
                 .foregroundColor(olive)
             
+            Spacer()
             // Done Button (saves house object, <- HomeScreen)
             Button(action: {
                 print("Name: \(currName), Frequency: \(currFrequncy), Address: \(currAddress), Job Description: \(currJobD)")
@@ -108,89 +109,97 @@ struct AddHomeScreen: View {
                     .cornerRadius(70)
                     .padding(5)
             })
+            Spacer()
             // Only appears when there is an existing house with the same name
             .alert(isPresented: $showMatchAlert) {
                 Alert(title: Text("Validation Error"), message: Text("A House with this name already exists, please rename"), dismissButton: .default(Text("Ok")))
             }
-            Spacer()
-        }
+        }.padding(.top, 20)
         
         ScrollView(.vertical) {
-            VStack(spacing: 30) {
+            VStack(spacing: 15) {
+                // VStack with image picker and delete button
                 // Image Picker
-                PhotosPicker(selection: $selectedPhoto, matching: .images, photoLibrary: .shared()) {
-                    if let selectedPhotoData,
-                       let uiImage = UIImage(data: selectedPhotoData) {
-                        withAnimation {
-                            Image(uiImage: uiImage)
-                                .resizable()
+                VStack(spacing: 10){
+                    PhotosPicker(selection: $selectedPhoto, matching: .images, photoLibrary: .shared()) {
+                        if let selectedPhotoData,
+                           let uiImage = UIImage(data: selectedPhotoData) {
+                            withAnimation {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .cornerRadius(40)
+                                    .aspectRatio(contentMode: .fit)
+                                    .padding(0)
+                            }
+                        } else {
+                            Image(systemName: "photo.badge.plus")
+                                .font(.system(size:  50))
+                                .foregroundColor(.black)
+                                .padding(.vertical, 75.0)
+                                .padding(.horizontal, 150)
+                                .background(Color(red: 200, green: 200, blue: 200))
                                 .cornerRadius(40)
-                                .aspectRatio(contentMode: .fit)
-                                .padding(5)
                         }
-                    } else {
-                        Image(systemName: "photo.badge.plus")
-                            .font(.system(size:  50))
-                            .foregroundColor(.black)
-                            .padding(.vertical, 75.0)
-                            .padding(.horizontal, 150)
-                            .background(Color(red: 200, green: 200, blue: 200))
-                            .cornerRadius(40)
+                    }
+                    .padding([.horizontal], 10)
+                    
+                    // Delete Picture Button
+                    if selectedPhotoData != nil {
+                        Button (role: .destructive) {
+                            withAnimation {
+                                selectedPhotoData = nil
+                                selectedPhoto = nil
+                            }
+                        } label: {
+                            Image(systemName: "trash.circle.fill")
+
+                        }
+                        .font(.title)
                     }
                 }
-                .padding()
                 
-                // Delete Picture Button
-                if selectedPhotoData != nil {
-                    Button (role: .destructive) {
-                        withAnimation {
-                            selectedPhotoData = nil
-                            selectedPhoto = nil
-                        }
-                    } label: {
-                        Image(systemName: "trash.circle.fill")
+                // VStack with fill in items
+                VStack(spacing: 20){
+                    // Text field where Name of client is inputted
+                    TextField("Customer Name", text: $currName)
+                        .frame(maxWidth: 350, alignment: .topLeading)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                    
+                    // Text field where Address of client is inputted
+                    TextField("Address", text: $currAddress)
+                        .frame(maxWidth: 350, alignment: .topLeading)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                    
+                    // Text field where job description is inputted
+                    TextField("Job Description", text: $currJobD)
+                        .frame(maxWidth: 350, alignment: .topLeading)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                }
+                
+                // VStack with days of the week frequency
+                VStack(spacing: 10){
+                    Text("Frequency:")
+                        .font(.title2)
+                        .bold()
+                    // The following buttons allow for frequency selection (refer to Helper)
+                    HStack {
+                        Spacer()
+                        DayButton(currFrequency: $currFrequncy, buttonColor: .gray, day: "Monday")
+                        Spacer()
+                        DayButton(currFrequency: $currFrequncy, buttonColor: .gray, day: "Tuesday")
+                        Spacer()
+                        DayButton(currFrequency: $currFrequncy, buttonColor: .gray, day: "Wednesday")
+                        Spacer()
                     }
-                    .font(.title)
+                    HStack {
+                        Spacer()
+                        DayButton(currFrequency: $currFrequncy, buttonColor: .gray, day: "Thursday")
+                        Spacer()
+                        DayButton(currFrequency: $currFrequncy, buttonColor: .gray, day: "Friday")
+                        Spacer()
+                    }
                 }
-                
-                
-                // Text field where Name of client is inputted
-                TextField("Customer Name", text: $currName)
-                    .frame(maxWidth: 350, alignment: .topLeading)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                
-                
-                // Text field where Address of client is inputted
-                TextField("Address", text: $currAddress)
-                    .frame(maxWidth: 350, alignment: .topLeading)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                
-                // Text field where job description is inputted
-                TextField("Job Description", text: $currJobD)
-                    .frame(maxWidth: 350, alignment: .topLeading)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                Text("Frequency:")
-                    .font(.title2)
-                    .bold()
-                // The following buttons allow for frequency selection (refer to Helper)
-                HStack {
-                    Spacer()
-                    DayButton(currFrequency: $currFrequncy, buttonColor: .gray, day: "Monday")
-                    Spacer()
-                    DayButton(currFrequency: $currFrequncy, buttonColor: .gray, day: "Tuesday")
-                    Spacer()
-                    DayButton(currFrequency: $currFrequncy, buttonColor: .gray, day: "Wednesday")
-                    Spacer()
-                }
-                HStack {
-                    Spacer()
-                    DayButton(currFrequency: $currFrequncy, buttonColor: .gray, day: "Thursday")
-                    Spacer()
-                    DayButton(currFrequency: $currFrequncy, buttonColor: .gray, day: "Friday")
-                    Spacer()
-                }
-                
-                
+
             }
             // Updates the variable storing the selected image data
             .task(id: selectedPhoto) {

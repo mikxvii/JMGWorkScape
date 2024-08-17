@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8328E5D62C7114BF007D70E0 /* Trie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8328E5D52C7114BF007D70E0 /* Trie.swift */; };
 		835C0AAA2C43A1AA0086C767 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C0AA92C43A1AA0086C767 /* Helper.swift */; };
 		835C0AB52C494BDD0086C767 /* House.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C0AB42C494BDD0086C767 /* House.swift */; };
 		ED3BEBC52C55EFF6006A2279 /* EditHomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED3BEBC42C55EFF6006A2279 /* EditHomeScreen.swift */; };
@@ -24,6 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8328E5D52C7114BF007D70E0 /* Trie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trie.swift; sourceTree = "<group>"; };
 		835C0AA92C43A1AA0086C767 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		835C0AB42C494BDD0086C767 /* House.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = House.swift; sourceTree = "<group>"; };
 		ED3BEBC42C55EFF6006A2279 /* EditHomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditHomeScreen.swift; sourceTree = "<group>"; };
@@ -101,6 +103,7 @@
 				835C0AB42C494BDD0086C767 /* House.swift */,
 				ED7AF6EB2C5F93F300A235A3 /* Profile.swift */,
 				835C0AA92C43A1AA0086C767 /* Helper.swift */,
+				8328E5D52C7114BF007D70E0 /* Trie.swift */,
 				ED97440A2C43A512003641FB /* Screens */,
 				EDABA0D22C4355F6000FD038 /* Assets.xcassets */,
 				EDABA0D42C4355F6000FD038 /* Preview Content */,
@@ -188,6 +191,7 @@
 			files = (
 				ED97440D2C43A512003641FB /* HomeDetailsScreen.swift in Sources */,
 				EDABA0D12C4355F4000FD038 /* ContentView.swift in Sources */,
+				8328E5D62C7114BF007D70E0 /* Trie.swift in Sources */,
 				835C0AB52C494BDD0086C767 /* House.swift in Sources */,
 				ED7AF6EC2C5F93F300A235A3 /* Profile.swift in Sources */,
 				ED7AF6E82C5D926200A235A3 /* ProfileScreen.swift in Sources */,
