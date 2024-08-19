@@ -24,7 +24,7 @@ struct ProfileScreen: View {
         Form {
             VStack {
                 HStack {
-                    Text("Name of Company: ")
+                    Text("Name of Company:\n")
                     
                     TextField("Enter Company", text: $companyText)
                         .focused($isFocused)
@@ -36,7 +36,6 @@ struct ProfileScreen: View {
                                 }
                             }
                         }
-
                         
                 }
                 .padding(.bottom, 20)
@@ -44,19 +43,19 @@ struct ProfileScreen: View {
                 .padding(.horizontal, 20)
                 Group {
                     HStack {
-                        Text("Name of Contractor: ")
+                        Text("Name of Contractor:\n")
                         TextField("Enter Name", text: $nameText)
                             .focused($isFocused)
 
                     }
                     HStack {
-                        Text("Billing Address")
+                        Text("Billing Address:\n")
                         TextField("Enter Address", text: $addressText)
                             .focused($isFocused)
 
                     }
                     HStack {
-                        Text("License #")
+                        Text("License #:\n")
                         TextField("Enter Number", text: $licenseText)
                             .focused($isFocused)
 
