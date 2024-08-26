@@ -16,6 +16,6 @@ struct JMGWorkScapeApp: App {
             HomeScreen()
                 .environmentObject(profileManager)
         }
-        .modelContainer(for: House.self)
+//        .modelContainer(for: House.self)
     }
 }

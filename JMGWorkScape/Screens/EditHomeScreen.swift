@@ -73,7 +73,7 @@ struct EditHomeScreen: View {
                         }
                         return index1 < index2
                     }
-                    house.update(currName, currAddress, currJobD, sortedDays.formatted(), selectedPhotoData)
+                    house.update(currName, currAddress, currJobD, sortedDays.formatted())
                     presentationMode.wrappedValue.dismiss()
                 }
             }, label: {
@@ -185,7 +185,7 @@ struct EditHomeScreen: View {
             currAddress = house.getAddress()
             currFrequncy = house.getFrqSet()
             currJobD = house.getJobD()
-            selectedPhotoData = house.getImg()
+//            selectedPhotoData = house.getImg()
             editHousesDic = housesDic
             editHousesDic.removeValue(forKey: house.getName())
         }

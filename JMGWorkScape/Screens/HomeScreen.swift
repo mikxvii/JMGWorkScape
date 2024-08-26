@@ -9,11 +9,56 @@ import SwiftUI
 import Foundation
 import SwiftData
 
+struct GridView: View {
+    var housesArray: [House]
+    let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
+    var pages: Int
+    var itemsPerPage: Int
+
+    func getItems(for page: Int, itemsPerPage: Int) -> [House] {
+        let startIndex = (page - 1) * itemsPerPage
+        let endIndex = min(startIndex + itemsPerPage, housesArray.count)
+        return Array(housesArray[startIndex..<endIndex])
+    }
+    
+    var body: some View {
+        TabView {
+            ForEach(1...pages, id: \.self) { page in
+                LazyVGrid(columns: columns, alignment: .center, spacing: 30) {
+                    let pageItems = getItems(for: page, itemsPerPage: itemsPerPage)
+                    ForEach(pageItems.indices, id: \.self) { index in
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 40)
+                                .fill(Color.gray)
+                                .frame(width: 150, height: 150)
+                                .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                            
+                            VStack {
+                                Spacer()
+                                Text(pageItems[index].getName())
+                                    .foregroundStyle(.white)
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 6)
+                                    .background(Color.darkOlive) // Use your darkOlive color
+                                    .cornerRadius(15)
+                                    .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                            }
+                            .padding(.bottom, 20)
+                        }
+                    }
+                }
+            }
+        }
+        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
+        .border(Color.black)
+    }
+}
+
+
 struct HomeScreen: View {
-    // in CMYK format
-    let olive = Color(red: 0.23, green: 0.28, blue: 0.20, opacity: 1.00)
-    let gray = Color(red: 0, green: 0, blue: 0, opacity: 0.04)
-    let darkOlive = Color(red: 0.19, green: 0.23, blue: 0.16, opacity: 1.00)
     
     @State var searchText = ""
     @State var goToDetails: Bool = false
@@ -24,9 +69,11 @@ struct HomeScreen: View {
     @State private var showAlert = false
     @State private var houseToDelete: House?
     @State private var longPressDetected = false // State variable to track long press
-    @Query private var houses: [House]
+//    @Query private var houses: [House]
     @Environment(\.modelContext) private var context
     
+    
+
     
     var housesDic: [String: House] {
            Dictionary(uniqueKeysWithValues: houses.map { (key: $0.getName(), value: $0) })
@@ -49,10 +96,7 @@ struct HomeScreen: View {
     }
     
     // These are used to help display the houses!
-    private let numberColumns = [
-        GridItem(.flexible()),
-        GridItem(.flexible())
-    ]
+
     
     var body: some View {
         // Setting up for Screen switching
@@ -95,147 +139,12 @@ struct HomeScreen: View {
                         
                         // Page Calculation
                         let itemsPerPage = 6
-                        let pages = Int(ceil(Double(houses.count) / Double(itemsPerPage)))
                         
-                        if searchText != ""{
-                            let foundHouses = searchTrie?.wordsWithPrefix(searchText) ?? []
-                            let itemsPerPage = 6
-                            let pages = Int(ceil(Double(foundHouses.count) / Double(itemsPerPage)))
-                            
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 35) {
-                                    ForEach(1..<pages + 1, id: \.self) { page in
-                                        VStack {
-                                            LazyVGrid(columns: numberColumns, spacing: 20) {
-                                                let housesArray = pullItems(foundHouses)
-                                                ForEach(housesArray, id: \.self) { item in
-                                                    ZStack {
-                                                        Button(action: {
-                                                            if !longPressDetected {
-                                                                selectedHouse = item
-                                                                goToDetails = true
-                                                            }
-                                                        }, label: {
-                                                            ZStack {
-                                                                if let imageData = item.getImg(), let image = UIImage(data: imageData) {
-                                                                    Image(uiImage: image)
-                                                                        .resizable()
-                                                                        .aspectRatio(contentMode: .fill)
-                                                                        .frame(width: 150, height: 150)
-                                                                        .cornerRadius(40)
-                                                                        .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
-                                                                } else {
-                                                                    RoundedRectangle(cornerRadius: 40)
-                                                                        .fill(gray)
-                                                                        .frame(width: 150, height: 150)
-                                                                        .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
-                                                                }
-                                                                VStack {
-                                                                    Spacer()
-                                                                    Text(item.getName())
-                                                                        .foregroundStyle(.white)
-                                                                        .padding(.horizontal, 12)
-                                                                        .padding(.vertical, 6)
-                                                                        .background(darkOlive)
-                                                                        .cornerRadius(15)
-                                                                        .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
-                                                                }
-                                                                .padding(.bottom, 20)
-                                                            }
-                                                        })
-                                                        .simultaneousGesture(
-                                                            LongPressGesture().onEnded { _ in
-                                                                houseToDelete = item
-                                                                showAlert = true
-                                                                longPressDetected = true
-                                                            }
-                                                        )
-                                                        .simultaneousGesture(
-                                                            TapGesture().onEnded {
-                                                                longPressDetected = false
-                                                            }
-                                                        )
-                                                    }
-                                                }
-                                            }
-                                            .frame(width: 361)
-                                            Spacer() // Need this spacer so when page isn't full of items, it starts on top
-                                        }
-                                    }
-                                }
-                                .scrollTargetLayout()
-                            }
-                            .padding(.top, 20)
-                            .scrollClipDisabled()
-                            .scrollTargetBehavior(.viewAligned)
-                        }else{
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 35) {
-                                    ForEach(1..<pages + 1, id: \.self) { page in
-                                        let housesArray = getItems(for: page, itemsPerPage: itemsPerPage)
-                                        VStack {
-                                            LazyVGrid(columns: numberColumns, spacing: 20) {
-                                                ForEach(housesArray, id: \.self) { item in
-                                                    ZStack {
-                                                        Button(action: {
-                                                            if !longPressDetected {
-                                                                selectedHouse = item
-                                                                goToDetails = true
-                                                            }
-                                                        }, label: {
-                                                            ZStack {
-                                                                if let imageData = item.getImg(), let image = UIImage(data: imageData) {
-                                                                    Image(uiImage: image)
-                                                                        .resizable()
-                                                                        .aspectRatio(contentMode: .fill)
-                                                                        .frame(width: 150, height: 150)
-                                                                        .cornerRadius(40)
-                                                                        .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
-                                                                } else {
-                                                                    RoundedRectangle(cornerRadius: 40)
-                                                                        .fill(gray)
-                                                                        .frame(width: 150, height: 150)
-                                                                        .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
-                                                                }
-                                                                VStack {
-                                                                    Spacer()
-                                                                    Text(item.getName())
-                                                                        .foregroundStyle(.white)
-                                                                        .padding(.horizontal, 12)
-                                                                        .padding(.vertical, 6)
-                                                                        .background(darkOlive)
-                                                                        .cornerRadius(15)
-                                                                        .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
-                                                                }
-                                                                .padding(.bottom, 20)
-                                                            }
-                                                        })
-                                                        .simultaneousGesture(
-                                                            LongPressGesture().onEnded { _ in
-                                                                houseToDelete = item
-                                                                showAlert = true
-                                                                longPressDetected = true
-                                                            }
-                                                        )
-                                                        .simultaneousGesture(
-                                                            TapGesture().onEnded {
-                                                                longPressDetected = false
-                                                            }
-                                                        )
-                                                    }
-                                                }
-                                            }
-                                            .frame(width: 361)
-                                            Spacer() // Need this spacer so when page isn't full of items, it starts on top
-                                        }
-                                    }
-                                }
-                                .scrollTargetLayout()
-                            }
-                            .padding(.top, 20)
-                            .scrollClipDisabled()
-                            .scrollTargetBehavior(.viewAligned)
+                        if searchText == "" {
+                            let pages = Int(ceil(Double(houses.count) / Double(itemsPerPage)) + 1)
+                            GridView(housesArray: houses, pages: pages, itemsPerPage: itemsPerPage)
                         }
+                        
 
                         if houses.isEmpty {
                             Spacer()
@@ -288,9 +197,9 @@ struct HomeScreen: View {
                         title: Text("Confirm Deletion"),
                         message: Text("Are you sure you want to delete this house?"),
                         primaryButton: .destructive(Text("Delete")) {
-                            if let houseToDelete = houseToDelete, let index = houses.firstIndex(of: houseToDelete) {
-                                context.delete(houses[index])
-                            }
+//                            if let houseToDelete = houseToDelete, let index = houses.firstIndex(of: houseToDelete) {
+//                                context.delete(houses[index])
+//                            }
                         },
                         secondaryButton: .cancel()
                     )
@@ -308,3 +217,4 @@ struct HomeScreen: View {
         }
     }
 }
+

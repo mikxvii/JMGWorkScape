@@ -95,8 +95,10 @@ struct AddHomeScreen: View {
                         return index1 < index2
                     }
                     // Creates house object and saves in context
-                    let house = House(currName, currAddress, currJobD, sortedDays.formatted(), selectedPhotoData)
-                    context.insert(house)
+                    let house = House(currName, currAddress, currJobD, sortedDays.formatted())
+                    //context.insert(house)
+                    houses.append(house)
+                    print(houses.count)
                     presentationMode.wrappedValue.dismiss()
                 }
             }, label: {
