@@ -165,6 +165,9 @@ struct HousesGrid: View {
 struct MiddleView: View {
     // Private Member Variables
     @Environment(\.modelContext) private var context
+    @Binding var searchText: String
+    @Binding var searchTrie: Trie?
+    @Binding var housesDic: [String: House]
     @Query private var houses: [House]
     private func pullItems(_ houseNames: [String]) -> [House] {
         // Use the house names to look up the corresponding House objects in the dictionary
@@ -191,7 +194,7 @@ struct MiddleView: View {
                     if !foundHouses.isEmpty {
                         let pages = Int(ceil(Double(foundHouses.count) / Double(itemsPerPage)))
                         let housesArray = pullItems(foundHouses)
-                        HousesGrid(housesDic: housesDic, houses: housesArray, pages: pages)
+                        HousesGrid(housesDic: housesDic, pages: pages)
                     }else{
                         Spacer()
                     }
