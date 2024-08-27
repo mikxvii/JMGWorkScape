@@ -99,10 +99,19 @@ struct HousesGrid: View {
                         let pageItems = getItems(for: page, itemsPerPage: itemsPerPage)
                         ForEach(pageItems.indices, id: \.self) { index in
                             ZStack {
-                                RoundedRectangle(cornerRadius: 40)
-                                    .fill(Color.gray)
-                                    .frame(width: 150, height: 150)
-                                    .shadow(color: .black.opacity(0.7), radius: 10, x: 0, y: 7)
+                                if let imageData = pageItems[index].getImg(), let image = UIImage(data: imageData) {
+                                    Image(uiImage: image)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width: 150, height: 150)
+                                        .cornerRadius(40)
+                                        .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                                } else {
+                                    RoundedRectangle(cornerRadius: 40)
+                                        .fill(gray)
+                                        .frame(width: 150, height: 150)
+                                        .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                                }
                                 
                                 VStack {
                                     Spacer()
@@ -177,7 +186,7 @@ struct MiddleView: View {
                     if !foundHouses.isEmpty {
                         let pages = Int(ceil(Double(foundHouses.count) / Double(itemsPerPage)))
                         let housesArray = pullItems(foundHouses)
-                        HousesGrid(housesDic: housesDic, housesArray: houses, pages: pages)
+                        HousesGrid(housesDic: housesDic, housesArray: housesArray, pages: pages)
                     }else{
                         Spacer()
                     }
@@ -193,7 +202,7 @@ struct BottomButtons: View {
     @State var goToRoute = false
     @State var goToAdd = false
     @State var houses: [House]
-    @State var housesDic: [String: House]
+    @Binding var housesDic: [String: House]
     
     var body: some View{
         // Buttons for actions
@@ -227,14 +236,12 @@ struct HomeScreen: View {
     @Query private var houses: [House]
     @Environment(\.modelContext) private var context
     
-    var housesDic: [String: House] {
+    @State var housesDic: [String: House] {
            Dictionary(uniqueKeysWithValues: houses.map { (key: $0.getName(), value: $0) })
        }
-       
+
    // Initialize the Trie
     @State private var searchTrie: Trie?
-    
-    // These are used to help display the houses!
     
     var body: some View {
         // Setting up for Screen switching
@@ -252,7 +259,7 @@ struct HomeScreen: View {
                         Header()
                         SearchBar(searchText: $searchText)
                         MiddleView(searchText: $searchText, searchTrie: $searchTrie, houses: houses, housesDic: housesDic)
-                        BottomButtons(houses: houses, housesDic: housesDic)
+                        BottomButtons(houses: houses, housesDic: $housesDic)
 
                     }
                 }

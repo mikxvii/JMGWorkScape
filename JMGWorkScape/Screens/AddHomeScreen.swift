@@ -98,8 +98,7 @@ struct AddHomeScreen: View {
                     }
                     // Creates house object and saves in context
                     let house = House(currName, currAddress, currJobD, sortedDays.formatted())
-                    //context.insert(house)
-                    houses.append(house)
+                    context.insert(house)
                     print(houses.count)
                     presentationMode.wrappedValue.dismiss()
                 }
