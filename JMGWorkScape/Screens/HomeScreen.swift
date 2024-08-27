@@ -11,7 +11,8 @@ import SwiftData
 
 
 struct Header: View {
-    @State var goToProfile = false
+    // Private Member Variables
+    @State private var goToProfile = false
     
     var body: some View{
         HStack(spacing: 190) {
@@ -60,7 +61,6 @@ struct NoHouses: View{
             .foregroundColor(.gray)
         Spacer()
     }
-    
 }
 
 struct HousesGrid: View {
@@ -83,13 +83,13 @@ struct HousesGrid: View {
         return Array(houses[startIndex..<endIndex])
     }
     
-    // Perameteres
+    // Parameters
     var housesDic: [String: House]
     var houses: [House]
-    var pages: Int
-
+    
     var body: some View {
         TabView {
+            let pages = Int(ceil(Double(houses.count) / Double(ITEMSPERPAGE)))
             ForEach(1...pages, id: \.self) { page in
                 VStack(){
                     LazyVGrid(columns: columns, alignment: .center, spacing: 30) {
@@ -165,9 +165,6 @@ struct HousesGrid: View {
 struct MiddleView: View {
     // Private Member Variables
     @Environment(\.modelContext) private var context
-    @Binding var searchText: String
-    @Binding var searchTrie: Trie?
-    @Binding var housesDic: [String: House]
     @Query private var houses: [House]
     private func pullItems(_ houseNames: [String]) -> [House] {
         // Use the house names to look up the corresponding House objects in the dictionary
@@ -182,19 +179,14 @@ struct MiddleView: View {
     
     var body: some View{
         VStack(){
-            // Page Calculation
-            let itemsPerPage = 6
-            
             if !houses.isEmpty{
                 if searchText == "" {
-                    let pages = Int(ceil(Double(houses.count) / Double(itemsPerPage)))
-                    HousesGrid(housesDic: housesDic, houses:houses, pages: pages)
+                    HousesGrid(housesDic: housesDic, houses:houses)
                 }else{
                     let foundHouses = searchTrie?.wordsWithPrefix(searchText) ?? []
                     if !foundHouses.isEmpty {
-                        let pages = Int(ceil(Double(foundHouses.count) / Double(itemsPerPage)))
                         let housesArray = pullItems(foundHouses)
-                        HousesGrid(housesDic: housesDic, pages: pages)
+                        HousesGrid(housesDic: housesDic, houses: housesArray)
                     }else{
                         Spacer()
                     }
@@ -247,7 +239,6 @@ struct HomeScreen: View {
     @State private var selectedHouse: House? = nil
     @Query private var houses: [House]
     @Environment(\.modelContext) private var context
-    
     private var housesDic: [String: House] {
            Dictionary(uniqueKeysWithValues: houses.map { (key: $0.getName(), value: $0) })
     }
