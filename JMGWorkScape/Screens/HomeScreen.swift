@@ -96,30 +96,51 @@ struct HousesGrid: View {
                         let pageItems = getItems(for: page, itemsPerPage: ITEMSPERPAGE)
                         ForEach(pageItems, id: \.self) { item in
                             ZStack {
-                                if let imageData = item.getImg(), let image = UIImage(data: imageData) {
-                                    Image(uiImage: image)
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                        .frame(width: 150, height: 150)
-                                        .cornerRadius(40)
-                                        .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
-                                } else {
-                                    RoundedRectangle(cornerRadius: 40)
-                                        .fill(gray)
-                                        .frame(width: 150, height: 150)
-                                        .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
-                                }
-                                VStack {
-                                    Spacer()
-                                    Text(item.getName())
-                                        .foregroundStyle(.white)
-                                        .padding(.horizontal, 12)
-                                        .padding(.vertical, 6)
-                                        .background(darkOlive)
-                                        .cornerRadius(15)
-                                        .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
-                                }
-                                .padding(.bottom, 20)
+                                Button(action: {
+                                    if !longPressDetected {
+                                        selectedHouse = item
+                                        goToDetails = true
+                                    }
+                                }, label: {
+                                    ZStack {
+                                        if let imageData = item.getImg(), let image = UIImage(data: imageData) {
+                                            Image(uiImage: image)
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fill)
+                                                .frame(width: 150, height: 150)
+                                                .cornerRadius(40)
+                                                .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                                        } else {
+                                            RoundedRectangle(cornerRadius: 40)
+                                                .fill(gray)
+                                                .frame(width: 150, height: 150)
+                                                .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                                        }
+                                        VStack {
+                                            Spacer()
+                                            Text(item.getName())
+                                                .foregroundStyle(.white)
+                                                .padding(.horizontal, 12)
+                                                .padding(.vertical, 6)
+                                                .background(darkOlive)
+                                                .cornerRadius(15)
+                                                .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                                        }
+                                        .padding(.bottom, 20)
+                                    }
+                                })
+                                .simultaneousGesture(
+                                    LongPressGesture().onEnded { _ in
+                                        houseToDelete = item
+                                        showAlert = true
+                                        longPressDetected = true
+                                    }
+                                )
+                                .simultaneousGesture(
+                                    TapGesture().onEnded {
+                                        longPressDetected = false
+                                    }
+                                )
                             }
                             .simultaneousGesture(
                                 LongPressGesture().onEnded { _ in
