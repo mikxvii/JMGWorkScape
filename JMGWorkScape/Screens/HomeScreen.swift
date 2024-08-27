@@ -79,8 +79,9 @@ struct HousesGrid: View {
     ]
     
     // Perameteres
-    @State var housesDic: [String: House]
-    @State var houses: [House]
+    @Binding var housesDic: [String: House]
+    var houses: [House]
+    
     var pages: Int
 
     // Function Paramters
@@ -169,8 +170,8 @@ struct MiddleView: View {
     @Environment(\.modelContext) private var context
     @Binding var searchText: String
     @Binding var searchTrie: Trie?
-    @State var houses: [House]
     @Binding var housesDic: [String: House]
+    @Query private var houses: [House]
     
     func pullItems(_ houseNames: [String]) -> [House] {
         // Use the house names to look up the corresponding House objects in the dictionary
@@ -186,13 +187,13 @@ struct MiddleView: View {
             if !houses.isEmpty{
                 if searchText == "" {
                     let pages = Int(ceil(Double(houses.count) / Double(itemsPerPage)))
-                    HousesGrid(housesDic: housesDic, houses: houses, pages: pages)
+                    HousesGrid(housesDic: $housesDic, houses:houses, pages: pages)
                 }else{
                     let foundHouses = searchTrie?.wordsWithPrefix(searchText) ?? []
                     if !foundHouses.isEmpty {
                         let pages = Int(ceil(Double(foundHouses.count) / Double(itemsPerPage)))
                         let housesArray = pullItems(foundHouses)
-                        HousesGrid(housesDic: housesDic, houses: housesArray, pages: pages)
+                        HousesGrid(housesDic: $housesDic, houses: housesArray, pages: pages)
                     }else{
                         Spacer()
                     }
@@ -219,7 +220,7 @@ struct BottomButtons: View {
             }, label: {
                 Image(systemName: "house.fill").foregroundColor(olive)
             }).sheet(isPresented: $goToAdd) {
-                AddHomeScreen(housesDic: housesDic, houses:$houses).navigationBarBackButtonHidden(true)
+                AddHomeScreen(housesDic: housesDic).navigationBarBackButtonHidden(true)
             }
             Button(action: {
                 // navigate to route page
@@ -266,9 +267,8 @@ struct HomeScreen: View {
                     VStack(spacing: 10) {
                         Header()
                         SearchBar(searchText: $searchText)
-                        MiddleView(searchText: $searchText, searchTrie: $searchTrie, houses: houses, housesDic: $housesDic)
+                        MiddleView(searchText: $searchText, searchTrie: $searchTrie, housesDic: $housesDic)
                         BottomButtons(houses: houses, housesDic: $housesDic)
-
                     }
                 }
                 .onAppear(){
