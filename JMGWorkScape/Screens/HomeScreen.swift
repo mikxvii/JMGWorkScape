@@ -204,7 +204,7 @@ struct BottomButtons: View {
             }, label: {
                 Image(systemName: "house.fill").foregroundColor(olive)
             }).sheet(isPresented: $goToAdd) {
-                AddHomeScreen(housesDic: housesDic, houses:houses).navigationBarBackButtonHidden(true)
+                AddHomeScreen(housesDic: housesDic, houses: houses).navigationBarBackButtonHidden(true)
             }
             Button(action: {
                 // navigate to route page
