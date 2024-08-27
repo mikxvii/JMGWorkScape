@@ -261,7 +261,7 @@ struct HomeScreen: View {
     @Query private var houses: [House]
     @Environment(\.modelContext) private var context
     private var housesDic: [String: House] {
-           Dictionary(uniqueKeysWithValues: houses.map { (key: $0.getName(), value: $0) })
+        Dictionary(uniqueKeysWithValues: houses.map { (key: $0.getAddressKeyFormat(), value: $0) })
     }
     
     private var searchTrie: Trie{

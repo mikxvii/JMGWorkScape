@@ -90,3 +90,9 @@ func formatDate(_ date: Date) -> String {
     dateFormatter.dateFormat = "MMMM d, yyyy" // Set the desired format
     return dateFormatter.string(from: date)
 }
+
+func addressKeyFormat(_ address: String) -> String {
+    return address
+        .lowercased() // Convert to lowercase
+        .filter { $0.isLetter || $0.isNumber } // Keep only letters and numbers
+}
