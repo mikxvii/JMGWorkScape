@@ -9,6 +9,10 @@ import SwiftUI
 import Foundation
 import SwiftData
 
+var housesDic: [String: House] {
+    Dictionary(uniqueKeysWithValues: houses.map { (key: $0.getName(), value: $0) })
+}
+
 struct Header: View {
     @State var goToProfile = false
     
@@ -72,6 +76,7 @@ struct HousesGrid: View {
     @State private var goToDetails = false
     let itemsPerPage = 6
     
+    var housesArray: [House]
     let columns = [
         GridItem(.flexible()),
         GridItem(.flexible())
@@ -176,7 +181,7 @@ struct MiddleView: View {
                     if !foundHouses.isEmpty {
                         let pages = Int(ceil(Double(foundHouses.count) / Double(itemsPerPage)))
                         let housesArray = pullItems(foundHouses)
-                        HousesGrid(housesDic: housesDic, housesArray: houses, pages: pages)
+                        HousesGrid(housesArray: housesArray, pages: pages)
                     }else{
                         Spacer()
                     }
@@ -203,7 +208,7 @@ struct BottomButtons: View {
             }, label: {
                 Image(systemName: "house.fill").foregroundColor(olive)
             }).sheet(isPresented: $goToAdd) {
-                AddHomeScreen(housesDic: housesDic, houses: houses).navigationBarBackButtonHidden(true)
+                AddHomeScreen(housesDic: housesDic).navigationBarBackButtonHidden(true)
             }
             Button(action: {
                 // navigate to route page
