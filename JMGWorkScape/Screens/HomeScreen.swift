@@ -64,39 +64,36 @@ struct NoHouses: View{
 }
 
 struct HousesGrid: View {
-    @Environment(\.modelContext) private var context
     // Private Member Variables
+    @Environment(\.modelContext) private var context
     @State private var houseToDelete: House?
     @State private var showAlert = false
     @State private var longPressDetected = false // State variable to track long press
     @State private var selectedHouse: House?
     @State private var goToDetails = false
-    let itemsPerPage = 6
-    
-    let columns = [
+    private let ITEMSPERPAGE = 6
+    private let columns = [
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
     
-    // Perameteres
-    var housesDic: [String: House]
-    var houses: [House]
-    
-    var pages: Int
-
-    // Function Paramters
-    func getItems(for page: Int, itemsPerPage: Int) -> [House] {
+    private func getItems(for page: Int, itemsPerPage: Int) -> [House] {
         let startIndex = (page - 1) * itemsPerPage
         let endIndex = min(startIndex + itemsPerPage, houses.count)
         return Array(houses[startIndex..<endIndex])
     }
     
+    // Perameteres
+    var housesDic: [String: House]
+    var houses: [House]
+    var pages: Int
+
     var body: some View {
         TabView {
             ForEach(1...pages, id: \.self) { page in
                 VStack(){
                     LazyVGrid(columns: columns, alignment: .center, spacing: 30) {
-                        let pageItems = getItems(for: page, itemsPerPage: itemsPerPage)
+                        let pageItems = getItems(for: page, itemsPerPage: ITEMSPERPAGE)
                         ForEach(pageItems, id: \.self) { item in
                             ZStack {
                                 if let imageData = item.getImg(), let image = UIImage(data: imageData) {
@@ -141,19 +138,18 @@ struct HousesGrid: View {
                                     title: Text("Confirm Deletion"),
                                     message: Text("Are you sure you want to delete this house?"),
                                     primaryButton: .destructive(Text("Delete")) {
-                                    if let houseToDelete = houseToDelete {
-                                        context.delete(item)
-                                    }
+                                        if let houseToDelete = houseToDelete, let index = houses.firstIndex(of: houseToDelete) {
+                                            context.delete(houses[index])
+                                        }
                                     },
                                     secondaryButton: .cancel()
                                 )
                             }
- 
                         }
                     }
 
-                    Spacer()
-                }.padding(10)
+                    Spacer() // spacer to push items to the top when < 5 items in page
+                }.padding(10) //  reduce the gap between columns
             }
             
         }
@@ -167,17 +163,19 @@ struct HousesGrid: View {
 }
 
 struct MiddleView: View {
+    // Private Member Variables
     @Environment(\.modelContext) private var context
-    @Binding var searchText: String
-    var searchTrie: Trie?
-    var housesDic: [String: House]
     @Query private var houses: [House]
-    
-    func pullItems(_ houseNames: [String]) -> [House] {
+    private func pullItems(_ houseNames: [String]) -> [House] {
         // Use the house names to look up the corresponding House objects in the dictionary
         let houseObjects = houseNames.compactMap { housesDic[$0] }
         return houseObjects
     }
+    
+    // Parameters
+    @Binding var searchText: String
+    var searchTrie: Trie?
+    var housesDic: [String: House]
     
     var body: some View{
         VStack(){
@@ -206,8 +204,11 @@ struct MiddleView: View {
 }
 
 struct BottomButtons: View {
-    @State var goToRoute = false
-    @State var goToAdd = false
+    // Private Member Variables
+    @State private var goToRoute = false
+    @State private var goToAdd = false
+    
+    // Parameters
     @State var houses: [House]
     var housesDic: [String: House]
     
@@ -238,16 +239,17 @@ struct BottomButtons: View {
 }
 
 struct HomeScreen: View {
-    @State var searchText = ""
-    @State var selectedHouse: House? = nil
+    // Private Member Variables
+    @State private var searchText = ""
+    @State private var selectedHouse: House? = nil
     @Query private var houses: [House]
     @Environment(\.modelContext) private var context
     
-    var housesDic: [String: House] {
+    private var housesDic: [String: House] {
            Dictionary(uniqueKeysWithValues: houses.map { (key: $0.getName(), value: $0) })
     }
     
-    var searchTrie: Trie{
+    private var searchTrie: Trie{
         Trie(words: houses.map { $0.getName() })
     }
     
