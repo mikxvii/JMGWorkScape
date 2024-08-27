@@ -45,8 +45,6 @@ struct AddHomeScreen: View {
     
     // Dictionary is used to check if the new house already exists
     @State var housesDic: [String: House]
-    
-    @Binding var houses: [House]
 
     let daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
     let olive = Color(red: 0.23, green: 0.28, blue: 0.20, opacity: 1.00)
@@ -100,7 +98,6 @@ struct AddHomeScreen: View {
                     // Creates house object and saves in context
                     let house = House(currName, currAddress, currJobD, sortedDays.formatted())
                     context.insert(house)
-                    print(houses.count)
                     presentationMode.wrappedValue.dismiss()
                 }
             }, label: {

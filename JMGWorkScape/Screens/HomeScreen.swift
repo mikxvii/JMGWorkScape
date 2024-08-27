@@ -64,7 +64,7 @@ struct NoHouses: View{
 }
 
 struct HousesGrid: View {
-    
+    @Environment(\.modelContext) private var context
     // Private Member Variables
     @State private var houseToDelete: House?
     @State private var showAlert = false
@@ -78,17 +78,16 @@ struct HousesGrid: View {
         GridItem(.flexible())
     ]
     
-    
     // Perameteres
     @State var housesDic: [String: House]
-    var housesArray: [House]
+    @State var houses: [House]
     var pages: Int
 
     // Function Paramters
     func getItems(for page: Int, itemsPerPage: Int) -> [House] {
         let startIndex = (page - 1) * itemsPerPage
-        let endIndex = min(startIndex + itemsPerPage, housesArray.count)
-        return Array(housesArray[startIndex..<endIndex])
+        let endIndex = min(startIndex + itemsPerPage, houses.count)
+        return Array(houses[startIndex..<endIndex])
     }
     
     var body: some View {
@@ -97,9 +96,9 @@ struct HousesGrid: View {
                 VStack(){
                     LazyVGrid(columns: columns, alignment: .center, spacing: 30) {
                         let pageItems = getItems(for: page, itemsPerPage: itemsPerPage)
-                        ForEach(pageItems.indices, id: \.self) { index in
+                        ForEach(pageItems, id: \.self) { item in
                             ZStack {
-                                if let imageData = pageItems[index].getImg(), let image = UIImage(data: imageData) {
+                                if let imageData = item.getImg(), let image = UIImage(data: imageData) {
                                     Image(uiImage: image)
                                         .resizable()
                                         .aspectRatio(contentMode: .fill)
@@ -112,40 +111,46 @@ struct HousesGrid: View {
                                         .frame(width: 150, height: 150)
                                         .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
                                 }
-                                
                                 VStack {
                                     Spacer()
-                                    Text(pageItems[index].getName())
+                                    Text(item.getName())
                                         .foregroundStyle(.white)
                                         .padding(.horizontal, 12)
                                         .padding(.vertical, 6)
-                                        .background(darkOlive) // Use your darkOlive color
+                                        .background(darkOlive)
                                         .cornerRadius(15)
+                                        .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
                                 }
                                 .padding(.bottom, 20)
-                            }                             
+                            }
                             .simultaneousGesture(
                                 LongPressGesture().onEnded { _ in
-                                    houseToDelete = housesArray[index]
+                                    houseToDelete = item
                                     showAlert = true
                                     longPressDetected = true
                                 }
                             )
+                            .simultaneousGesture(
+                                TapGesture().onEnded {
+                                    longPressDetected = false
+                                }
+                            )
+                            .alert(isPresented: $showAlert) {
+                                Alert(
+                                    title: Text("Confirm Deletion"),
+                                    message: Text("Are you sure you want to delete this house?"),
+                                    primaryButton: .destructive(Text("Delete")) {
+                                    if let houseToDelete = houseToDelete, let index = houses.firstIndex(of: houseToDelete) {
+                                        context.delete(item)
+                                    }
+                                    },
+                                    secondaryButton: .cancel()
+                                )
+                            }
  
                         }
                     }
-                    .alert(isPresented: $showAlert) {
-                        Alert(
-                            title: Text("Confirm Deletion"),
-                            message: Text("Are you sure you want to delete this house?"),
-                            primaryButton: .destructive(Text("Delete")) {
-//                            if let houseToDelete = houseToDelete, let index = houses.firstIndex(of: houseToDelete) {
-//                                context.delete(houses[index])
-//                            }
-                            },
-                            secondaryButton: .cancel()
-                        )
-                    }
+
                     Spacer()
                 }.padding(10)
             }
@@ -161,6 +166,7 @@ struct HousesGrid: View {
 }
 
 struct MiddleView: View {
+    @Environment(\.modelContext) private var context
     @Binding var searchText: String
     @Binding var searchTrie: Trie?
     @State var houses: [House]
@@ -180,13 +186,13 @@ struct MiddleView: View {
             if !houses.isEmpty{
                 if searchText == "" {
                     let pages = Int(ceil(Double(houses.count) / Double(itemsPerPage)))
-                    HousesGrid(housesDic: housesDic, housesArray: houses, pages: pages)
+                    HousesGrid(housesDic: housesDic, houses: houses, pages: pages)
                 }else{
                     let foundHouses = searchTrie?.wordsWithPrefix(searchText) ?? []
                     if !foundHouses.isEmpty {
                         let pages = Int(ceil(Double(foundHouses.count) / Double(itemsPerPage)))
                         let housesArray = pullItems(foundHouses)
-                        HousesGrid(housesDic: housesDic, housesArray: housesArray, pages: pages)
+                        HousesGrid(housesDic: housesDic, houses: housesArray, pages: pages)
                     }else{
                         Spacer()
                     }
