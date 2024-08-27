@@ -13,8 +13,45 @@ var housesDic: [String: House] {
        Dictionary(uniqueKeysWithValues: houses.map { (key: $0.getName(), value: $0) })
 }
 
+struct Logo_Profile_Picture: View {
+    @State var goToProfile: Bool
+    
+    var body: some View{
+        HStack(spacing: 157) {
+            // Title of the Screen
+            Text("Homes")
+                .bold()
+                .font(.largeTitle)
+                .shadow(color: Color(red: 0.00, green: 0.00, blue: 0.00, opacity: 0.25), radius: 4, x: 0, y: 4)
+                .foregroundColor(olive)
+            
+            Button(action: {
+                goToProfile = true
+            }, label: {
+                Image(systemName: "person.crop.circle")
+                    .font(.largeTitle)
+                    .foregroundColor(olive)
+            })
+        }
+    }
+}
 
-struct GridView: View {
+struct SearchBar: View{
+    @Binding var searchText: String
+    
+    var body: some View{
+        ZStack {
+            TextField("'Calle Miramar..'", text: $searchText)
+                .frame(maxWidth: 350, alignment: .topLeading)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+            Image(systemName: "magnifyingglass")
+                .foregroundColor(olive)
+                .offset(x: 145)
+        }
+    }
+}
+
+struct HousesGrid: View {
     var housesArray: [House]
     let columns = [
         GridItem(.flexible()),
@@ -22,7 +59,7 @@ struct GridView: View {
     ]
     
     var pages: Int
-    var itemsPerPage: Int
+    let itemsPerPage = 6
 
     func getItems(for page: Int, itemsPerPage: Int) -> [House] {
         let startIndex = (page - 1) * itemsPerPage
@@ -65,7 +102,54 @@ struct GridView: View {
     }
 }
 
-struct BottomButtons: View{
+struct NoHouses: View{
+    var body: some View{
+        Image(systemName: "tree")
+            .foregroundColor(.gray)
+            .font(.title)
+        Text("No homes added")
+            .foregroundColor(.gray)
+    }
+}
+
+struct MiddleView: View {
+    @Binding var searchText: String
+    @Binding var searchTrie: Trie?
+    
+    func pullItems(_ houseNames: [String]) -> [House] {
+        // Use the house names to look up the corresponding House objects in the dictionary
+        let houseObjects = houseNames.compactMap { housesDic[$0] }
+        return houseObjects
+    }
+    
+    var body: some View{
+        VStack(){
+            // Page Calculation
+            let itemsPerPage = 6
+            
+            if !houses.isEmpty{
+                if searchText == "" {
+                    let pages = Int(ceil(Double(houses.count) / Double(itemsPerPage)))
+                    HousesGrid(housesArray: houses, pages: pages)
+                }else{
+                    let foundHouses = searchTrie?.wordsWithPrefix(searchText) ?? []
+                    if foundHouses.count != 0 {
+                        let pages = Int(ceil(Double(foundHouses.count) / Double(itemsPerPage)))
+                        let housesArray = pullItems(foundHouses)
+                        HousesGrid(housesArray: housesArray, pages: pages)
+                    }
+                }
+            }else{
+                Spacer()
+                NoHouses()
+                Spacer()
+            }
+
+        }
+    }
+}
+
+struct BottomButtons: View {
     @State var goToRoute: Bool
     @State var goToAdd: Bool
     
@@ -95,9 +179,7 @@ struct BottomButtons: View{
     }
 }
 
-
 struct HomeScreen: View {
-    
     @State var searchText = ""
     @State var goToDetails: Bool = false
     @State var goToAdd: Bool = false
@@ -120,15 +202,7 @@ struct HomeScreen: View {
         return Array(houses[startIndex..<endIndex])
     }
     
-
-    
     // These are used to help display the houses!
-    func pullItems(_ houseNames: [String]) -> [House] {
-        // Use the house names to look up the corresponding House objects in the dictionary
-        let houseObjects = houseNames.compactMap { housesDic[$0] }
-        return houseObjects
-    }
-    
     
     var body: some View {
         // Setting up for Screen switching
@@ -143,62 +217,12 @@ struct HomeScreen: View {
                         .frame(width: geo.size.width, height: geo.size.height, alignment: .center)
                     
                     VStack(spacing: 10) {
-                        HStack(spacing: 157) {
-                            // Title of the Screen
-                            Text("Homes")
-                                .bold()
-                                .font(.largeTitle)
-                                .shadow(color: Color(red: 0.00, green: 0.00, blue: 0.00, opacity: 0.25), radius: 4, x: 0, y: 4)
-                                .foregroundColor(olive)
-                            
-                            Button(action: {
-                                goToProfile = true
-                            }, label: {
-                                Image(systemName: "person.crop.circle")
-                                    .font(.largeTitle)
-                                    .foregroundColor(olive)
-                            })
-                        }
-                        
-                        ZStack {
-                            TextField("'Calle Miramar..'", text: $searchText)
-                                .frame(maxWidth: 350, alignment: .topLeading)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                            Image(systemName: "magnifyingglass")
-                                .foregroundColor(olive)
-                                .offset(x: 145)
-                        }
-                        
-                        VStack(){
-                            // Page Calculation
-                            let itemsPerPage = 6
-                            
-                            if searchText == "" {
-                                let pages = Int(ceil(Double(houses.count) / Double(itemsPerPage)))
-                                GridView(housesArray: houses, pages: pages, itemsPerPage: itemsPerPage)
-                            }else{
-                                
-                                let foundHouses = searchTrie?.wordsWithPrefix(searchText) ?? []
-                                if foundHouses.count != 0 {
-                                    let pages = Int(ceil(Double(foundHouses.count) / Double(itemsPerPage)))
-                                    let housesArray = pullItems(foundHouses)
-                                    GridView(housesArray: housesArray, pages: pages, itemsPerPage: itemsPerPage)
-                                }
-                            }
-                            
-                        }
-                        
+                        Logo_Profile_Picture(goToProfile: goToProfile)
+                        SearchBar(searchText: $searchText)
+                        MiddleView(searchText: $searchText, searchTrie: $searchTrie)
                         BottomButtons(goToRoute: goToRoute, goToAdd: goToAdd)
 
-                        if houses.isEmpty {
-                            Spacer()
-                            Image(systemName: "tree")
-                                .foregroundColor(.gray)
-                                .font(.title)
-                            Text("No homes added")
-                                .foregroundColor(.gray)
-                        }
-                        
+
                         Spacer()
 
                     }
@@ -241,4 +265,3 @@ struct HomeScreen: View {
         }
     }
 }
-

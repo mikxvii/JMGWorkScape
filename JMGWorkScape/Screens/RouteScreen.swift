@@ -140,6 +140,6 @@ struct RouteScreen: View {
                 remainingHouses = houses.filter { !$0.getFrqSet().contains(currentWeekday) }
 
             }
-        }
+        }.navigationBarBackButtonHidden(true)
     }
 }

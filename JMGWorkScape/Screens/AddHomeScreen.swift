@@ -212,7 +212,7 @@ struct AddHomeScreen: View {
             .alert(isPresented: $showFieldAlert) {
                 Alert(title: Text("Validation Error"), message: Text("All text fields must be filled"), dismissButton: .default(Text("OK")))
             }
-        }
+        }.navigationBarBackButtonHidden(true)
     }
 }
 
