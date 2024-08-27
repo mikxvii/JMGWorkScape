@@ -9,12 +9,18 @@ import SwiftUI
 import Foundation
 import SwiftData
 
+var housesDic: [String: House] {
+       Dictionary(uniqueKeysWithValues: houses.map { (key: $0.getName(), value: $0) })
+}
+
+
 struct GridView: View {
     var housesArray: [House]
     let columns = [
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
+    
     var pages: Int
     var itemsPerPage: Int
 
@@ -27,33 +33,65 @@ struct GridView: View {
     var body: some View {
         TabView {
             ForEach(1...pages, id: \.self) { page in
-                LazyVGrid(columns: columns, alignment: .center, spacing: 30) {
-                    let pageItems = getItems(for: page, itemsPerPage: itemsPerPage)
-                    ForEach(pageItems.indices, id: \.self) { index in
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 40)
-                                .fill(Color.gray)
-                                .frame(width: 150, height: 150)
-                                .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
-                            
-                            VStack {
-                                Spacer()
-                                Text(pageItems[index].getName())
-                                    .foregroundStyle(.white)
-                                    .padding(.horizontal, 12)
-                                    .padding(.vertical, 6)
-                                    .background(Color.darkOlive) // Use your darkOlive color
-                                    .cornerRadius(15)
-                                    .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                VStack(){
+                    LazyVGrid(columns: columns, alignment: .center, spacing: 30) {
+                        let pageItems = getItems(for: page, itemsPerPage: itemsPerPage)
+                        ForEach(pageItems.indices, id: \.self) { index in
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 40)
+                                    .fill(Color.gray)
+                                    .frame(width: 150, height: 150)
+                                    .shadow(color: .black.opacity(0.7), radius: 10, x: 0, y: 7)
+                                
+                                VStack {
+                                    Spacer()
+                                    Text(pageItems[index].getName())
+                                        .foregroundStyle(.white)
+                                        .padding(.horizontal, 12)
+                                        .padding(.vertical, 6)
+                                        .background(darkOlive) // Use your darkOlive color
+                                        .cornerRadius(15)
+                                }
+                                .padding(.bottom, 20)
                             }
-                            .padding(.bottom, 20)
                         }
                     }
+                    Spacer()
                 }
             }
+            
         }
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
-        .border(Color.black)
+    }
+}
+
+struct BottomButtons: View{
+    @State var goToRoute: Bool
+    @State var goToAdd: Bool
+    
+    var body: some View{
+        // Buttons for actions
+        HStack(spacing: 115) {
+            // Add a Home Button
+            Button(action: {
+                goToAdd = true
+            }, label: {
+                Image(systemName: "house.fill").foregroundColor(olive)
+            }).navigationDestination(isPresented: $goToAdd) {
+                AddHomeScreen(housesDic:housesDic)
+            }
+            Button(action: {
+                // navigate to route page
+                goToRoute = true
+            }, label: {
+                Image(systemName: "map")
+                    .foregroundColor(olive)
+            }).navigationDestination(isPresented: $goToRoute) {
+                RouteScreen(houses: houses, housesDic: housesDic)
+            }
+        }
+        .padding(.bottom, 30.0)
+        .font(.system(size: 40))
     }
 }
 
@@ -71,13 +109,6 @@ struct HomeScreen: View {
     @State private var longPressDetected = false // State variable to track long press
 //    @Query private var houses: [House]
     @Environment(\.modelContext) private var context
-    
-    
-
-    
-    var housesDic: [String: House] {
-           Dictionary(uniqueKeysWithValues: houses.map { (key: $0.getName(), value: $0) })
-       }
        
    // Initialize the Trie
     @State private var searchTrie: Trie?
@@ -89,14 +120,15 @@ struct HomeScreen: View {
         return Array(houses[startIndex..<endIndex])
     }
     
+
+    
+    // These are used to help display the houses!
     func pullItems(_ houseNames: [String]) -> [House] {
         // Use the house names to look up the corresponding House objects in the dictionary
         let houseObjects = houseNames.compactMap { housesDic[$0] }
         return houseObjects
     }
     
-    // These are used to help display the houses!
-
     
     var body: some View {
         // Setting up for Screen switching
@@ -137,14 +169,26 @@ struct HomeScreen: View {
                                 .offset(x: 145)
                         }
                         
-                        // Page Calculation
-                        let itemsPerPage = 6
-                        
-                        if searchText == "" {
-                            let pages = Int(ceil(Double(houses.count) / Double(itemsPerPage)) + 1)
-                            GridView(housesArray: houses, pages: pages, itemsPerPage: itemsPerPage)
+                        VStack(){
+                            // Page Calculation
+                            let itemsPerPage = 6
+                            
+                            if searchText == "" {
+                                let pages = Int(ceil(Double(houses.count) / Double(itemsPerPage)))
+                                GridView(housesArray: houses, pages: pages, itemsPerPage: itemsPerPage)
+                            }else{
+                                
+                                let foundHouses = searchTrie?.wordsWithPrefix(searchText) ?? []
+                                if foundHouses.count != 0 {
+                                    let pages = Int(ceil(Double(foundHouses.count) / Double(itemsPerPage)))
+                                    let housesArray = pullItems(foundHouses)
+                                    GridView(housesArray: housesArray, pages: pages, itemsPerPage: itemsPerPage)
+                                }
+                            }
+                            
                         }
                         
+                        BottomButtons(goToRoute: goToRoute, goToAdd: goToAdd)
 
                         if houses.isEmpty {
                             Spacer()
@@ -156,27 +200,7 @@ struct HomeScreen: View {
                         }
                         
                         Spacer()
-                        // Buttons for actions
-                        HStack(spacing: 115) {
-                            // Add a Home Button
-                            Button(action: {
-                                goToAdd = true
-                            }, label: {
-                                Image(systemName: "house.fill").foregroundColor(olive)
-                            })
-                            
-                            Button(action: {
-                                // navigate to route page
-                                goToRoute = true
-                            }, label: {
-                                Image(systemName: "map")
-                                    .foregroundColor(olive)
-                            }).navigationDestination(isPresented: $goToRoute) {
-                                RouteScreen(houses: houses, housesDic: housesDic)
-                            }
-                        }
-                        .padding(.bottom, 30.0)
-                        .font(.system(size: 40))
+
                     }
                     .padding()
                 }

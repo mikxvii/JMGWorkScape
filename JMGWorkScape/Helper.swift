@@ -18,7 +18,7 @@ let gray = Color(red: 0, green: 0, blue: 0, opacity: 0.04)
 let darkOlive = Color(red: 0.19, green: 0.23, blue: 0.16, opacity: 1.00)
 
 
-// houses for testing
+// houses for testing 11 houses
 var houses: [House] = [
     House("Casa Bella", "123 Main St, Springfield", "Lawn Mowing", "Wenesday"),
     House("Villa Verde", "456 Oak St, Maplewood", "Garden Maintenance", "Tuesday, Thursday"),
@@ -32,6 +32,7 @@ var houses: [House] = [
     House("Riverbend Estate", "707 River Rd, Riverdale", "Deck Staining", "Thursday"),
     House("Forest Glen", "808 Spruce St, Greenfield", "Roof Inspection", "Monday, Friday")
 ]
+
 
 
 //
