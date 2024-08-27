@@ -61,11 +61,12 @@ struct AddHomeScreen: View {
             }, label: {
                 Text("Cancel")
                     .bold()
+                    .font(.headline)
                     .foregroundColor(.black)
                     .padding(.horizontal, 25.0)
                     .padding(.vertical, 10)
                     .background(.red)
-                    .cornerRadius(10)
+                    .cornerRadius(70)
                     .padding(5)
             })
             
@@ -105,6 +106,7 @@ struct AddHomeScreen: View {
             }, label: {
                 Text("Done")
                     .bold()
+                    .font(.headline)
                     .foregroundColor(olive)
                     .padding(.horizontal, 25.0)
                     .padding(.vertical, 10)
@@ -178,6 +180,8 @@ struct AddHomeScreen: View {
                         .frame(maxWidth: 350, alignment: .topLeading)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                 }
+                .font(.headline)
+
                 
                 // VStack with days of the week frequency
                 VStack(spacing: 10){
@@ -194,6 +198,8 @@ struct AddHomeScreen: View {
                         DayButton(currFrequency: $currFrequncy, buttonColor: .gray, day: "Wednesday")
                         Spacer()
                     }
+                    .font(.headline)
+
                     HStack {
                         Spacer()
                         DayButton(currFrequency: $currFrequncy, buttonColor: .gray, day: "Thursday")
@@ -201,6 +207,8 @@ struct AddHomeScreen: View {
                         DayButton(currFrequency: $currFrequncy, buttonColor: .gray, day: "Friday")
                         Spacer()
                     }
+                    .font(.headline)
+
                 }
 
             }
