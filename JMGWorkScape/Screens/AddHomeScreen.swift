@@ -63,7 +63,7 @@ struct AddHomeScreen: View {
                     .padding(.horizontal, 25.0)
                     .padding(.vertical, 10)
                     .background(.red)
-                    .cornerRadius(70)
+                    .cornerRadius(10)
                     .padding(5)
             })
             
@@ -212,7 +212,7 @@ struct AddHomeScreen: View {
             .alert(isPresented: $showFieldAlert) {
                 Alert(title: Text("Validation Error"), message: Text("All text fields must be filled"), dismissButton: .default(Text("OK")))
             }
-        }.navigationBarBackButtonHidden(true)
+        }
     }
 }
 

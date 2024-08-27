@@ -9,15 +9,11 @@ import SwiftUI
 import Foundation
 import SwiftData
 
-var housesDic: [String: House] {
-       Dictionary(uniqueKeysWithValues: houses.map { (key: $0.getName(), value: $0) })
-}
-
-struct Logo_Profile_Picture: View {
-    @State var goToProfile: Bool
+struct Header: View {
+    @State var goToProfile = false
     
     var body: some View{
-        HStack(spacing: 157) {
+        HStack(spacing: 190) {
             // Title of the Screen
             Text("Homes")
                 .bold()
@@ -32,6 +28,8 @@ struct Logo_Profile_Picture: View {
                     .font(.largeTitle)
                     .foregroundColor(olive)
             })
+        }.navigationDestination(isPresented: $goToProfile) {
+            ProfileScreen()
         }
     }
 }
@@ -51,7 +49,26 @@ struct SearchBar: View{
     }
 }
 
+struct NoHouses: View{
+    var body: some View{
+        Spacer()
+        Image(systemName: "tree")
+            .foregroundColor(.gray)
+            .font(.title)
+        Text("No homes added")
+            .foregroundColor(.gray)
+        Spacer()
+    }
+    
+}
+
 struct HousesGrid: View {
+    @State private var houseToDelete: House?
+    @State private var showAlert = false
+    @State private var longPressDetected = false // State variable to track long press
+    @State private var selectedHouse: House?
+    @State private var goToDetails = false
+    
     var housesArray: [House]
     let columns = [
         GridItem(.flexible()),
@@ -90,31 +107,47 @@ struct HousesGrid: View {
                                         .cornerRadius(15)
                                 }
                                 .padding(.bottom, 20)
-                            }
+                            }                             
+                            .simultaneousGesture(
+                                LongPressGesture().onEnded { _ in
+                                    houseToDelete = housesArray[index]
+                                    showAlert = true
+                                    longPressDetected = true
+                                }
+                            )
+ 
                         }
                     }
+                    .alert(isPresented: $showAlert) {
+                        Alert(
+                            title: Text("Confirm Deletion"),
+                            message: Text("Are you sure you want to delete this house?"),
+                            primaryButton: .destructive(Text("Delete")) {
+//                            if let houseToDelete = houseToDelete, let index = houses.firstIndex(of: houseToDelete) {
+//                                context.delete(houses[index])
+//                            }
+                            },
+                            secondaryButton: .cancel()
+                        )
+                    }
                     Spacer()
-                }
+                }.padding(10)
             }
             
         }
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
-    }
-}
-
-struct NoHouses: View{
-    var body: some View{
-        Image(systemName: "tree")
-            .foregroundColor(.gray)
-            .font(.title)
-        Text("No homes added")
-            .foregroundColor(.gray)
+        .navigationDestination(isPresented: $goToDetails) {
+            if let selectedHouse = selectedHouse {
+                HomeDetailsScreen(house: selectedHouse, houseDic: housesDic)
+            }
+        }
     }
 }
 
 struct MiddleView: View {
     @Binding var searchText: String
     @Binding var searchTrie: Trie?
+    @State var houses: [House]
     
     func pullItems(_ houseNames: [String]) -> [House] {
         // Use the house names to look up the corresponding House objects in the dictionary
@@ -133,25 +166,25 @@ struct MiddleView: View {
                     HousesGrid(housesArray: houses, pages: pages)
                 }else{
                     let foundHouses = searchTrie?.wordsWithPrefix(searchText) ?? []
-                    if foundHouses.count != 0 {
+                    if !foundHouses.isEmpty {
                         let pages = Int(ceil(Double(foundHouses.count) / Double(itemsPerPage)))
                         let housesArray = pullItems(foundHouses)
                         HousesGrid(housesArray: housesArray, pages: pages)
+                    }else{
+                        Spacer()
                     }
                 }
             }else{
-                Spacer()
                 NoHouses()
-                Spacer()
             }
-
         }
     }
 }
 
 struct BottomButtons: View {
-    @State var goToRoute: Bool
-    @State var goToAdd: Bool
+    @State var goToRoute = false
+    @State var goToAdd = false
+    @State var houses: [House]
     
     var body: some View{
         // Buttons for actions
@@ -161,8 +194,8 @@ struct BottomButtons: View {
                 goToAdd = true
             }, label: {
                 Image(systemName: "house.fill").foregroundColor(olive)
-            }).navigationDestination(isPresented: $goToAdd) {
-                AddHomeScreen(housesDic:housesDic)
+            }).sheet(isPresented: $goToAdd) {
+                AddHomeScreen(housesDic: housesDic).navigationBarBackButtonHidden(true)
             }
             Button(action: {
                 // navigate to route page
@@ -181,26 +214,15 @@ struct BottomButtons: View {
 
 struct HomeScreen: View {
     @State var searchText = ""
-    @State var goToDetails: Bool = false
-    @State var goToAdd: Bool = false
-    @State var goToRoute: Bool = false
-    @State var goToProfile: Bool = false
     @State var selectedHouse: House? = nil
-    @State private var showAlert = false
-    @State private var houseToDelete: House?
-    @State private var longPressDetected = false // State variable to track long press
-//    @Query private var houses: [House]
+    @Query private var houses: [House]
     @Environment(\.modelContext) private var context
+    var housesDic: [String: House] {
+        Dictionary(uniqueKeysWithValues: houses.map { (key: $0.getName(), value: $0) })
+    }
        
    // Initialize the Trie
     @State private var searchTrie: Trie?
-    
-    // Function to get items for a specific page
-    func getItems(for page: Int, itemsPerPage: Int) -> [House] {
-        let startIndex = (page - 1) * itemsPerPage
-        let endIndex = min(startIndex + itemsPerPage, houses.count)
-        return Array(houses[startIndex..<endIndex])
-    }
     
     // These are used to help display the houses!
     
@@ -217,42 +239,13 @@ struct HomeScreen: View {
                         .frame(width: geo.size.width, height: geo.size.height, alignment: .center)
                     
                     VStack(spacing: 10) {
-                        Logo_Profile_Picture(goToProfile: goToProfile)
+                        Header()
                         SearchBar(searchText: $searchText)
-                        MiddleView(searchText: $searchText, searchTrie: $searchTrie)
-                        BottomButtons(goToRoute: goToRoute, goToAdd: goToAdd)
-
-
-                        Spacer()
+                        MiddleView(searchText: $searchText, searchTrie: $searchTrie, houses: houses)
+                        BottomButtons(houses: houses)
 
                     }
-                    .padding()
                 }
-                .padding()
-                .navigationDestination(isPresented: $goToDetails) {
-                    if let selectedHouse = selectedHouse {
-                        HomeDetailsScreen(house: selectedHouse, houseDic: housesDic)
-                    }
-                }
-                .sheet(isPresented: $goToAdd) {
-                    AddHomeScreen(housesDic: housesDic).navigationBarBackButtonHidden(true)
-                }
-                .navigationDestination(isPresented: $goToProfile) {
-                    ProfileScreen()
-                }
-                .alert(isPresented: $showAlert) {
-                    Alert(
-                        title: Text("Confirm Deletion"),
-                        message: Text("Are you sure you want to delete this house?"),
-                        primaryButton: .destructive(Text("Delete")) {
-//                            if let houseToDelete = houseToDelete, let index = houses.firstIndex(of: houseToDelete) {
-//                                context.delete(houses[index])
-//                            }
-                        },
-                        secondaryButton: .cancel()
-                    )
-                }
-                // trie stuff here
                 .onAppear(){
                     // Initialize the Trie with house names, will update when going back to homescreen
                     searchTrie = Trie()
@@ -260,8 +253,7 @@ struct HomeScreen: View {
                         searchTrie?.insert(house.getName())
                     }
                 }
-            }
-            .ignoresSafeArea(.all)
+            }.ignoresSafeArea(.all)
         }
     }
 }

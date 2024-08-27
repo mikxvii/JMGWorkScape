@@ -9,13 +9,12 @@ import Foundation
 import SwiftUI
 
 struct RouteScreen: View {
-//    var currentWeekday: String = getCurrentWeekday()
+    var currentWeekday: String = getCurrentWeekday()
     var houses: [House]
     var housesDic: [String: House]
     @State var editHouses: [House] = []
     @State var stopHouses: [House] = []
     @State var remainingHouses: [House] = []
-    var currentWeekday: String = "Monday" // Tester Day
     let daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
     let darkOlive = Color(red: 0.19, green: 0.23, blue: 0.16, opacity: 1.00)
     @State private var goToDetails = false
@@ -38,67 +37,67 @@ struct RouteScreen: View {
                         Image(systemName: "map.circle")
                             .font(.title2)
                             .foregroundColor(.brown)
-//                        Spacer()
-//                        List {
-//                            ForEach(editHouses, id: \.self) { house in
-//                                HStack {
-//                                    Spacer()
-//                                    ZStack {
-//                                        if let imageData = house.getImg(), let image = UIImage(data: imageData) {
-//                                            Image(uiImage: image)
-//                                                .frame(width: 360, height: 70)
-//                                                .cornerRadius(10)
-//                                                .padding(.bottom, 20)
-//                                                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-//                                                    Button(role: .destructive) {
-//                                                        if let index = editHouses.firstIndex(of: house) {
-//                                                            editHouses.remove(at: index)
-//                                                        }
-//                                                    } label: {
-//                                                        Label("Delete", systemImage: "trash")
-//                                                    }
-//                                                }
-//                                                .multilineTextAlignment(.center)
-//                                                .onTapGesture {
-//                                                    goToDetails = true
-//                                                    selectedHouse = house
-//                                                }
-//                                        } else {
-//                                            RoundedRectangle(cornerRadius: 10)
-//                                                .frame(width: 360, height: 70)
-//                                                .cornerRadius(10)
-//                                                .padding(.bottom, 20)
-//                                                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-//                                                    Button(role: .destructive) {
-//                                                        if let index = editHouses.firstIndex(of: house) {
-//                                                            editHouses.remove(at: index)
-//                                                        }
-//                                                    } label: {
-//                                                        Label("Delete", systemImage: "trash")
-//                                                    }
-//                                                }
-//                                                .multilineTextAlignment(.center)
-//                                                .onTapGesture {
-//                                                    goToDetails = true
-//                                                    selectedHouse = house
-//                                                }
-//                                        }
-//                                        Text("\(house.getName()): \(house.getAddress())")
-//                                            .foregroundStyle(.white)
-//                                            .padding(.horizontal, 12)
-//                                            .padding(.vertical, 6)
-//                                            .background(darkOlive)
-//                                            .cornerRadius(15)
-//                                            .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
-//                                    }
-//                                    Spacer()
-//                                }
-//                            }
-//
-//                        }
-//                        .listStyle(.inset)
-//                        .frame(height: 640)
-//                        Spacer()
+                        Spacer()
+                        List {
+                            ForEach(editHouses, id: \.self) { house in
+                                HStack {
+                                    Spacer()
+                                    ZStack {
+                                        if let imageData = house.getImg(), let image = UIImage(data: imageData) {
+                                            Image(uiImage: image)
+                                                .frame(width: 360, height: 70)
+                                                .cornerRadius(10)
+                                                .padding(.bottom, 20)
+                                                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                                    Button(role: .destructive) {
+                                                        if let index = editHouses.firstIndex(of: house) {
+                                                            editHouses.remove(at: index)
+                                                        }
+                                                    } label: {
+                                                        Label("Delete", systemImage: "trash")
+                                                    }
+                                                }
+                                                .multilineTextAlignment(.center)
+                                                .onTapGesture {
+                                                    goToDetails = true
+                                                    selectedHouse = house
+                                                }
+                                        } else {
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .frame(width: 360, height: 70)
+                                                .cornerRadius(10)
+                                                .padding(.bottom, 20)
+                                                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                                    Button(role: .destructive) {
+                                                        if let index = editHouses.firstIndex(of: house) {
+                                                            editHouses.remove(at: index)
+                                                        }
+                                                    } label: {
+                                                        Label("Delete", systemImage: "trash")
+                                                    }
+                                                }
+                                                .multilineTextAlignment(.center)
+                                                .onTapGesture {
+                                                    goToDetails = true
+                                                    selectedHouse = house
+                                                }
+                                        }
+                                        Text("\(house.getName()): \(house.getAddress())")
+                                            .foregroundStyle(.white)
+                                            .padding(.horizontal, 12)
+                                            .padding(.vertical, 6)
+                                            .background(darkOlive)
+                                            .cornerRadius(15)
+                                            .shadow(color: .black.opacity(0.5), radius: 10, x: 5, y: 5)
+                                    }
+                                    Spacer()
+                                }
+                            }
+
+                        }
+                        .listStyle(.inset)
+                        .frame(height: 640)
+                        Spacer()
                     }
                 } else {
                     VStack {
@@ -140,6 +139,6 @@ struct RouteScreen: View {
                 remainingHouses = houses.filter { !$0.getFrqSet().contains(currentWeekday) }
 
             }
-        }.navigationBarBackButtonHidden(true)
+        }
     }
 }

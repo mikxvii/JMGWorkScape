@@ -19,19 +19,19 @@ let darkOlive = Color(red: 0.19, green: 0.23, blue: 0.16, opacity: 1.00)
 
 
 // houses for testing 11 houses
-var houses: [House] = [
-    House("Casa Bella", "123 Main St, Springfield", "Lawn Mowing", "Wenesday"),
-    House("Villa Verde", "456 Oak St, Maplewood", "Garden Maintenance", "Tuesday, Thursday"),
-    House("The White Cottage", "789 Pine St, Cedarville", "Pool Cleaning", "Friday"),
-    House("Sunny Meadows", "101 Birch Rd, Oakwood", "Tree Trimming", "Monday, Saturday"),
-    House("Hilltop Retreat", "202 Elm St, Ridgefield", "Patio Cleaning", "Sunday"),
-    House("Ocean Breeze", "303 Maple Ave, Seaside", "Fence Repair", "Tuesday"),
-    House("Mountain View", "404 Aspen Dr, Hillcrest", "Snow Removal", "Thursday"),
-    House("Lakeside Manor", "505 Willow Ln, Lakeside", "Leaf Blowing", "Wednesday, Saturday"),
-    House("Sunset Villa", "606 Cedar St, Highland", "Gutter Cleaning", "Friday"),
-    House("Riverbend Estate", "707 River Rd, Riverdale", "Deck Staining", "Thursday"),
-    House("Forest Glen", "808 Spruce St, Greenfield", "Roof Inspection", "Monday, Friday")
-]
+//var houses: [House] = [
+//    House("Casa Bella", "123 Main St, Springfield", "Lawn Mowing", "Wenesday"),
+//    House("Villa Verde", "456 Oak St, Maplewood", "Garden Maintenance", "Tuesday, Thursday"),
+//    House("The White Cottage", "789 Pine St, Cedarville", "Pool Cleaning", "Friday"),
+//    House("Sunny Meadows", "101 Birch Rd, Oakwood", "Tree Trimming", "Monday, Saturday"),
+//    House("Hilltop Retreat", "202 Elm St, Ridgefield", "Patio Cleaning", "Sunday"),
+//    House("Ocean Breeze", "303 Maple Ave, Seaside", "Fence Repair", "Tuesday"),
+//    House("Mountain View", "404 Aspen Dr, Hillcrest", "Snow Removal", "Thursday"),
+//    House("Lakeside Manor", "505 Willow Ln, Lakeside", "Leaf Blowing", "Wednesday, Saturday"),
+//    House("Sunset Villa", "606 Cedar St, Highland", "Gutter Cleaning", "Friday"),
+//    House("Riverbend Estate", "707 River Rd, Riverdale", "Deck Staining", "Thursday"),
+//    House("Forest Glen", "808 Spruce St, Greenfield", "Roof Inspection", "Monday, Friday")
+//]
 
 
 

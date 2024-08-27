@@ -10,8 +10,8 @@ import SwiftData
 import SwiftUI
 
 //// Data Model
-//@Model
-final class House {
+@Model
+final class House: Identifiable {
     
     //
     // Class Attributes
@@ -25,24 +25,23 @@ final class House {
     private var imageData: Data?
     
     
-    // _ imageData: Data? = nil code for image
     // Initialize
-    init(_ name: String="", _ address: String="", _ job: String="", _ frequency: String="") {
+    init(_ name: String="", _ address: String="", _ job: String="", _ frequency: String="", _ imageData: Data? = nil) {
         self.id = UUID().uuidString
         self.name = name
         self.address = address
         self.frequency = frequency
         self.jobD = job
-//        self.imageData = imageData
+        self.imageData = imageData
     }
-    // _ imageData: Data? = nil
+
     // Exclusively used in EditHomeScreen
-    func update(_ name: String="", _ address: String="", _ job: String="", _ frequency: String="") {
+    func update(_ name: String="", _ address: String="", _ job: String="", _ frequency: String="", _ imageData: Data? = nil) {
         self.name = name
         self.address = address
         self.frequency = frequency
         self.jobD = job
-//        self.imageData = imageData
+        self.imageData = imageData
     }
     
     //
@@ -74,7 +73,7 @@ final class House {
         return self.frequency
     }
     
-//    func getImg() -> Data? {
-//        return self.imageData
-//    }
+    func getImg() -> Data? {
+        return self.imageData
+    }
 }
