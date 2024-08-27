@@ -25,9 +25,6 @@ struct AddHomeScreen: View {
     // Parameters
     //
     
-    // Dictionary is used to check if the new house already exists
-    var housesDic: [String: House]
-    
     //
     // State Variables
     //
@@ -45,6 +42,11 @@ struct AddHomeScreen: View {
     
     // Used to switch back to HomeScreen
     @State private var goBackToHome: Bool = false
+    
+    // Dictionary is used to check if the new house already exists
+    var housesDic: [String: House]
+    
+    @State var houses: [House]
 
     let daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
     let olive = Color(red: 0.23, green: 0.28, blue: 0.20, opacity: 1.00)

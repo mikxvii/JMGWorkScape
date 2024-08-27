@@ -63,21 +63,27 @@ struct NoHouses: View{
 }
 
 struct HousesGrid: View {
+    
+    // Private Member Variables
     @State private var houseToDelete: House?
     @State private var showAlert = false
     @State private var longPressDetected = false // State variable to track long press
     @State private var selectedHouse: House?
     @State private var goToDetails = false
+    let itemsPerPage = 6
     
-    var housesArray: [House]
     let columns = [
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
     
+    
+    // Perameteres
+    @State var housesDic: [String: House]
+    var housesArray: [House]
     var pages: Int
-    let itemsPerPage = 6
 
+    // Function Paramters
     func getItems(for page: Int, itemsPerPage: Int) -> [House] {
         let startIndex = (page - 1) * itemsPerPage
         let endIndex = min(startIndex + itemsPerPage, housesArray.count)
@@ -148,6 +154,7 @@ struct MiddleView: View {
     @Binding var searchText: String
     @Binding var searchTrie: Trie?
     @State var houses: [House]
+    @State var housesDic: [String: House]
     
     func pullItems(_ houseNames: [String]) -> [House] {
         // Use the house names to look up the corresponding House objects in the dictionary
@@ -163,13 +170,13 @@ struct MiddleView: View {
             if !houses.isEmpty{
                 if searchText == "" {
                     let pages = Int(ceil(Double(houses.count) / Double(itemsPerPage)))
-                    HousesGrid(housesArray: houses, pages: pages)
+                    HousesGrid(housesDic: housesDic, housesArray: houses, pages: pages)
                 }else{
                     let foundHouses = searchTrie?.wordsWithPrefix(searchText) ?? []
                     if !foundHouses.isEmpty {
                         let pages = Int(ceil(Double(foundHouses.count) / Double(itemsPerPage)))
                         let housesArray = pullItems(foundHouses)
-                        HousesGrid(housesArray: housesArray, pages: pages)
+                        HousesGrid(housesDic: housesDic, housesArray: houses, pages: pages)
                     }else{
                         Spacer()
                     }
@@ -185,6 +192,7 @@ struct BottomButtons: View {
     @State var goToRoute = false
     @State var goToAdd = false
     @State var houses: [House]
+    @State var housesDic: [String: House]
     
     var body: some View{
         // Buttons for actions
@@ -195,7 +203,7 @@ struct BottomButtons: View {
             }, label: {
                 Image(systemName: "house.fill").foregroundColor(olive)
             }).sheet(isPresented: $goToAdd) {
-                AddHomeScreen(housesDic: housesDic).navigationBarBackButtonHidden(true)
+                AddHomeScreen(housesDic: housesDic, houses: houses).navigationBarBackButtonHidden(true)
             }
             Button(action: {
                 // navigate to route page
@@ -217,9 +225,10 @@ struct HomeScreen: View {
     @State var selectedHouse: House? = nil
     @Query private var houses: [House]
     @Environment(\.modelContext) private var context
+    
     var housesDic: [String: House] {
-        Dictionary(uniqueKeysWithValues: houses.map { (key: $0.getName(), value: $0) })
-    }
+           Dictionary(uniqueKeysWithValues: houses.map { (key: $0.getName(), value: $0) })
+       }
        
    // Initialize the Trie
     @State private var searchTrie: Trie?
@@ -241,8 +250,8 @@ struct HomeScreen: View {
                     VStack(spacing: 10) {
                         Header()
                         SearchBar(searchText: $searchText)
-                        MiddleView(searchText: $searchText, searchTrie: $searchTrie, houses: houses)
-                        BottomButtons(houses: houses)
+                        MiddleView(searchText: $searchText, searchTrie: $searchTrie, houses: houses, housesDic: housesDic)
+                        BottomButtons(houses: houses, housesDic: housesDic)
 
                     }
                 }
