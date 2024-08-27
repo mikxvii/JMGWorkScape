@@ -49,16 +49,16 @@ struct HomeDetailsScreen: View {
                 ScrollView(.vertical) {
                     VStack {
                         // Display Image
-//                        if house.getImg() != nil {
-//                            if let image = UIImage(data: house.getImg()!) {
-//                                Image(uiImage: image)
-//                                    .resizable()
-//                                    .aspectRatio(contentMode: .fill)
-//                                    .frame(maxWidth: .infinity, maxHeight: 270)
-//                                    .cornerRadius(40)
-//                            }
-//                        } 
-//                        else {
+                        if house.getImg() != nil {
+                            if let image = UIImage(data: house.getImg()!) {
+                                Image(uiImage: image)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(maxWidth: .infinity, maxHeight: 270)
+                                    .cornerRadius(40)
+                            }
+                        } 
+                        else {
                             Image(systemName: "photo.artframe")
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
@@ -66,7 +66,7 @@ struct HomeDetailsScreen: View {
                                 .frame(maxWidth: .infinity, maxHeight: 270)
                                 .cornerRadius(40)
 
-                        //}
+                        }
 
                         // Display House Owner Name
                         Text(house.getName() + "'s Home")
