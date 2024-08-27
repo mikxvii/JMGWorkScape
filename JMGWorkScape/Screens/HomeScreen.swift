@@ -142,18 +142,6 @@ struct HousesGrid: View {
                                     }
                                 )
                             }
-                            .simultaneousGesture(
-                                LongPressGesture().onEnded { _ in
-                                    houseToDelete = item
-                                    showAlert = true
-                                    longPressDetected = true
-                                }
-                            )
-                            .simultaneousGesture(
-                                TapGesture().onEnded {
-                                    longPressDetected = false
-                                }
-                            )
                             .alert(isPresented: $showAlert) {
                                 Alert(
                                     title: Text("Confirm Deletion"),
