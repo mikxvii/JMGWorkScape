@@ -1,3 +1,4 @@
 /.vscode
-/JMGWorkScape.xcodeproj/xcuserdata
+/JMGWorkScape.xcodeproj
 project.pbxproj
+temp.swift
