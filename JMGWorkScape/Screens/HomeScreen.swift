@@ -164,7 +164,7 @@ struct MiddleView: View {
     @Binding var searchText: String
     @Binding var searchTrie: Trie?
     @State var houses: [House]
-    @State var housesDic: [String: House]
+    @Binding var housesDic: [String: House]
     
     func pullItems(_ houseNames: [String]) -> [House] {
         // Use the house names to look up the corresponding House objects in the dictionary
@@ -213,7 +213,7 @@ struct BottomButtons: View {
             }, label: {
                 Image(systemName: "house.fill").foregroundColor(olive)
             }).sheet(isPresented: $goToAdd) {
-                AddHomeScreen(housesDic: housesDic, houses:houses).navigationBarBackButtonHidden(true)
+                AddHomeScreen(housesDic: housesDic, houses:$houses).navigationBarBackButtonHidden(true)
             }
             Button(action: {
                 // navigate to route page
@@ -236,9 +236,11 @@ struct HomeScreen: View {
     @Query private var houses: [House]
     @Environment(\.modelContext) private var context
     
-    @State var housesDic: [String: House] {
-           Dictionary(uniqueKeysWithValues: houses.map { (key: $0.getName(), value: $0) })
-       }
+    @State var housesDic: [String: House] = [:]
+
+    init() {
+        _housesDic = State(initialValue: Dictionary(uniqueKeysWithValues: houses.map { (key: $0.getName(), value: $0) }))
+    }
 
    // Initialize the Trie
     @State private var searchTrie: Trie?
@@ -258,7 +260,7 @@ struct HomeScreen: View {
                     VStack(spacing: 10) {
                         Header()
                         SearchBar(searchText: $searchText)
-                        MiddleView(searchText: $searchText, searchTrie: $searchTrie, houses: houses, housesDic: housesDic)
+                        MiddleView(searchText: $searchText, searchTrie: $searchTrie, houses: houses, housesDic: $housesDic)
                         BottomButtons(houses: houses, housesDic: $housesDic)
 
                     }
