@@ -79,7 +79,7 @@ struct HousesGrid: View {
     ]
     
     // Perameteres
-    @Binding var housesDic: [String: House]
+    var housesDic: [String: House]
     var houses: [House]
     
     var pages: Int
@@ -141,7 +141,7 @@ struct HousesGrid: View {
                                     title: Text("Confirm Deletion"),
                                     message: Text("Are you sure you want to delete this house?"),
                                     primaryButton: .destructive(Text("Delete")) {
-                                    if let houseToDelete = houseToDelete, let index = houses.firstIndex(of: houseToDelete) {
+                                    if let houseToDelete = houseToDelete {
                                         context.delete(item)
                                     }
                                     },
@@ -169,8 +169,8 @@ struct HousesGrid: View {
 struct MiddleView: View {
     @Environment(\.modelContext) private var context
     @Binding var searchText: String
-    @Binding var searchTrie: Trie?
-    @Binding var housesDic: [String: House]
+    var searchTrie: Trie?
+    var housesDic: [String: House]
     @Query private var houses: [House]
     
     func pullItems(_ houseNames: [String]) -> [House] {
@@ -187,13 +187,13 @@ struct MiddleView: View {
             if !houses.isEmpty{
                 if searchText == "" {
                     let pages = Int(ceil(Double(houses.count) / Double(itemsPerPage)))
-                    HousesGrid(housesDic: $housesDic, houses:houses, pages: pages)
+                    HousesGrid(housesDic: housesDic, houses:houses, pages: pages)
                 }else{
                     let foundHouses = searchTrie?.wordsWithPrefix(searchText) ?? []
                     if !foundHouses.isEmpty {
                         let pages = Int(ceil(Double(foundHouses.count) / Double(itemsPerPage)))
                         let housesArray = pullItems(foundHouses)
-                        HousesGrid(housesDic: $housesDic, houses: housesArray, pages: pages)
+                        HousesGrid(housesDic: housesDic, houses: housesArray, pages: pages)
                     }else{
                         Spacer()
                     }
@@ -209,7 +209,7 @@ struct BottomButtons: View {
     @State var goToRoute = false
     @State var goToAdd = false
     @State var houses: [House]
-    @Binding var housesDic: [String: House]
+    var housesDic: [String: House]
     
     var body: some View{
         // Buttons for actions
@@ -243,14 +243,13 @@ struct HomeScreen: View {
     @Query private var houses: [House]
     @Environment(\.modelContext) private var context
     
-    @State var housesDic: [String: House] = [:]
-
-    init() {
-        _housesDic = State(initialValue: Dictionary(uniqueKeysWithValues: houses.map { (key: $0.getName(), value: $0) }))
+    var housesDic: [String: House] {
+           Dictionary(uniqueKeysWithValues: houses.map { (key: $0.getName(), value: $0) })
     }
-
-   // Initialize the Trie
-    @State private var searchTrie: Trie?
+    
+    var searchTrie: Trie{
+        Trie(words: houses.map { $0.getName() })
+    }
     
     var body: some View {
         // Setting up for Screen switching
@@ -267,15 +266,8 @@ struct HomeScreen: View {
                     VStack(spacing: 10) {
                         Header()
                         SearchBar(searchText: $searchText)
-                        MiddleView(searchText: $searchText, searchTrie: $searchTrie, housesDic: $housesDic)
-                        BottomButtons(houses: houses, housesDic: $housesDic)
-                    }
-                }
-                .onAppear(){
-                    // Initialize the Trie with house names, will update when going back to homescreen
-                    searchTrie = Trie()
-                    for house in houses {
-                        searchTrie?.insert(house.getName())
+                        MiddleView(searchText: $searchText, searchTrie: searchTrie, housesDic: housesDic)
+                        BottomButtons(houses: houses, housesDic: housesDic)
                     }
                 }
             }.ignoresSafeArea(.all)

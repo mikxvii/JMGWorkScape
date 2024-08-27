@@ -35,6 +35,12 @@ class Trie {
         }
     }
     
+    init(words: [String]) {
+        for word in words{
+            self.insert(word)
+        }
+    }
+    
     // MARK: - Public Methods
     
     /// Retrieves the total count of words stored in the trie.
@@ -154,3 +160,4 @@ class Trie {
         }
     }
 }
+

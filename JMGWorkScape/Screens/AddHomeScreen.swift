@@ -45,6 +45,7 @@ struct AddHomeScreen: View {
     
     // Dictionary is used to check if the new house already exists
     @State var housesDic: [String: House]
+    var searchTrie: Trie?
 
     let daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
     let olive = Color(red: 0.23, green: 0.28, blue: 0.20, opacity: 1.00)
@@ -96,7 +97,7 @@ struct AddHomeScreen: View {
                         return index1 < index2
                     }
                     // Creates house object and saves in context
-                    let house = House(currName, currAddress, currJobD, sortedDays.formatted())
+                    let house = House(currName, currAddress, currJobD, sortedDays.formatted(), selectedPhotoData)
                     context.insert(house)
                     presentationMode.wrappedValue.dismiss()
                 }
@@ -205,7 +206,6 @@ struct AddHomeScreen: View {
                         Spacer()
                     }
                     .font(.headline)
-
                 }
 
             }
