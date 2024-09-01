@@ -11,7 +11,7 @@ import SwiftUI
 struct RouteScreen: View {
     var currentWeekday: String = getCurrentWeekday()
     var houses: [House]
-    var housesDic: [String: House]
+    var housesDic: ChainDictionary?
     @State var editHouses: [House] = []
     @State var stopHouses: [House] = []
     @State var remainingHouses: [House] = []

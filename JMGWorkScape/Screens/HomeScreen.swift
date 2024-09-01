@@ -84,7 +84,7 @@ struct HousesGrid: View {
     }
     
     // Parameters
-    var housesDic: [String: House]
+    var housesDic: ChainDictionary?
     var houses: [House]
     
     var body: some View {
@@ -175,16 +175,16 @@ struct MiddleView: View {
     // Private Member Variables
     @Environment(\.modelContext) private var context
     @Query private var houses: [House]
+    
     private func pullItems(_ houseNames: [String]) -> [House] {
         // Use the house names to look up the corresponding House objects in the dictionary
-        let houseObjects = houseNames.compactMap { housesDic[$0] }
-        return houseObjects
+        return housesDic?.getHouses(houseNames) ?? []
     }
     
     // Parameters
     @Binding var searchText: String
     var searchTrie: Trie?
-    var housesDic: [String: House]
+    var housesDic: ChainDictionary?
     
     var body: some View{
         VStack(){
@@ -214,7 +214,7 @@ struct BottomButtons: View {
     
     // Parameters
     @State var houses: [House]
-    var housesDic: [String: House]
+    var housesDic: ChainDictionary?
     
     var body: some View{
         // Buttons for actions
@@ -248,8 +248,13 @@ struct HomeScreen: View {
     @State private var selectedHouse: House? = nil
     @Query private var houses: [House]
     @Environment(\.modelContext) private var context
-    private var housesDic: [String: House] {
-        Dictionary(uniqueKeysWithValues: houses.map { (key: $0.getAddressKeyFormat(), value: $0) })
+    
+//    private var housesDic: [String: House] {
+//        Dictionary(uniqueKeysWithValues: houses.map { (key: $0.getName(), value: $0) })
+//    }
+    
+    private var housesDic: ChainDictionary{
+        ChainDictionary(houses.map {$0})
     }
     
     private var searchTrie: Trie{

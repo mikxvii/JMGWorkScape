@@ -84,3 +84,53 @@ final class House: Identifiable {
         return self.imageData
     }
 }
+
+class ChainDictionary{
+    private var houses: [String: [House]] = [:]
+    private var addresses: Set<String> = []
+    
+    init(_ housesArray: [House]){
+        for house in housesArray{
+            if houses[house.getName()] != nil {
+                houses[house.getName()]?.append(house)
+            }else{
+                houses[house.getName()] = [house]
+            }
+            
+            addresses.insert(house.getAddress())
+        }
+    }
+    
+    // overloading the [] operator
+    subscript(houseName: String) -> [House]? {
+        var housesToReturn: [House] = []
+
+        if let housesForName = houses[houseName] {
+            // Now housesForName is unwrapped and you can iterate over it
+            for house in housesForName {
+                housesToReturn.append(house)
+            }
+        }
+        
+        return housesToReturn
+    }
+    
+    
+    func getHouses(_ houseNameList : [String]) -> [House]?{
+        var housesToReturn: [House] = []
+        
+        for name in houseNameList{
+            if let housesFromName = houses[name]{
+                for house in housesFromName{
+                    housesToReturn.append(house)
+                }
+            }
+        }
+        
+        return housesToReturn
+    }
+    
+    func alreadyExists(_ houseAddress: String) -> Bool{
+        return addresses.contains(houseAddress)
+    }
+}

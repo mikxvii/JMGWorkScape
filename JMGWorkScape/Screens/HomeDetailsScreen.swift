@@ -21,7 +21,7 @@ struct HomeDetailsScreen: View {
     //
     
     var house: House
-    var houseDic: [String: House]
+    var houseDic: ChainDictionary?
     
     //
     // State Variables

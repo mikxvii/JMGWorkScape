@@ -12,9 +12,9 @@ import PhotosUI
 struct EditHomeScreen: View {
     @Environment(\.modelContext) private var context
     @Environment(\.presentationMode) var presentationMode
-    var housesDic: [String: House]
+    var housesDic: ChainDictionary?
     var house: House
-    @State var editHousesDic: [String: House] = [:]
+    @State var editHousesDic: ChainDictionary?
     
     @State var currName:String = ""
     @State var currAddress:String = ""
@@ -60,7 +60,7 @@ struct EditHomeScreen: View {
                 print("Name: \(currName), Frequency: \(currFrequncy), Address: \(currAddress), Job Description: \(currJobD)")
                 if (currName.isEmpty || currFrequncy.isEmpty || currAddress.isEmpty || currJobD.isEmpty) {
                     showFieldAlert = true
-                } else if (editHousesDic[addressKeyFormat(currAddress)] != nil) {
+                } else if (editHousesDic?.alreadyExists(currAddress) ?? false) {
                     showMatchAlert = true
                 } else {
                     // Proceed with form submission
@@ -187,7 +187,7 @@ struct EditHomeScreen: View {
             currJobD = house.getJobD()
             selectedPhotoData = house.getImg()
             editHousesDic = housesDic
-            editHousesDic.removeValue(forKey: addressKeyFormat(house.getAddress()))
+            //editHousesDic.removeValue(forKey: addressKeyFormat(house.getAddress()))
         }
     }
 }
