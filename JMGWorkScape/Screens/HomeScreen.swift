@@ -9,7 +9,6 @@ import SwiftUI
 import Foundation
 import SwiftData
 
-
 struct Header: View {
     // Private Member Variables
     @State private var goToProfile = false
@@ -84,7 +83,7 @@ struct HousesGrid: View {
     }
     
     // Parameters
-    var housesDic: ChainDictionary?
+    var houseSearchManager: HouseSearchManager?
     var houses: [House]
     
     var body: some View {
@@ -165,7 +164,7 @@ struct HousesGrid: View {
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
         .navigationDestination(isPresented: $goToDetails) {
             if let selectedHouse = selectedHouse {
-                HomeDetailsScreen(house: selectedHouse, houseDic: housesDic)
+                HomeDetailsScreen(house: selectedHouse, houseSearchManager: houseSearchManager)
             }
         }
     }
@@ -176,26 +175,22 @@ struct MiddleView: View {
     @Environment(\.modelContext) private var context
     @Query private var houses: [House]
     
-    private func pullItems(_ houseNames: [String]) -> [House] {
-        // Use the house names to look up the corresponding House objects in the dictionary
-        return housesDic?.getHouses(houseNames) ?? []
-    }
     
     // Parameters
     @Binding var searchText: String
-    var searchTrie: Trie?
-    var housesDic: ChainDictionary?
+    var houseSearchManager: HouseSearchManager?
     
     var body: some View{
         VStack(){
             if !houses.isEmpty{
                 if searchText == "" {
-                    HousesGrid(housesDic: housesDic, houses:houses)
+                    HousesGrid(houseSearchManager: houseSearchManager, houses:houses)
                 }else{
-                    let foundHouses = searchTrie?.wordsWithPrefix(searchText) ?? []
-                    if !foundHouses.isEmpty {
-                        let housesArray = pullItems(foundHouses)
-                        HousesGrid(housesDic: housesDic, houses: housesArray)
+                    
+                    let foundHouses = houseSearchManager?.houseNamesWithPrefix(searchText)
+                    
+                    if !(foundHouses?.isEmpty ?? true) {
+                        HousesGrid(houseSearchManager: houseSearchManager, houses: foundHouses ?? [])
                     }else{
                         Spacer()
                     }
@@ -214,7 +209,7 @@ struct BottomButtons: View {
     
     // Parameters
     @State var houses: [House]
-    var housesDic: ChainDictionary?
+    var houseSearchManager: HouseSearchManager?
     
     var body: some View{
         // Buttons for actions
@@ -225,7 +220,7 @@ struct BottomButtons: View {
             }, label: {
                 Image(systemName: "house.fill").foregroundColor(olive)
             }).sheet(isPresented: $goToAdd) {
-                AddHomeScreen(housesDic: housesDic).navigationBarBackButtonHidden(true)
+                AddHomeScreen(houseSearchManager: houseSearchManager).navigationBarBackButtonHidden(true)
             }
             Button(action: {
                 // navigate to route page
@@ -234,7 +229,7 @@ struct BottomButtons: View {
                 Image(systemName: "map")
                     .foregroundColor(olive)
             }).navigationDestination(isPresented: $goToRoute) {
-                RouteScreen(houses: houses, housesDic: housesDic)
+                RouteScreen(houses: houses, houseSearchManager: houseSearchManager)
             }
         }
         .padding(.bottom, 30.0)
@@ -253,12 +248,9 @@ struct HomeScreen: View {
 //        Dictionary(uniqueKeysWithValues: houses.map { (key: $0.getName(), value: $0) })
 //    }
     
-    private var housesDic: ChainDictionary{
-        ChainDictionary(houses.map {$0})
-    }
     
-    private var searchTrie: Trie{
-        Trie(words: houses.map { $0.getName() })
+    private var houseSearchManager: HouseSearchManager{
+        HouseSearchManager(houses.map {$0})
     }
     
     var body: some View {
@@ -276,8 +268,8 @@ struct HomeScreen: View {
                     VStack(spacing: 10) {
                         Header()
                         SearchBar(searchText: $searchText)
-                        MiddleView(searchText: $searchText, searchTrie: searchTrie, housesDic: housesDic)
-                        BottomButtons(houses: houses, housesDic: housesDic)
+                        MiddleView(searchText: $searchText, houseSearchManager: houseSearchManager)
+                        BottomButtons(houses: houses, houseSearchManager: houseSearchManager)
                     }
                 }
             }.ignoresSafeArea(.all)

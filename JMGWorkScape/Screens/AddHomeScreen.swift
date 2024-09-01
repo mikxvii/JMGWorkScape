@@ -21,9 +21,7 @@ struct AddHomeScreen: View {
     // Necessary for switching back to main view
     @Environment(\.presentationMode) var presentationMode
     
-    //
-    // Parameters
-    //
+
     
     //
     // State Variables
@@ -44,7 +42,12 @@ struct AddHomeScreen: View {
     @State private var goBackToHome: Bool = false
     
     // Dictionary is used to check if the new house already exists
-    @State var housesDic: ChainDictionary?
+    
+    //
+    // Parameters
+    //
+    
+    @State var houseSearchManager: HouseSearchManager?
     var searchTrie: Trie?
 
     let daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
@@ -82,7 +85,7 @@ struct AddHomeScreen: View {
                 print("Name: \(currName), Frequency: \(currFrequncy), Address: \(currAddress), Job Description: \(currJobD)")
                 if (currName.isEmpty || currFrequncy.isEmpty || currAddress.isEmpty || currJobD.isEmpty) {
                     showFieldAlert = true
-                } else if (housesDic?.alreadyExists(currAddress) ?? false) {
+                } else if (houseSearchManager?.alreadyExists(currAddress) ?? false) {
                     showMatchAlert = true
                 } else {
                     // Proceed with form submission
