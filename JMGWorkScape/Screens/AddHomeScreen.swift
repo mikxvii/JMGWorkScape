@@ -48,7 +48,6 @@ struct AddHomeScreen: View {
     //
     
     @State var houseSearchManager: HouseSearchManager?
-    var searchTrie: Trie?
 
     let daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
     let olive = Color(red: 0.23, green: 0.28, blue: 0.20, opacity: 1.00)

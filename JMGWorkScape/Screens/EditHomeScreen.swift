@@ -20,13 +20,12 @@ struct EditHomeScreen: View {
     @Environment(\.presentationMode) var presentationMode
     
     // The dictionary of all houses passed from the parent view, allowing updates and deletions.
-    var houseSearchManager: HouseSearchManager?
+    @State var houseSearchManager: HouseSearchManager?
     
     // The house object being edited.
     var house: House
     
     // A state variable for a temporary dictionary used during the editing process.
-    @State var editHouse: HouseSearchManager?
     
     // State variables to hold the current values of the house's properties for editing.
     @State var currName: String = ""
@@ -80,7 +79,7 @@ struct EditHomeScreen: View {
                 print("Name: \(currName), Frequency: \(currFrequncy), Address: \(currAddress), Job Description: \(currJobD)")
                 if (currName.isEmpty || currFrequncy.isEmpty || currAddress.isEmpty || currJobD.isEmpty) {
                     showFieldAlert = true
-                } else if (editHouse?.alreadyExists(currAddress) ?? false) {
+                } else if (houseSearchManager?.alreadyExists(currAddress) ?? false) {
                     showMatchAlert = true
                 } else {
                     // Save the changes and update the house's properties.
@@ -216,8 +215,7 @@ struct EditHomeScreen: View {
             currFrequncy = house.getFrqSet()
             currJobD = house.getJobD()
             selectedPhotoData = house.getImg()
-            editHouse = houseSearchManager
-            editHouse?.remove(house)
+            houseSearchManager?.remove(house)
         }
     }
 }
