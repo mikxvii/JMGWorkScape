@@ -36,6 +36,49 @@ final class HouseSearchManager {
         count += 1
     }
     
+    /// Deletes a word from the trie.
+    /// - Parameters:
+    ///   - word: The word to delete.
+    ///   - currentNode: The current node in the recursive deletion process.
+    ///   - index: The current index in the word being deleted.
+    /// - Returns: `true` if the current node can be deleted, otherwise `false`.
+    private func removeFromTrie(_ word: String, currentNode: TrieNode, index: Int) -> Bool {
+        if index == word.count {
+            // End of word reached
+            if !currentNode.isEndOfWord {
+                // Word does not exist
+                return false
+            }
+            currentNode.isEndOfWord = false
+            // If the current node has no children, it can be deleted
+            let canDeleteCurrentNode = currentNode.children.isEmpty
+            if canDeleteCurrentNode {
+                count -= 1 // Decrement the count when a word is removed
+            }
+            return canDeleteCurrentNode
+        }
+        
+        let charIndex = word.index(word.startIndex, offsetBy: index)
+        let char = word[charIndex]
+        
+        guard let nextNode = currentNode.children[char] else {
+            // Character not found, word does not exist
+            return false
+        }
+        
+        let shouldDeleteChild = removeFromTrie(word, currentNode: nextNode, index: index + 1)
+        
+        if shouldDeleteChild {
+            // Remove the reference to the child node if it can be deleted
+            currentNode.children[char] = nil
+            // Return true if the current node should be deleted
+            return currentNode.children.isEmpty && !currentNode.isEndOfWord
+        }
+        
+        return false
+    }
+
+    
     /// Collects all words in the Trie that have the given prefix.
     /// - Parameters:
     ///   - node: The current TrieNode to start collecting words from.
@@ -73,22 +116,6 @@ final class HouseSearchManager {
         }
     }
     
-    /// Retrieves all houses whose names start with the specified prefix.
-    /// - Parameter prefix: The prefix to search for in house names.
-    /// - Returns: An array of `House` objects whose names start with the given prefix.
-    func houseNamesWithPrefix(_ prefix: String) -> [House] {
-        var currentNode = root
-        for char in prefix {
-            guard let nextNode = currentNode.children[char] else {
-                return []
-            }
-            currentNode = nextNode
-        }
-        var results: [String] = []
-        collectWords(node: currentNode, prefix: prefix, results: &results)
-        return getHouses(results) ?? []
-    }
-    
     /// Initializes the manager with an array of houses.
     /// Each house is added to the dictionary and Trie, and its address is added to the addresses set.
     /// - Parameter housesArray: An array of `House` objects to initialize the manager with.
@@ -112,6 +139,7 @@ final class HouseSearchManager {
     }
     
     /// Retrieves an array of `House` objects for the specified house name.
+    /// This overloads the [] operator
     /// - Parameter houseName: The name of the house to retrieve.
     /// - Returns: An array of `House` objects that match the provided name, or an empty array if no matches are found.
     subscript(houseName: String) -> [House]? {
@@ -120,6 +148,22 @@ final class HouseSearchManager {
         } else {
             return []  // Return an empty array if `houses[houseName]` is `nil`
         }
+    }
+    
+    /// Retrieves all houses whose names start with the specified prefix.
+    /// - Parameter prefix: The prefix to search for in house names.
+    /// - Returns: An array of `House` objects whose names start with the given prefix.
+    func houseNamesWithPrefix(_ prefix: String) -> [House] {
+        var currentNode = root
+        for char in prefix {
+            guard let nextNode = currentNode.children[char] else {
+                return []
+            }
+            currentNode = nextNode
+        }
+        var results: [String] = []
+        collectWords(node: currentNode, prefix: prefix, results: &results)
+        return getHouses(results) ?? []
     }
     
     /// Retrieves an array of `House` objects based on a list of house names.
@@ -149,6 +193,8 @@ final class HouseSearchManager {
     func remove(_ house: House) {
         houses[house.getName()]?.removeValue(forKey: house.getAddress())
         addresses.remove(house.getAddress())
+        self.removeFromTrie(house.getName(), currentNode: self.root, index: 0)
+        count -= 1
     }
     
     /// Updates the address of a `House` object in the dictionary.
