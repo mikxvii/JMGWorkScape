@@ -60,7 +60,7 @@ struct EditHomeScreen: View {
                 print("Name: \(currName), Frequency: \(currFrequncy), Address: \(currAddress), Job Description: \(currJobD)")
                 if (currName.isEmpty || currFrequncy.isEmpty || currAddress.isEmpty || currJobD.isEmpty) {
                     showFieldAlert = true
-                } else if (editHousesDic[currName] != nil) {
+                } else if (editHousesDic[addressKeyFormat(currAddress)] != nil) {
                     showMatchAlert = true
                 } else {
                     // Proceed with form submission
@@ -73,7 +73,7 @@ struct EditHomeScreen: View {
                         }
                         return index1 < index2
                     }
-                    house.update(currName, currAddress, currJobD, sortedDays.formatted())
+                    house.update(currName, currAddress, currJobD, sortedDays.formatted(), selectedPhotoData)
                     presentationMode.wrappedValue.dismiss()
                 }
             }, label: {
@@ -87,7 +87,7 @@ struct EditHomeScreen: View {
                     .padding(5)
             })
             .alert(isPresented: $showMatchAlert) {
-                Alert(title: Text("Validation Error"), message: Text("A House with this name already exists, please rename"), dismissButton: .default(Text("Ok")))
+                Alert(title: Text("Validation Error"), message: Text("A House with this address already exists"), dismissButton: .default(Text("Ok")))
             }
             
             Spacer()
@@ -185,9 +185,9 @@ struct EditHomeScreen: View {
             currAddress = house.getAddress()
             currFrequncy = house.getFrqSet()
             currJobD = house.getJobD()
-//            selectedPhotoData = house.getImg()
+            selectedPhotoData = house.getImg()
             editHousesDic = housesDic
-            editHousesDic.removeValue(forKey: house.getName())
+            editHousesDic.removeValue(forKey: addressKeyFormat(house.getAddress()))
         }
     }
 }

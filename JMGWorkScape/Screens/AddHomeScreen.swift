@@ -82,7 +82,7 @@ struct AddHomeScreen: View {
                 print("Name: \(currName), Frequency: \(currFrequncy), Address: \(currAddress), Job Description: \(currJobD)")
                 if (currName.isEmpty || currFrequncy.isEmpty || currAddress.isEmpty || currJobD.isEmpty) {
                     showFieldAlert = true
-                } else if (housesDic[currName] != nil) {
+                } else if (housesDic[addressKeyFormat(currAddress)] != nil) {
                     showMatchAlert = true
                 } else {
                     // Proceed with form submission
@@ -115,7 +115,7 @@ struct AddHomeScreen: View {
             Spacer()
             // Only appears when there is an existing house with the same name
             .alert(isPresented: $showMatchAlert) {
-                Alert(title: Text("Validation Error"), message: Text("A House with this name already exists, please rename"), dismissButton: .default(Text("Ok")))
+                Alert(title: Text("Validation Error"), message: Text("A House with this address already exists"), dismissButton: .default(Text("Ok")))
             }
         }.padding(.top, 20)
         

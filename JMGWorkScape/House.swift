@@ -56,6 +56,13 @@ final class House: Identifiable {
         return self.address
     }
     
+    func getAddressKeyFormat() -> String {
+        let modifiedAddress = self.address
+            .lowercased() // Convert to lowercase
+            .filter { $0.isLetter || $0.isNumber } // Keep only letters and numbers
+        return modifiedAddress
+    }
+    
     func getJobD() -> String {
         return self.jobD
     }

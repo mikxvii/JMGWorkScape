@@ -37,7 +37,6 @@ struct RouteScreen: View {
                         Image(systemName: "map.circle")
                             .font(.title2)
                             .foregroundColor(.brown)
-                        Spacer()
                         List {
                             ForEach(editHouses, id: \.self) { house in
                                 HStack {
