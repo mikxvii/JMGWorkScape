@@ -79,7 +79,7 @@ struct EditHomeScreen: View {
                 print("Name: \(currName), Frequency: \(currFrequncy), Address: \(currAddress), Job Description: \(currJobD)")
                 if (currName.isEmpty || currFrequncy.isEmpty || currAddress.isEmpty || currJobD.isEmpty) {
                     showFieldAlert = true
-                } else if (houseSearchManager?.alreadyExists(currAddress) ?? false) {
+                } else if (houseSearchManager?.alreadyExists(addressKeyFormat(currAddress)) ?? false) {
                     showMatchAlert = true
                 } else {
                     // Save the changes and update the house's properties.
