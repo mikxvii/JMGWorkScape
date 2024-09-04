@@ -1,4 +1,3 @@
 .vscode
-/JMGWorkScape.xcodeproj/xcuserdata
-project.pbxproj
-/JMGWorkScape/project.xcworkspace
+JMGWorkScape.xcodeproj
+.vscode/*
