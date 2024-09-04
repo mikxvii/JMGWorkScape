@@ -22,52 +22,39 @@ struct ProfileScreen: View {
 
     var body: some View {
         Form {
-            VStack {
-                HStack {
-                    Text("Name of Company:\n")
-                    
-                    TextField("Enter Company", text: $companyText)
-                        .focused($isFocused)
-                        .toolbar {
-                            ToolbarItemGroup(placement: .keyboard) {
-                                Spacer() // Pushes the button to the right side
-                                Button("Done") {
-                                    isFocused = false
-                                }
-                            }
-                        }
-                        
-                }
-                .padding(.bottom, 20)
-                .padding(.top, 30)
-                .padding(.horizontal, 20)
-                Group {
-                    HStack {
-                        Text("Name of Contractor:\n")
-                        TextField("Enter Name", text: $nameText)
-                            .focused($isFocused)
-
-                    }
-                    HStack {
-                        Text("Billing Address:\n")
-                        TextField("Enter Address", text: $addressText)
-                            .focused($isFocused)
-
-                    }
-                    HStack {
-                        Text("License #:\n")
-                        TextField("Enter Number", text: $licenseText)
-                            .focused($isFocused)
-
-                    }
-                }
-                .padding(.bottom, 20)
-                .padding(.horizontal, 20)
-
-                Spacer()
+            Section(header: Text("Name of Company")) {
+                TextField("Enter Company", text: $companyText)
+                    .focused($isFocused)
+//                    .toolbar {
+//                        ToolbarItemGroup(placement: .keyboard) {
+//                            Spacer() // Pushes the button to the right side
+//                            Button("Done") {
+//                                isFocused = false
+//                            }
+//                        }
+//                    }
+                // For some reason, it is bugging out when the keyboard pops up
             }
-            .navigationTitle("Contractor Profile")
+            
+            Section(header: Text("Name of contractor")) {
+                TextField("Enter Name", text: $nameText)
+                    .focused($isFocused)
+            }
+            
+         
+            Section(header: Text("Billing Address")) {
+                TextField("Enter Address", text: $addressText)
+                    .focused($isFocused)
+            }
+            
+            Section(header: Text("License #")) {
+                SecureField("Enter Number", text: $licenseText)
+                    .focused($isFocused)
+            }
+            
         }
+        .navigationBarTitle("Contractor Profile")
+
         .onTapGesture {
             isFocused = false
         }

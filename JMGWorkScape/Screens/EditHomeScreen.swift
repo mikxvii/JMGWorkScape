@@ -9,34 +9,51 @@ import Foundation
 import SwiftUI
 import PhotosUI
 
+/// A view that allows users to edit details of an existing house in the JMGWorkScape app.
+/// This view includes text fields for editing the name, address, job description, and service frequency,
+/// as well as the ability to upload or remove a photo associated with the house.
 struct EditHomeScreen: View {
+    // Environment context used to interact with the model data.
     @Environment(\.modelContext) private var context
+    
+    // Environment variable for managing the view's presentation mode (e.g., dismissing the view).
     @Environment(\.presentationMode) var presentationMode
-    var housesDic: [String: House]
+    
+    // The dictionary of all houses passed from the parent view, allowing updates and deletions.
+    @State var houseSearchManager: HouseSearchManager?
+    
+    // The house object being edited.
     var house: House
-    @State var editHousesDic: [String: House] = [:]
     
-    @State var currName:String = ""
-    @State var currAddress:String = ""
-    @State var currFrequncy = Set<String>() //default value to not get error for having "" as default
-    @State var currJobD:String = ""
+    // A state variable for a temporary dictionary used during the editing process.
     
+    // State variables to hold the current values of the house's properties for editing.
+    @State var currName: String = ""
+    @State var currAddress: String = ""
+    @State var currFrequncy = Set<String>() // The frequency of services, initialized as an empty set to avoid errors.
+    @State var currJobD: String = ""
+    
+    // State variables for managing the display of alerts.
     @State private var showFieldAlert: Bool = false
     @State private var showMatchAlert: Bool = false
-
+    
+    // State variable to trigger navigation back to the details view after saving or canceling edits.
     @State var goBackToDetails: Bool = false
+    
+    // State variables to handle photo selection and display.
     @State var selectedPhoto: PhotosPickerItem?
     @State var selectedPhotoData: Data?
 
-    
+    // Constants representing the days of the week and a custom color used in the UI.
     let daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
     let olive = Color(red: 0.23, green: 0.28, blue: 0.20, opacity: 1.00)
     
     var body: some View {
-        // bool variable changed by Cancel and Done buttons
+        // A horizontal stack for the top bar, containing Cancel and Done buttons and the title "Edit Home".
         HStack {
             Spacer()
             
+            // Cancel button dismisses the view without saving changes.
             Button(action: {
                 goBackToDetails = true
                 presentationMode.wrappedValue.dismiss()
@@ -51,19 +68,21 @@ struct EditHomeScreen: View {
                     .padding(5)
             })
             
+            // The title of the screen, styled with a custom color and bold font.
             Text("Edit Home")
                 .font(.headline)
                 .bold()
                 .foregroundColor(olive)
             
+            // Done button saves the changes to the house if all fields are valid, otherwise shows appropriate alerts.
             Button(action: {
                 print("Name: \(currName), Frequency: \(currFrequncy), Address: \(currAddress), Job Description: \(currJobD)")
                 if (currName.isEmpty || currFrequncy.isEmpty || currAddress.isEmpty || currJobD.isEmpty) {
                     showFieldAlert = true
-                } else if (editHousesDic[addressKeyFormat(currAddress)] != nil) {
+                } else if (houseSearchManager?.alreadyExists(addressKeyFormat(currAddress)) ?? false) {
                     showMatchAlert = true
                 } else {
-                    // Proceed with form submission
+                    // Save the changes and update the house's properties.
                     goBackToDetails = true
                     let dayOrderMap = Dictionary(uniqueKeysWithValues: daysOfWeek.enumerated().map { ($1, $0) })
                     let filteredUnsortedDays = currFrequncy.filter { dayOrderMap.keys.contains($0) }
@@ -86,14 +105,18 @@ struct EditHomeScreen: View {
                     .cornerRadius(70)
                     .padding(5)
             })
+            // Alert shown when the user tries to save a house with a duplicate address.
             .alert(isPresented: $showMatchAlert) {
                 Alert(title: Text("Validation Error"), message: Text("A House with this address already exists"), dismissButton: .default(Text("Ok")))
             }
             
             Spacer()
         }
+        
+        // ScrollView containing the main form fields for editing the house details.
         ScrollView(.vertical) {
             VStack(spacing: 30) {
+                // PhotosPicker allows the user to select or remove a photo for the house.
                 PhotosPicker(selection: $selectedPhoto, matching: .images, photoLibrary: .shared()) {
                     if let selectedPhotoData,
                        let uiImage = UIImage(data: selectedPhotoData) {
@@ -115,6 +138,8 @@ struct EditHomeScreen: View {
                     }
                 }
                 .padding()
+                
+                // Button to delete the selected photo if one is chosen.
                 if selectedPhotoData != nil {
                     Button (role: .destructive) {
                         withAnimation {
@@ -127,27 +152,28 @@ struct EditHomeScreen: View {
                     .font(.title)
                 }
                 
-                
-                // Text field where Name of client is inputted
+                // Text field for entering or editing the customer's name.
                 TextField("Customer Name", text: $currName)
                     .frame(maxWidth: 350, alignment: .topLeading)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                 
-                
-                // Text field where Address of client is inputted
+                // Text field for entering or editing the address of the house.
                 TextField("Address", text: $currAddress)
                     .frame(maxWidth: 350, alignment: .topLeading)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                 
-                // Text field where job description is inputted
+                // Text field for entering or editing the job description for the house.
                 TextField("Job Description", text: $currJobD)
                     .frame(maxWidth: 350, alignment: .topLeading)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
+                
+                // Label and buttons for selecting the service frequency (days of the week).
                 Text("Frequency:")
                     .font(.title2)
                     .bold()
+                
+                // Horizontal stack for day buttons representing Monday, Tuesday, and Wednesday.
                 HStack {
-    
                     Spacer()
                     let monday: Color = house.getFrqSet().contains("Monday") ? .cyan : .gray
                     DayButton(currFrequency: $currFrequncy, buttonColor: monday, day: "Monday")
@@ -159,6 +185,8 @@ struct EditHomeScreen: View {
                     DayButton(currFrequency: $currFrequncy, buttonColor: wednesday, day: "Wednesday")
                     Spacer()
                 }
+                
+                // Horizontal stack for day buttons representing Thursday and Friday.
                 HStack {
                     Spacer()
                     let thursday: Color = house.getFrqSet().contains("Thursday") ? .cyan : .gray
@@ -168,27 +196,26 @@ struct EditHomeScreen: View {
                     DayButton(currFrequency: $currFrequncy, buttonColor: friday, day: "Friday")
                     Spacer()
                 }
-                
-                
             }
+            // Task that loads the selected photo data when the view appears.
             .task(id: selectedPhoto) {
                 if let data = try? await selectedPhoto?.loadTransferable(type: Data.self) {
                     selectedPhotoData = data
                 }
             }
+            // Alert shown when the user tries to save the form with empty required fields.
             .alert(isPresented: $showFieldAlert) {
                 Alert(title: Text("Validation Error"), message: Text("All text fields must be filled"), dismissButton: .default(Text("OK")))
             }
         }
+        // Populates the state variables with the house's current details when the view appears.
         .onAppear {
             currName = house.getName()
             currAddress = house.getAddress()
             currFrequncy = house.getFrqSet()
             currJobD = house.getJobD()
             selectedPhotoData = house.getImg()
-            editHousesDic = housesDic
-            editHousesDic.removeValue(forKey: addressKeyFormat(house.getAddress()))
+            houseSearchManager?.remove(house)
         }
     }
 }
-
