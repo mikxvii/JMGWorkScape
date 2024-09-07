@@ -42,6 +42,8 @@ This requires to have Xcode download. You can run our app in iOS simulator that 
 - Contributed 12 hours per week over 2 months to deliver a functional, well-documented app.
  -->
 
+
+## Developer Notes
 links for apple developer membership information:
 1. https://developer.apple.com/support/enrollment/
 2. https://atlc.apple.com/downloads/AppleDeveloperProgram_FeeWaiverforEducation_OnboardingKit.pdf?cid=pm-enus-nwl-3pp-edu-dis-adp
@@ -52,4 +54,4 @@ link for figma design prototype:
 https://www.figma.com/proto/o7xaPuZht7zynZkDMCQAkV/App-Design-Ver.-1.0?t=bf4mZlCK7fDHkCb5-1
 
 video for data:
-https://www.youtube.com/watch?v=krRkm8w22A8
+https://www.youtube.com/watch?v=krRkm8w22A8 
