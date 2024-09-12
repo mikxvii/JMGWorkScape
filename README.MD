@@ -33,7 +33,7 @@
 This app was created for the company **JMG Landscape**. The purpose of the app is to manage and store customers' house data. From the customers' houses data, our app creates a route for each day depending from a customer's house data if work needed to be done that day of the week. Once a job is completed for a house, our app offers a feature that can create invoives for a house and deliver it to our customers as a pdf format.
 
 ## App View
-<img src="images/homesgrid.PNG" alt="homes grid" width="135" /><img src="images/searchBarView.PNG" alt="search View" width="135" /><img src="images/routeView.PNG" alt="route View" width="135" /><img src="images/addHomeView.PNG" alt="add home view" width="135" /><img src="images/houseDetailsView.PNG" alt="House Details" width="135" /><img src="images/editHomeView.PNG" alt="edit home view" width="135" /><img src="images/invoiceView.PNG" alt="invoice view" width="135" /><img src="images/profileView.PNG" alt="profile view" width="135" />
+<img src="images/homesgrid.PNG" alt="homes grid" width="200" /><img src="images/searchBarView.PNG" alt="search View" width="200" /><img src="images/routeView.PNG" alt="route View" width="200" /><img src="images/addHomeView.PNG" alt="add home view" width="200" /><img src="images/houseDetailsView.PNG" alt="House Details" width="200" /><img src="images/editHomeView.PNG" alt="edit home view" width="200" /><img src="images/invoiceView.PNG" alt="invoice view" width="200" /><img src="images/profileView.PNG" alt="profile view" width="200" />
 
 ## Built With
 
