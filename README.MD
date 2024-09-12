@@ -33,7 +33,7 @@
 This app was created for the company **JMG Landscape**. The purpose of the app is to manage and store customers' house data. From the customers' houses data, our app creates a route for each day depending from a customer's house data if work needed to be done that day of the week. Once a job is completed for a house, our app offers a feature that can create invoives for a house and deliver it to our customers as a pdf format.
 
 ## App View
-  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.7em;" class="image-container">
+  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.7em;" class="image-container" grid-row-template: 50% 50%;>
     <img src="images/homesgrid.PNG" alt="homes grid">
     <!-- <img src="images/homesGridLast.PNG" alt="last page"> -->
     <img src="images/searchBarView.PNG" alt="search View">
