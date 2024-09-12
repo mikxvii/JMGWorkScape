@@ -34,7 +34,7 @@ This app was created for the company **JMG Landscape**. The purpose of the app i
 
 ## App View
 <div style="display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: 50% 50%; gap: 0.7em;" class="image-container">
-  <img src="images/homesgrid.PNG" alt="homes grid">
+  <img style="max-width: 10%; height: auto;" src="images/homesgrid.PNG" alt="homes grid">
   <img src="images/searchBarView.PNG" alt="search View">
   <img src="images/routeView.PNG" alt="route View">
   <img src="images/addHomeView.PNG" alt="add home view">
