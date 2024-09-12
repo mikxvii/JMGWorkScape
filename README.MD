@@ -30,11 +30,11 @@ This app was created for the company **JMG Landscape**. The purpose of the app i
 
 ## Built With
 
-<img src="swiftImage.png" alt="description" width="80" height="50">
+<img src="images/swiftImage.png" alt="swift icon" width="80" height="50">
 
-<img src="image.png" alt="description" width="80" height="54">
+<img src="images/swiftUI.png" alt="swiftUI icon" width="80" height="54">
 
-<img src="image-1.png" alt="description" width="80" height="37">
+<img src="images/xcodeImg.png" alt="xcode icon" width="80" height="37">
 
 ## How to run our app
 
@@ -42,9 +42,35 @@ This requires to have Xcode download. You can run our app in iOS simulator that 
 
 ## App View
 
-![App Image 1]()
-![App Image 1]()
-![App Image 1]()
+  <style>
+    /* Container that holds the images */
+    .image-container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr); /* Two equal columns */
+      gap: 0.7em; /* Spacing between images */
+    }
+
+    /* Styling for images inside the container */
+    .image-container img {
+      width: 100%; /* Each image will fill the grid cell */
+      height: auto; /* Maintain aspect ratio */
+    }
+  </style>
+
+  <div class="image-container">
+    <img src="images/homesgrid.PNG" alt="homes grid">
+    <!-- <img src="images/homesGridLast.PNG" alt="last page"> -->
+    <img src="images/searchBarView.PNG" alt="search View">
+    <img src="images/routeView.PNG" alt="route View">
+    <img src="images/addHomeView.PNG" alt="add home view">
+    <img src="images/houseDetailsView.PNG" alt="House Details">
+    <img src="images/editHomeView.PNG" alt="edit home view">
+    <img src="images/invoiceView.PNG" alt="invoice view">
+    <img src="images/profileView.PNG" alt="profile view">
+
+
+
+  </div>
 
 ## Features
 
