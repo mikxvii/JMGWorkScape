@@ -1,10 +1,3 @@
-//
-//  EditHomeScreen.swift
-//  JMGWorkScape
-//
-//  Created by Michael Guerrero on 7/27/24.
-//
-
 import Foundation
 import SwiftUI
 import PhotosUI

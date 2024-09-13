@@ -44,9 +44,6 @@ This app was created for the company **JMG Landscape**. The purpose of the app i
 <img src="images/xcodeImg.png" alt="xcode icon" width="80" height="37"> 
 
 
-
-
-
 ## How to run our app
 
 This requires to have Xcode download. You can run our app in iOS simulator that is running iOS 16+.
@@ -69,8 +66,8 @@ In our application, users can access detailed information about a house by selec
    - Additional options such as creating an invoice or opening Apple Maps for directions to the house.
 
 4. **Features:**
-   - **Create Invoice:** Users can generate an invoice directly from the details screen.
-   - **Open in Apple Maps:** Users can tap a button to open Apple Maps and get directions to the house’s address.
+   - **Create Invoice:** Users can generate an invoice PDF directly from the details screen.
+   - **Open in Apple Maps:** Users can tap on a button to open Apple Maps and get directions to the house’s address.
 
 
 ### Scalability of Houses Data
@@ -83,7 +80,7 @@ Our application is built to efficiently handle a large volume of house data, inc
   - The primary dictionary maps house names to a secondary dictionary.
   - The secondary dictionary maps addresses to `House` objects.
 
-  This design allows for efficient storage and retrieval of house information even when multiple houses share the same name but have unique addresses.
+  This design allows for efficient storage and retrieval of house information even when multiple houses share the same customer name but have unique addresses.
 
 - **Efficient Prefix-Based Search:** The app employs a Trie data structure for managing house names, which supports efficient prefix-based searches. This ensures that users can quickly find houses by partial names, even as the number of houses grows.
 
@@ -121,7 +118,7 @@ This implementation ensures that the search for house names is both quick and re
 
 ### Add a House
 
-Adding a house to the system involves updating multiple components to ensure that the new house is stored efficiently and can be retrieved quickly. The `HouseSearchManager` class handles this process through the following steps:
+Adding a house to the system involves updating multiple components to ensure that the new house is stored efficiently and can be retrieved quickly. Before a user passes a house's information into the HouseSearchManager, the house's address is checked if it exists in the  `addresses` set, if not, it will procceed with adding the house into the database. The `HouseSearchManager` class handles this process through the following steps:
 
 #### Process Overview
 
@@ -136,14 +133,15 @@ Adding a house to the system involves updating multiple components to ensure tha
    - **Address Uniqueness:** By maintaining a set of unique addresses, the `HouseSearchManager` prevents duplicate entries and ensures that each address is associated with only one house.
 
 4. **Performance Considerations:**
-   - **Efficient Handling:** The process is designed to handle a growing number of houses efficiently. The underlying data structures (dictionary and Trie) ensure that adding a house does not compromise performance, even as the dataset expands.
+    - **Efficient Handling:** The process is designed to handle a growing number of houses efficiently. The underlying data structures (dictionary and Trie) ensure that adding a house does not compromise performance, even as the dataset expands.
 
 #### Code Implementation
 
 In the `HouseSearchManager` class, the `init(_ housesArray: [House])` method initializes the manager with an array of `House` objects. During this initialization:
 
 - Each house is added to the primary dictionary and Trie.
-- The address of each house is inserted into the set of unique addresses.
+- The address of each house is inserted into the set of unique `addresses`.
+- Increments the count of houses managed by the `HouseSearchManager`.
 
 When adding a single house, similar steps are followed to update the primary dictionary, Trie, and address set, ensuring the new house is properly integrated into the system.
 
