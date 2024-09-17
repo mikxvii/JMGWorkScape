@@ -1,10 +1,3 @@
-//
-//  House.swift
-//  JMGWorkScape
-//
-//  Created by Christopher Rebollar on 7/18/24.
-//
-
 import Foundation
 import SwiftData
 import SwiftUI

@@ -1,10 +1,3 @@
-//
-//  Profile.swift
-//  JMGWorkScape
-//
-//  Created by Michael Guerrero on 8/2/24.
-//
-
 import Foundation
 import SwiftUI
 
