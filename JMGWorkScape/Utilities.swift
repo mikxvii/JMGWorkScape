@@ -4,9 +4,15 @@ import SwiftUI
 import PhotosUI
 
 
+// in CMYK format
+let olive = Color(red: 0.23, green: 0.28, blue: 0.20, opacity: 1.00)
+let gray = Color(red: 0, green: 0, blue: 0, opacity: 0.04)
+let darkOlive = Color(red: 0.19, green: 0.23, blue: 0.16, opacity: 1.00)
+
 //
 // Custom Button element exclusively used for Frequency selection (AddHomeScreen, EditHomeScreen)
 //
+
 struct DayButton: View {
     @Binding var currFrequency: Set<String>
     @State var buttonColor: Color
