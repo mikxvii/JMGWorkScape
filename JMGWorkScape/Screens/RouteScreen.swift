@@ -1,9 +1,11 @@
 import Foundation
+import SwiftData
 import SwiftUI
 
 /// `RouteScreen` is a SwiftUI view that displays a list of houses scheduled for work on the current weekday.
 /// The view allows users to see details of each house, remove houses from the list, and navigate to the house details screen.
 struct RouteScreen: View {
+    @Environment(\.modelContext) private var context
     // The current weekday, determined by the `getCurrentWeekday()` function.
     var currentWeekday: String = getCurrentWeekday()
     
@@ -15,8 +17,6 @@ struct RouteScreen: View {
     
     // State variables to manage the lists of houses being edited, stopped, and remaining.
     @State var editHouses: [House] = []
-    @State var stopHouses: [House] = []
-    @State var remainingHouses: [House] = []
     
     // An array representing the days of the week during which work is scheduled.
     let daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
@@ -26,9 +26,23 @@ struct RouteScreen: View {
     
     // State variables to control navigation and track the currently selected house.
     @State private var goToDetails = false
-    @State private var goToAddStop = false
     @State private var selectedHouse: House?
-       
+    
+    /// Returns a list of House objects that contain day in its frequency attribute
+    ///
+    /// - Parameter `address`: The address to format.
+    /// - Returns: A lowercase, alphanumeric string suitable for key usage.
+    func fetchHousesByDay(_ day: String) -> [House] {
+        let predicate = House.getPredicate(day)
+        let descriptor = House.getDescriptor(predicate)
+            do {
+                return try context.fetch(descriptor)
+            } catch {
+                print("Failed to fetch houses for \(day): \(error)")
+                return []
+            }
+        }
+    
     var body: some View {
         GeometryReader { geo in
             ZStack {
@@ -39,10 +53,20 @@ struct RouteScreen: View {
                     .edgesIgnoringSafeArea(.all)
                     .frame(width: geo.size.width, height: geo.size.height, alignment: .center)
                 
-                // Display the list of houses only if today is a workday.
-                if daysOfWeek.contains(currentWeekday) {
+                // Display a message when today is not a workday.
+                if editHouses.isEmpty {
                     VStack {
-                        
+                        Spacer()
+                        Image(systemName: "tree")
+                            .foregroundColor(.gray)
+                            .font(.title)
+                        Text("No work today :)")
+                            .foregroundColor(.gray)
+                        Spacer()
+                    }
+                } else {
+                    // Display the list of houses only if today is a workday.
+                    VStack {
                         // A map icon at the top of the list.
                         Image(systemName: "map.circle")
                             .font(.title2)
@@ -60,20 +84,22 @@ struct RouteScreen: View {
                                                 .frame(width: 360, height: 70)
                                                 .cornerRadius(10)
                                                 .padding(.bottom, 20)
-                                                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                                    // Swipe action to delete the house from the list.
-                                                    Button(role: .destructive) {
-                                                        if let index = editHouses.firstIndex(of: house) {
-                                                            editHouses.remove(at: index)
-                                                        }
-                                                    } label: {
-                                                        Label("Delete", systemImage: "trash")
-                                                    }
-                                                }
                                                 .multilineTextAlignment(.center)
                                                 .onTapGesture {
                                                     goToDetails = true
                                                     selectedHouse = house
+                                                }
+                                                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                                    // Swipe action to delete the house from the list.
+                                                    Button(role: .destructive) {
+                                                        if let index = editHouses.firstIndex(of: house) {
+                                                            let houseRemoved = editHouses.remove(at: index)
+                                                            houseRemoved.routeSwitch()
+                                                            print(editHouses)
+                                                        }
+                                                    } label: {
+                                                        Label("Delete", systemImage: "trash")
+                                                    }
                                                 }
                                         } else {
                                             // Placeholder view when no image is available.
@@ -115,17 +141,6 @@ struct RouteScreen: View {
                         .frame(height: 640)
                         Spacer()
                     }
-                } else {
-                    // Display a message when today is not a workday.
-                    VStack {
-                        Spacer()
-                        Image(systemName: "tree")
-                            .foregroundColor(.gray)
-                            .font(.title)
-                        Text("No work today :)")
-                            .foregroundColor(.gray)
-                        Spacer()
-                    }
                 }
                 
             }
@@ -155,10 +170,14 @@ struct RouteScreen: View {
             }
             // Filter and assign the houses to the appropriate lists when the view appears.
             .onAppear {
-                editHouses = houses.filter { $0.getFrqSet().contains(currentWeekday) }
-                remainingHouses = houses.filter { !$0.getFrqSet().contains(currentWeekday) }
-
+                editHouses = fetchHousesByDay(currentWeekday)
+                for house in editHouses{
+                    print(house.getName())
+                    print(house.getRemoved())
+                }
+                
             }
         }
     }
 }
+

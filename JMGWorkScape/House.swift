@@ -17,6 +17,7 @@ final class House: Identifiable {
     private var frequency: String
     private var jobD: String
     private var imageData: Data?
+    private var removed: Bool
 
     /// Initializes a new `House` object with the provided parameters.
     ///
@@ -26,13 +27,14 @@ final class House: Identifiable {
     ///   - job: The description of the job to be performed at the house. Default is an empty string.
     ///   - frequency: The frequency of the job, represented as a comma-separated string. Default is an empty string.
     ///   - imageData: Optional image data associated with the house. Default is `nil`.
-    init(_ name: String = "", _ address: String = "", _ job: String = "", _ frequency: String = "", _ imageData: Data? = nil) {
+    init(_ name: String = "", _ address: String = "", _ job: String = "", _ frequency: String = "", _ imageData: Data? = nil, _ removed: Bool = false) {
         self.id = UUID().uuidString
         self.name = name
         self.address = address
         self.frequency = frequency
         self.jobD = job
         self.imageData = imageData
+        self.removed = removed
     }
 
     /// Updates the house's attributes with new values.
@@ -45,12 +47,13 @@ final class House: Identifiable {
     ///   - job: The new job description to be performed at the house. Default is an empty string.
     ///   - frequency: The new frequency of the job, represented as a comma-separated string. Default is an empty string.
     ///   - imageData: The new image data associated with the house. Default is `nil`.
-    func update(_ name: String = "", _ address: String = "", _ job: String = "", _ frequency: String = "", _ imageData: Data? = nil) {
+    func update(_ name: String = "", _ address: String = "", _ job: String = "", _ frequency: String = "", _ imageData: Data? = nil, _ removed: Bool = false) {
         self.name = name
         self.address = address
         self.frequency = frequency
         self.jobD = job
         self.imageData = imageData
+        self.removed = removed
     }
 
     /// Returns the name of the customer associated with the house.
@@ -120,4 +123,24 @@ final class House: Identifiable {
     func update(_ newAddress: String) {
         self.address = newAddress
     }
+    
+    
+    func routeSwitch() -> Void {
+        self.removed.toggle()
+    }
+    
+    func getRemoved() -> Bool {
+        return self.removed
+    }
+    
+    static func getDescriptor(_ predicate: Predicate<House>) -> FetchDescriptor<House> {
+        return FetchDescriptor<House>(predicate: predicate)
+    }
+    
+    static func getPredicate(_ day: String) -> Predicate<House> {
+        return #Predicate<House> { house in
+            house.frequency.contains(day) && !house.removed
+        }
+    }
+    
 }
