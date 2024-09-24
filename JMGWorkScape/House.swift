@@ -17,7 +17,7 @@ final class House: Identifiable {
     private var frequency: String
     private var jobD: String
     private var imageData: Data?
-    private var removed: Bool
+     var removed: Bool
 
     /// Initializes a new `House` object with the provided parameters.
     ///
@@ -125,7 +125,7 @@ final class House: Identifiable {
     }
     
     
-    func routeSwitch() -> Void {
+    func toggleRemoved() -> Void {
         self.removed.toggle()
     }
     

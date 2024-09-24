@@ -18,39 +18,41 @@ struct ProfileScreen: View {
             Section(header: Text("Name of Company")) {
                 TextField("Enter Company", text: $companyText)
                     .focused($isFocused)
-//                    .toolbar {
-//                        ToolbarItemGroup(placement: .keyboard) {
-//                            Spacer() // Pushes the button to the right side
-//                            Button("Done") {
-//                                isFocused = false
-//                            }
-//                        }
-//                    }
+                    .onTapGesture {
+                        isFocused.toggle()
+                    }
                 // For some reason, it is bugging out when the keyboard pops up
             }
             
             Section(header: Text("Name of contractor")) {
                 TextField("Enter Name", text: $nameText)
+                    .onTapGesture {
+                        isFocused.toggle()
+                    }
                     .focused($isFocused)
+
             }
             
          
             Section(header: Text("Billing Address")) {
                 TextField("Enter Address", text: $addressText)
+                    .onTapGesture {
+                        isFocused.toggle()
+                    }
                     .focused($isFocused)
             }
             
             Section(header: Text("License #")) {
                 SecureField("Enter Number", text: $licenseText)
+                    .onTapGesture {
+                        isFocused.toggle()
+                    }
                     .focused($isFocused)
+
             }
             
         }
         .navigationBarTitle("Contractor Profile")
-
-        .onTapGesture {
-            isFocused = false
-        }
         .onAppear {
             // Initialize with existing profile data if needed
             companyText = profileManager.profile.companyName
@@ -66,6 +68,12 @@ struct ProfileScreen: View {
                 }, label: {
                     Text("Save")
                 })
+            }
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer() // Pushes the button to the right side
+                Button("Done") {
+                    isFocused = false
+                }
             }
         }
     }

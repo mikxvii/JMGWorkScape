@@ -17,7 +17,7 @@ struct RouteScreen: View {
     
     // State variables to manage the lists of houses being edited, stopped, and remaining.
     @State var editHouses: [House] = []
-    
+
     // An array representing the days of the week during which work is scheduled.
     let daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
     
@@ -27,6 +27,7 @@ struct RouteScreen: View {
     // State variables to control navigation and track the currently selected house.
     @State private var goToDetails = false
     @State private var selectedHouse: House?
+    @State private var refreshTrigger = false
     
     /// Returns a list of House objects that contain day in its frequency attribute
     ///
@@ -42,7 +43,14 @@ struct RouteScreen: View {
                 return []
             }
         }
-    
+        
+        var removedHouses: [House] {
+            let descriptor = FetchDescriptor<House>(predicate: #Predicate { house in
+                house.removed == true
+            })
+            _ = refreshTrigger
+            return (try? context.fetch(descriptor)) ?? []
+        }
     var body: some View {
         GeometryReader { geo in
             ZStack {
@@ -94,7 +102,7 @@ struct RouteScreen: View {
                                                     Button(role: .destructive) {
                                                         if let index = editHouses.firstIndex(of: house) {
                                                             let houseRemoved = editHouses.remove(at: index)
-                                                            houseRemoved.routeSwitch()
+                                                            houseRemoved.toggleRemoved()
                                                             print(editHouses)
                                                         }
                                                     } label: {
@@ -142,7 +150,7 @@ struct RouteScreen: View {
                         Spacer()
                     }
                 }
-                
+
             }
             .toolbar {
                 ToolbarItem(placement: .principal) {
@@ -161,6 +169,17 @@ struct RouteScreen: View {
                             .foregroundColor(.brown)
                     }
                 }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(action: {
+                        refreshTrigger.toggle()
+                        for house in removedHouses {
+                            house.toggleRemoved()
+                        }
+                        editHouses = fetchHousesByDay(currentWeekday)
+                    }, label: {
+                        Image(systemName: "arrow.clockwise")
+                    })
+                }
             }
             // Navigate to the `HomeDetailsScreen` when a house is selected.
             .navigationDestination(isPresented: $goToDetails) {
@@ -175,7 +194,7 @@ struct RouteScreen: View {
                     print(house.getName())
                     print(house.getRemoved())
                 }
-                
+
             }
         }
     }
