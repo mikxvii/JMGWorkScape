@@ -1,10 +1,3 @@
-//
-//  HouseSearchManager.swift
-//  JMGWorkScape
-//
-//  Created by Christopher Rebollar on 9/1/24.
-//
-
 import Foundation
 
 /// Manages a collection of houses and supports operations such as adding, removing,
