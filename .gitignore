@@ -1,4 +1,11 @@
+<<<<<<< HEAD
 /.vscode
 /JMGWorkScape.xcodeproj
 project.pbxproj
 temp.swift
+=======
+.vscode
+/JMGWorkScape.xcodeproj/xcuserdata
+project.pbxproj
+/JMGWorkScape/project.xcworkspace
+>>>>>>> ChrisBranch

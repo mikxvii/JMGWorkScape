@@ -1,10 +1,3 @@
-//
-//  HomeDetailsScreen.swift
-//  JMGWorkScape
-//
-//  Created by Michael Guerrero and Christopher Rebollar-Ramirez on 7/13/24.
-//
-
 import Foundation
 import SwiftUI
 import PhotosUI
@@ -21,12 +14,7 @@ struct AddHomeScreen: View {
     // Necessary for switching back to main view
     @Environment(\.presentationMode) var presentationMode
     
-    //
-    // Parameters
-    //
-    
-    // Dictionary is used to check if the new house already exists
-    var housesDic: [String: House]
+
     
     //
     // State Variables
@@ -45,6 +33,14 @@ struct AddHomeScreen: View {
     
     // Used to switch back to HomeScreen
     @State private var goBackToHome: Bool = false
+    
+    // Dictionary is used to check if the new house already exists
+    
+    //
+    // Parameters
+    //
+    
+    @State var houseSearchManager: HouseSearchManager?
 
     let daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
     let olive = Color(red: 0.23, green: 0.28, blue: 0.20, opacity: 1.00)
@@ -59,6 +55,7 @@ struct AddHomeScreen: View {
             }, label: {
                 Text("Cancel")
                     .bold()
+                    .font(.headline)
                     .foregroundColor(.black)
                     .padding(.horizontal, 25.0)
                     .padding(.vertical, 10)
@@ -80,7 +77,7 @@ struct AddHomeScreen: View {
                 print("Name: \(currName), Frequency: \(currFrequncy), Address: \(currAddress), Job Description: \(currJobD)")
                 if (currName.isEmpty || currFrequncy.isEmpty || currAddress.isEmpty || currJobD.isEmpty) {
                     showFieldAlert = true
-                } else if (housesDic[currName] != nil) {
+                } else if (houseSearchManager?.alreadyExists(currAddress) ?? false) {
                     showMatchAlert = true
                 } else {
                     // Proceed with form submission
@@ -102,6 +99,7 @@ struct AddHomeScreen: View {
             }, label: {
                 Text("Done")
                     .bold()
+                    .font(.headline)
                     .foregroundColor(olive)
                     .padding(.horizontal, 25.0)
                     .padding(.vertical, 10)
@@ -112,7 +110,7 @@ struct AddHomeScreen: View {
             Spacer()
             // Only appears when there is an existing house with the same name
             .alert(isPresented: $showMatchAlert) {
-                Alert(title: Text("Validation Error"), message: Text("A House with this name already exists, please rename"), dismissButton: .default(Text("Ok")))
+                Alert(title: Text("Validation Error"), message: Text("A House with this address already exists"), dismissButton: .default(Text("Ok")))
             }
         }.padding(.top, 20)
         
@@ -175,6 +173,8 @@ struct AddHomeScreen: View {
                         .frame(maxWidth: 350, alignment: .topLeading)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                 }
+                .font(.headline)
+
                 
                 // VStack with days of the week frequency
                 VStack(spacing: 10){
@@ -191,6 +191,8 @@ struct AddHomeScreen: View {
                         DayButton(currFrequency: $currFrequncy, buttonColor: .gray, day: "Wednesday")
                         Spacer()
                     }
+                    .font(.headline)
+
                     HStack {
                         Spacer()
                         DayButton(currFrequency: $currFrequncy, buttonColor: .gray, day: "Thursday")
@@ -198,6 +200,7 @@ struct AddHomeScreen: View {
                         DayButton(currFrequency: $currFrequncy, buttonColor: .gray, day: "Friday")
                         Spacer()
                     }
+                    .font(.headline)
                 }
 
             }

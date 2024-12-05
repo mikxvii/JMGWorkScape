@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8328E5D62C7114BF007D70E0 /* Trie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8328E5D52C7114BF007D70E0 /* Trie.swift */; };
-		835C0AAA2C43A1AA0086C767 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C0AA92C43A1AA0086C767 /* Helper.swift */; };
+		8325BBDC2C9E4598004ACEBF /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8325BBDB2C9E4598004ACEBF /* Utilities.swift */; };
+		8332E03C2C8512A600A45BBA /* HouseSearchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8332E03B2C8512A600A45BBA /* HouseSearchManager.swift */; };
 		835C0AB52C494BDD0086C767 /* House.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C0AB42C494BDD0086C767 /* House.swift */; };
 		ED3BEBC52C55EFF6006A2279 /* EditHomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED3BEBC42C55EFF6006A2279 /* EditHomeScreen.swift */; };
 		ED7AF6E82C5D926200A235A3 /* ProfileScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7AF6E72C5D926200A235A3 /* ProfileScreen.swift */; };
@@ -25,8 +25,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		8328E5D52C7114BF007D70E0 /* Trie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trie.swift; sourceTree = "<group>"; };
-		835C0AA92C43A1AA0086C767 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
+		8325BBDB2C9E4598004ACEBF /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		8332E03B2C8512A600A45BBA /* HouseSearchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HouseSearchManager.swift; sourceTree = "<group>"; };
 		835C0AB42C494BDD0086C767 /* House.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = House.swift; sourceTree = "<group>"; };
 		ED3BEBC42C55EFF6006A2279 /* EditHomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditHomeScreen.swift; sourceTree = "<group>"; };
 		ED6AA00E2C51A5E0003A8C86 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -96,14 +96,14 @@
 		EDABA0CD2C4355F4000FD038 /* JMGWorkScape */ = {
 			isa = PBXGroup;
 			children = (
+				8325BBDB2C9E4598004ACEBF /* Utilities.swift */,
 				ED6AA00E2C51A5E0003A8C86 /* Info.plist */,
 				835C0AAB2C43F3E10086C767 /* data */,
 				EDABA0CE2C4355F4000FD038 /* JMGWorkScapeApp.swift */,
 				EDABA0D02C4355F4000FD038 /* ContentView.swift */,
 				835C0AB42C494BDD0086C767 /* House.swift */,
 				ED7AF6EB2C5F93F300A235A3 /* Profile.swift */,
-				835C0AA92C43A1AA0086C767 /* Helper.swift */,
-				8328E5D52C7114BF007D70E0 /* Trie.swift */,
+				8332E03B2C8512A600A45BBA /* HouseSearchManager.swift */,
 				ED97440A2C43A512003641FB /* Screens */,
 				EDABA0D22C4355F6000FD038 /* Assets.xcassets */,
 				EDABA0D42C4355F6000FD038 /* Preview Content */,
@@ -191,15 +191,15 @@
 			files = (
 				ED97440D2C43A512003641FB /* HomeDetailsScreen.swift in Sources */,
 				EDABA0D12C4355F4000FD038 /* ContentView.swift in Sources */,
-				8328E5D62C7114BF007D70E0 /* Trie.swift in Sources */,
 				835C0AB52C494BDD0086C767 /* House.swift in Sources */,
 				ED7AF6EC2C5F93F300A235A3 /* Profile.swift in Sources */,
+				8325BBDC2C9E4598004ACEBF /* Utilities.swift in Sources */,
 				ED7AF6E82C5D926200A235A3 /* ProfileScreen.swift in Sources */,
 				EDABA0CF2C4355F4000FD038 /* JMGWorkScapeApp.swift in Sources */,
 				ED97440F2C43A512003641FB /* InvoiceScreen.swift in Sources */,
 				ED9744122C43A715003641FB /* HomeScreen.swift in Sources */,
 				ED9744102C43A512003641FB /* RouteScreen.swift in Sources */,
-				835C0AAA2C43A1AA0086C767 /* Helper.swift in Sources */,
+				8332E03C2C8512A600A45BBA /* HouseSearchManager.swift in Sources */,
 				ED3BEBC52C55EFF6006A2279 /* EditHomeScreen.swift in Sources */,
 				ED97440B2C43A512003641FB /* AddHomeScreen.swift in Sources */,
 			);
@@ -335,7 +335,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"JMGWorkScape/Preview Content\"";
-				DEVELOPMENT_TEAM = 9A6YCRFES5;
+				DEVELOPMENT_TEAM = DQBXB9GGJ9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = JMGWorkScape/Info.plist;
@@ -349,7 +349,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.MikeGuerrero.JMGWorkScape;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Chris.JMGWorkScape;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -365,7 +365,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"JMGWorkScape/Preview Content\"";
-				DEVELOPMENT_TEAM = 9A6YCRFES5;
+				DEVELOPMENT_TEAM = DQBXB9GGJ9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = JMGWorkScape/Info.plist;
@@ -379,7 +379,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.MikeGuerrero.JMGWorkScape;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Chris.JMGWorkScape;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
