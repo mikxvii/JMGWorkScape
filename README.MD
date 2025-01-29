@@ -1,6 +1,8 @@
 # JMGWorkScape App Documentation
 
 <!-- TABLE OF CONTENTS -->
+<!-- 1. [About our App](#about-our-app)
+2. []( -->
 <details>
   <summary>Table of Contents</summary>
   <ol>
@@ -33,16 +35,13 @@
 This app was created for the company **JMG Landscape**. The purpose of the app is to manage and store customers' house data. From the customers' houses data, our app creates a route for each day depending from a customer's house data if work needed to be done that day of the week. Once a job is completed for a house, our app offers a feature that can create invoives for a house and deliver it to our customers as a pdf format.
 
 ## App View
+
 <img src="images/homesgrid.PNG" alt="homes grid" width="200" /><img src="images/searchBarView.PNG" alt="search View" width="200" /><img src="images/routeView.PNG" alt="route View" width="200" /><img src="images/addHomeView.PNG" alt="add home view" width="200" /><img src="images/houseDetailsView.PNG" alt="House Details" width="200" /><img src="images/editHomeView.PNG" alt="edit home view" width="200" /><img src="images/invoiceView.PNG" alt="invoice view" width="200" /><img src="images/profileView.PNG" alt="profile view" width="200" />
 
 ## Built With
 
-<img src="images/swiftImage.png" alt="swift icon" width="80" height="50"> 
-
-<img src="images/swiftUI.png" alt="swiftUI icon" width="80" height="54">
-
-<img src="images/xcodeImg.png" alt="xcode icon" width="80" height="37"> 
-
+![Swift](https://img.shields.io/badge/swift-F54A2A?style=for-the-badge&logo=swift&logoColor=white)
+![Xcode](https://img.shields.io/badge/Xcode-007ACC?style=for-the-badge&logo=Xcode&logoColor=white)
 
 ## How to run our app
 
@@ -57,10 +56,10 @@ In our application, users can access detailed information about a house by selec
 #### How It Works
 
 1. **Selection:** When a user taps on a house in the grid, the application retrieves detailed information about that house.
-   
 2. **Data Retrieval:** The `HouseSearchManager` class maintains a dictionary where each house name maps to a secondary dictionary. This secondary dictionary maps addresses to `House` objects. This setup allows for quick lookups of house details based on both name and address.
 
 3. **Display Details:** Once a house is selected, the application displays a detailed view that includes:
+
    - The customer's name
    - The house address
    - Additional options such as creating an invoice or opening Apple Maps for directions to the house.
@@ -69,14 +68,14 @@ In our application, users can access detailed information about a house by selec
    - **Create Invoice:** Users can generate an invoice PDF directly from the details screen.
    - **Open in Apple Maps:** Users can tap on a button to open Apple Maps and get directions to the house’s address.
 
-
 ### Scalability of Houses Data
 
-Our application is built to efficiently handle a large volume of house data, including scenarios where multiple houses may share the same customer name but have different addresses. 
+Our application is built to efficiently handle a large volume of house data, including scenarios where multiple houses may share the same customer name but have different addresses.
 
 #### Key Features
 
 - **Dual-Level Data Structure:** The `HouseSearchManager` uses a two-level dictionary structure where:
+
   - The primary dictionary maps house names to a secondary dictionary.
   - The secondary dictionary maps addresses to `House` objects.
 
@@ -91,6 +90,7 @@ Our application is built to efficiently handle a large volume of house data, inc
 This architecture supports the seamless expansion of house data, allowing the app to perform robustly and maintain high performance as the dataset grows.
 
 ### Search Bar
+
 The search bar feature in our application allows users to efficiently search for houses based on a prefix of their names. This is implemented using the `houseNamesWithPrefix(_ prefix: String)` function from the `HouseSearchManager` class.
 
 #### Functionality
@@ -118,22 +118,25 @@ This implementation ensures that the search for house names is both quick and re
 
 ### Add a House
 
-Adding a house to the system involves updating multiple components to ensure that the new house is stored efficiently and can be retrieved quickly. Before a user passes a house's information into the HouseSearchManager, the house's address is checked if it exists in the  `addresses` set, if not, it will procceed with adding the house into the database. The `HouseSearchManager` class handles this process through the following steps:
+Adding a house to the system involves updating multiple components to ensure that the new house is stored efficiently and can be retrieved quickly. Before a user passes a house's information into the HouseSearchManager, the house's address is checked if it exists in the `addresses` set, if not, it will procceed with adding the house into the database. The `HouseSearchManager` class handles this process through the following steps:
 
 #### Process Overview
 
 1. **Data Insertion:**
+
    - **Dictionary Update:** The house is added to the primary dictionary, where the house name maps to a secondary dictionary. The secondary dictionary maps the house address to the `House` object. This dual-level structure allows efficient access and management of houses based on both their names and addresses.
    - **Address Set Update:** The address of the new house is also added to a set of unique addresses. This ensures that each address is distinct and supports quick lookups.
 
 2. **Trie Insertion:**
+
    - **Prefix-Based Search:** The house name is inserted into a Trie data structure. The Trie supports efficient prefix-based searches, allowing users to quickly find houses by partial names. Each character of the house name is processed to build the Trie, with nodes created as necessary.
 
 3. **Data Integrity:**
+
    - **Address Uniqueness:** By maintaining a set of unique addresses, the `HouseSearchManager` prevents duplicate entries and ensures that each address is associated with only one house.
 
 4. **Performance Considerations:**
-    - **Efficient Handling:** The process is designed to handle a growing number of houses efficiently. The underlying data structures (dictionary and Trie) ensure that adding a house does not compromise performance, even as the dataset expands.
+   - **Efficient Handling:** The process is designed to handle a growing number of houses efficiently. The underlying data structures (dictionary and Trie) ensure that adding a house does not compromise performance, even as the dataset expands.
 
 #### Code Implementation
 
@@ -147,7 +150,6 @@ When adding a single house, similar steps are followed to update the primary dic
 
 This approach ensures that adding a house is efficient and maintains the performance and accuracy of the house management system.
 
-
 ### Remove a House
 
 Removing a house from the system involves updating multiple components to ensure the house is completely and efficiently removed. The `HouseSearchManager` class handles this process through the following steps:
@@ -155,13 +157,16 @@ Removing a house from the system involves updating multiple components to ensure
 #### Process Overview
 
 1. **Data Removal:**
+
    - **Dictionary Update:** The house is removed from the primary dictionary. This involves locating the house by its name and address, and then deleting the entry from the secondary dictionary that maps addresses to `House` objects.
    - **Address Set Update:** The house's address is removed from the set of unique addresses. This ensures that the address is no longer associated with any house in the system.
 
 2. **Trie Update:**
+
    - **Prefix-Based Search:** The house name is removed from the Trie data structure. This involves traversing the Trie to find and delete the nodes associated with the house name. The Trie is updated to reflect the removal, ensuring that searches for this house name are accurately processed.
 
 3. **Data Integrity:**
+
    - **Node Cleanup:** During the Trie update, nodes that are no longer part of any house name are cleaned up. This involves checking if a node can be deleted (i.e., if it has no children and does not mark the end of another word) and removing it if possible.
 
 4. **Performance Considerations:**
@@ -178,7 +183,6 @@ In the `HouseSearchManager` class, the `remove(_ house: House)` method is respon
 
 This approach ensures that a house is completely removed from the system, including its entries in the dictionary, address set, and Trie, while maintaining overall system performance and data integrity.
 
-
 ### Get Route for Current Day
 
 The `RouteScreen` view provides a comprehensive display of houses scheduled for work on the current weekday. This feature allows users to view, manage, and navigate to houses based on their work schedule for the day. Here’s how the `RouteScreen` handles this functionality:
@@ -186,20 +190,25 @@ The `RouteScreen` view provides a comprehensive display of houses scheduled for 
 #### Overview
 
 1. **Determine Current Weekday:**
+
    - The screen starts by determining the current weekday using the `getCurrentWeekday()` function. This ensures that the displayed information is relevant to today’s schedule.
 
 2. **Display Houses Scheduled for Work:**
+
    - **Data Filtering:** The view filters the list of houses to include only those scheduled for work on the current weekday. This is achieved using the `editHouses` array, which is populated by filtering the `houses` array based on the weekday.
    - **UI Presentation:** Houses are displayed in a list format, with each entry showing the house’s image (or a placeholder if no image is available), name, and address. The list uses a custom style and background to enhance readability.
 
 3. **Interactive Features:**
+
    - **House Details:** Users can tap on a house to navigate to the `HomeDetailsScreen`, where they can view detailed information about the selected house.
    - **Swipe-to-Delete:** Each house entry includes a swipe-to-delete action. This allows users to remove a house from the list of scheduled work for the day. The deletion is handled efficiently, updating the `editHouses` array and reflecting the change in the UI.
 
 4. **Display Non-Workdays:**
+
    - If today is not a scheduled workday, the view displays a message indicating that no work is scheduled for the day. This ensures users are informed about their schedule status.
 
 5. **Navigation and Layout:**
+
    - **Toolbar:** The toolbar at the top of the screen displays the current weekday, providing context to the user about the route being shown.
    - **Navigation:** The `RouteScreen` includes navigation links to other screens, such as the `HomeDetailsScreen`, based on user interactions.
 
@@ -215,6 +224,8 @@ The `RouteScreen` view provides a comprehensive display of houses scheduled for 
 This feature provides users with an organized view of their daily work schedule, including interactive options to manage and view house details, ensuring a seamless and efficient workflow.
 
 ## Contributers
+- [Michael Guerrero](https://github.com/mikxvii)
+- [Christopher Rebollar-Ramirez](https://github.com/crebollarramirez)
 
 ## Developer Notes
 
