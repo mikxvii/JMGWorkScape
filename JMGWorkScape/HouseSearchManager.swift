@@ -115,18 +115,18 @@ final class HouseSearchManager {
     init(_ housesArray: [House]) {
         for house in housesArray {
             if houses[house.getName()] == nil {
-                houses[house.getName()] = [house.getAddress(): house]
+                houses[house.getName()] = [house.getAddressKeyFormat(): house]
             } else {
                 if var innerDict = houses[house.getName()] {
-                    innerDict[house.getAddress()] = house
+                    innerDict[house.getAddressKeyFormat()] = house
                     houses[house.getName()] = innerDict
                 } else {
-                    houses[house.getName()] = [house.getAddress(): house]
+                    houses[house.getName()] = [house.getAddressKeyFormat(): house]
                 }
             }
             
             count += 1
-            addresses.insert(house.getAddress())
+            addresses.insert(house.getAddressKeyFormat())
             self.insert(house.getName())
         }
     }
@@ -184,8 +184,8 @@ final class HouseSearchManager {
     /// Removes a `House` object from the dictionary.
     /// - Parameter house: The `House` object to remove.
     func remove(_ house: House) {
-        houses[house.getName()]?.removeValue(forKey: house.getAddress())
-        addresses.remove(house.getAddress())
+        houses[house.getName()]?.removeValue(forKey: house.getAddressKeyFormat())
+        addresses.remove(house.getAddressKeyFormat())
         self.removeFromTrie(house.getName(), currentNode: self.root, index: 0)
         count -= 1
     }
@@ -196,7 +196,8 @@ final class HouseSearchManager {
     ///   - newAddress: The new address for the house.
     func changeAddress(_ house: House, _ newAddress: String) {
         let houseName = house.getName()
-        let currentAddress = house.getAddress()
+        let updatedAddress = addressKeyFormat(newAddress)
+        let currentAddress = house.getAddressKeyFormat()
 
         // Check if the house exists in the dictionary under the current address
         if var housesByAddress = houses[houseName], let houseToUpdate = housesByAddress[currentAddress] {
@@ -206,14 +207,14 @@ final class HouseSearchManager {
             addresses.remove(currentAddress)
 
             // Update the house's address (Assuming House has a method or property to change the address)
-            houseToUpdate.update(newAddress) // Implement this method in the House class
+            houseToUpdate.update(updatedAddress) // Implement this method in the House class
             
             // Insert the house into the dictionary under the new address
-            housesByAddress[newAddress] = houseToUpdate
+            housesByAddress[updatedAddress] = houseToUpdate
             houses[houseName] = housesByAddress
             
             // Add the new address to the addresses set
-            addresses.insert(newAddress)
+            addresses.insert(updatedAddress)
         }
     }
     
